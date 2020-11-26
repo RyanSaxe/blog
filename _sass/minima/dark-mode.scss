@@ -60,6 +60,11 @@ pre, code {
     background-color: $dark-grey !important;
 }
 
+.Box {
+    background-color: $dark-grey !important;
+    border-color: $low-emph !important;
+}
+
 table th{
     background-color: $overlay;
     border-color: $overlay-light;
