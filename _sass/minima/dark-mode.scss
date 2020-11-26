@@ -28,6 +28,10 @@ a:hover {
     border-color: $overlay-light;
 }
 
+.site-header, .site-footer {
+    border-color: $med-emph !important;
+}
+
 * {
     scrollbar-color: $dark-grey $overlay-light;
 }
@@ -61,7 +65,7 @@ pre, code {
 }
 
 .Box {
-    border-color: $low-emph !important;
+    border-color: $med-emph !important;
 }
 
 table th{
