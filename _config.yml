@@ -6,8 +6,8 @@
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 
-title: Machine Machinations: Opening the Black Box
-description: A blog dedicated to exploring the math and structure behind how machines learn.
+title: "Machine Machinations: Opening the Black Box"
+description: "A blog dedicated to exploring the math and structure behind how machines learn."
 github_username: RyanSaxe
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "blog"
