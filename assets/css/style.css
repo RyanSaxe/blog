@@ -502,6 +502,8 @@ pre, code { border-color: #333333; background-color: #1e1e1e; }
 
 .btn:hover { background-color: #121212 !important; }
 
+.Box { background-color: #121212 !important; border-color: rgba(255, 255, 255, 0.38) !important; }
+
 table th { background-color: #1e1e1e; border-color: #333333; color: rgba(255, 255, 255, 0.87); }
 
 table td { background-color: #121212; border-color: #333333; color: rgba(255, 255, 255, 0.69); }
