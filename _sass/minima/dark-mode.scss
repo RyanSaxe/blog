@@ -29,7 +29,9 @@ a:hover {
 }
 
 .site-header, .site-footer {
-    border-color: $med-emph !important;
+    border-color: black !important;
+    border-width: 2px !important;
+    background-color: #1b1f23 !important;
 }
 
 * {
@@ -66,6 +68,7 @@ pre, code {
 
 .Box {
     border: 2px black solid !important;
+    background-color: #1b1f23 !important;
 }
 
 .box-shadow-medium {
