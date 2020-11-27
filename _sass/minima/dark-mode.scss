@@ -65,7 +65,11 @@ pre, code {
 }
 
 .Box {
-    border-color: $low-emph !important;
+    border: 2px black solid !important;
+}
+
+.box-shadow-medium {
+    border: 0 10px 10px rgba(0,0,0,0.8) !important;
 }
 
 table th{
