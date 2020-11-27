@@ -486,7 +486,7 @@ a:hover { color: rgba(255, 255, 255, 0.87) !important; }
 
 .site-title, .site-title:visited, .site-nav, .page-link { color: rgba(255, 255, 255, 0.87) !important; }
 
-.site-nav { background-color: #121212; border-color: #333333; }
+.site-nav { background-color: #1b1f23 !important; border-color: #333333; }
 
 .site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #1b1f23 !important; }
 
