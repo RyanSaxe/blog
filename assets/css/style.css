@@ -486,9 +486,9 @@ a:hover { color: rgba(255, 255, 255, 0.87) !important; }
 
 .site-title, .site-title:visited, .site-nav, .page-link { color: rgba(255, 255, 255, 0.87) !important; }
 
-.site-nav { background-color: #1b1f23 !important; border-color: #333333; }
+.site-nav { background-color: #1e1e1e !important; border-color: #333333; }
 
-.site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #1b1f23 !important; }
+.site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #1e1e1e !important; }
 
 * { scrollbar-color: #121212 #333333; }
 
@@ -504,7 +504,7 @@ pre, code { border-color: #333333; background-color: #1e1e1e; }
 
 .btn:hover { background-color: #121212 !important; }
 
-.Box { border: 2px black solid !important; background-color: #1b1f23 !important; }
+.Box { border: 1px #333333 solid !important; background-color: #1e1e1e !important; }
 
 .box-shadow-medium { box-shadow: 0 10px 10px rgba(0, 0, 0, 0.8) !important; }
 
