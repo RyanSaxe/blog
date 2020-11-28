@@ -40,8 +40,8 @@ a:hover {
 
 pre, code {
     // BVas a lighter colour to better highlight short code words
-    border: 2px solid black;
-    background-color: #1b1f23;
+    border: 1px solid black !important;
+    background-color: #1b1f23 !important;
 }
 
 .page-description {
