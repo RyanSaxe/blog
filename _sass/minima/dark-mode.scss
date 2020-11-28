@@ -24,14 +24,14 @@ a:hover {
 }
 
 .site-nav {
-    background-color: #1b1f23 !important;
+    background-color: $overlay !important;
     border-color: $overlay-light;
 }
 
 .site-header, .site-footer {
     border-color: black !important;
     border-width: 2px !important;
-    background-color: #1b1f23 !important;
+    background-color: $overlay !important;
 }
 
 * {
@@ -67,8 +67,8 @@ pre, code {
 }
 
 .Box {
-    border: 2px black solid !important;
-    background-color: #1b1f23 !important;
+    border: 1px $overlay-light solid !important;
+    background-color: $overlay !important;
 }
 
 .box-shadow-medium {
