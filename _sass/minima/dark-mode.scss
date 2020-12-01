@@ -6,6 +6,11 @@ $dark-grey : #1b1f23;// #121212;
 $overlay: mix($dark-grey, white, 95%);
 $overlay-light: mix($dark-grey, white, 86%);
 
+.post img {
+  max-height: 350px !important;
+  margin-left: 0 !important;
+}
+
 html, body, input, textarea, select, button, .Box {   
   color: $high-emph !important;
   background-color: $dark-grey !important;
