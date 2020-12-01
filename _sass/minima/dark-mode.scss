@@ -53,7 +53,18 @@ pre, code {
     color: $med-emph;
 }
 
+.p-3 {
+  position: relative;
+}
+
 .post-meta {
+    color: $low-emph;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
+.post-meta-description {
     color: $low-emph;
 }
 
