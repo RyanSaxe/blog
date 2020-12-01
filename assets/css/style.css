@@ -500,7 +500,7 @@ pre, code { border-color: #3b3e42; background-color: #262a2e; }
 
 .p-3 { position: relative !important; }
 
-.post-meta { color: rgba(255, 255, 255, 0.38) !important; position: absolute !important; bottom: 16px !important; right: 16px !important; }
+.post-meta { color: rgba(255, 255, 255, 0.38) !important; position: absolute !important; bottom: 12px !important; right: 16px !important; font-size: 16px !important; }
 
 .post-meta-description { color: rgba(255, 255, 255, 0.38) !important; }
 
