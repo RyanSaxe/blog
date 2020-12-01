@@ -54,18 +54,18 @@ pre, code {
 }
 
 .p-3 {
-  position: relative;
+  position: relative !important;
 }
 
 .post-meta {
-    color: $low-emph;
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
+    color: $low-emph !important;
+    position: absolute !important;
+    bottom: 16px !important;
+    right: 16px !important;
 }
 
 .post-meta-description {
-    color: $low-emph;
+    color: $low-emph !important;
 }
 
 .post-content p, .post-content li {
