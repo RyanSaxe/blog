@@ -57,11 +57,14 @@ pre, code {
   position: relative !important;
 }
 
-.post-meta {
-    color: $low-emph !important;
+.p-3 .post-meta {
     position: absolute !important;
     bottom: 12px !important;
     right: 16px !important;
+}
+
+.post-meta {
+    color: $low-emph !important;
     font-size: 16px !important;
 }
 
