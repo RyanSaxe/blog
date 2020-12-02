@@ -43,8 +43,9 @@ a:hover {
     border-width: 2px !important;
     background-color: $overlay !important;
     position: fixed !important;
-    opacity: 0.95;
+    opacity: 0.97;
     width: 100% !important;
+    z-index: 999999999;
 }
 
 * {
@@ -158,21 +159,17 @@ canvas {
 .site-footer {
     padding: 0px !important;
     bottom: 0 !important;
-    box-shadow: 0 -3px 6px rgba(0,0,0,0.75) !important;
+    box-shadow: 0 -1px 6px rgba(0,0,0,0.5) !important;
 }
 
 .site-header {
     top: 0 !important;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.5) !important;
 }
 .footer-col {
   margin-bottom: 0px !important;
 }
 
-::-webkit-scrollbar-track-piece:start {
-    background: transparent url('{{ site.baseurl }}/images/transparent.png') repeat-y !important;
-}
-
-::-webkit-scrollbar-track-piece:end {
-    background: transparent url('{{ site.baseurl }}/images/transparent.png') repeat-y !important;
+::-webkit-scrollbar {
+    background: transparent url('https://ryansaxe.github.io/blog/images/transparent.png') repeat-y !important;
 }
