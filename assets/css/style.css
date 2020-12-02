@@ -492,7 +492,7 @@ a:hover { color: rgba(255, 255, 255, 0.87) !important; }
 
 .site-nav { background-color: #262a2e !important; border-color: #3b3e42; }
 
-.site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #262a2e !important; position: fixed !important; opacity: 0.97; width: 100% !important; z-index: 999999999; }
+.site-header, .site-footer { border-color: rgba(0, 0, 0, 0.5) !important; border-width: 1px !important; background-color: #262a2e !important; position: fixed !important; opacity: 0.97; width: 100% !important; z-index: 999999999; }
 
 * { scrollbar-color: #1b1f23 #3b3e42; }
 
