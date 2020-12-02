@@ -1,1 +1,1 @@
-Sitemap: https://ryansaxe.github.io/blog/sitemap.xml
+Sitemap: https://ryansaxe.com/sitemap.xml
