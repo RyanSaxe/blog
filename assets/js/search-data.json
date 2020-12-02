@@ -4,7 +4,7 @@
         "post0": {
             "title": "Neural Networks as Interpretable as Linear Models",
             "content": "What is a Neural Network . Flowing Through a Node .",
-            "url": "https://ryansaxe.com/blog/transparency/math-intermediate/2020/12/01/NAM.html",
+            "url": "https://ryansaxe.com/transparency/math-intermediate/2020/12/01/NAM.html",
             "relUrl": "/transparency/math-intermediate/2020/12/01/NAM.html",
             "date": " • Dec 1, 2020"
         }
@@ -46,7 +46,7 @@
       ,"page12": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
-          "url": "https://ryansaxe.com/blog/robots.txt",
+          "url": "https://ryansaxe.com/robots.txt",
           "relUrl": "/robots.txt",
           "date": ""
       }
