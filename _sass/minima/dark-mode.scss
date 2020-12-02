@@ -123,10 +123,19 @@ canvas {
 }
 
  .svg-icon {
+    transform: scale(1.5) !important;
+    -ms-transform: scale(1.5) !important;
+    -webkit-transform: scale(1.5) !important;
+    color: #4bbaff !important;
+    opacity: 0.5 !important;
+    transition: 0.5s;
+}
+
+ .svg-icon:hover {
     transform: scale(2.0) !important;
     -ms-transform: scale(2.0) !important;
     -webkit-transform: scale(2.0) !important;
-    color: #4bbaff !important
+    opacity: 1.0 !important;
 }
 
 .social-media-list {
@@ -135,5 +144,9 @@ canvas {
 
 .social-media-list li a {
     border: none !important;
-    padding-right: 20px !important;
+    padding: 10px !important;
+}
+
+.site-footer, .footer-col {
+    padding: 0px !important;
 }
