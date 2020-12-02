@@ -542,6 +542,6 @@ canvas { filter: invert(100%); }
 
 .footer-col { margin-bottom: 0px !important; }
 
-::-webkit-scrollbar { background: transparent url("https://ryansaxe.github.io/blog/images/transparent.png") repeat-y !important; }
+::-webkit-scrollbar { display: none !important; }
 
 /*# sourceMappingURL=style.css.map */
