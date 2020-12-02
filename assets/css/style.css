@@ -534,6 +534,8 @@ canvas { filter: invert(100%); }
 
 .social-media-list li a, .pagination li a { border: none !important; padding: 10px !important; }
 
-.site-footer, .footer-col { padding: 0px !important; }
+.site-footer { padding: 0px !important; }
+
+.footer-col { margin-bottom: 0px !important; }
 
 /*# sourceMappingURL=style.css.map */
