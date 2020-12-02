@@ -480,6 +480,8 @@ p code { font-size: 19px; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
+.category-tags-link { color: #4bbaff !important; }
+
 html, body, input, textarea, select, button, .Box { color: rgba(255, 255, 255, 0.87) !important; background-color: #1b1f23 !important; }
 
 a { color: #4bbaff !important; }
