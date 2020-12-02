@@ -526,10 +526,14 @@ table td { background-color: #1b1f23; border-color: #3b3e42; color: rgba(255, 25
 
 canvas { filter: invert(100%); }
 
-.svg-icon { transform: scale(2) !important; -ms-transform: scale(2) !important; -webkit-transform: scale(2) !important; color: #4bbaff !important; }
+.svg-icon { transform: scale(1.5) !important; -ms-transform: scale(1.5) !important; -webkit-transform: scale(1.5) !important; color: #4bbaff !important; opacity: 0.5 !important; transition: 0.5s; }
+
+.svg-icon:hover { transform: scale(2) !important; -ms-transform: scale(2) !important; -webkit-transform: scale(2) !important; opacity: 1.0 !important; }
 
 .social-media-list, .pagination { float: left; }
 
-.social-media-list li a, .pagination li a { border: none !important; padding-right: 20px !important; }
+.social-media-list li a, .pagination li a { border: none !important; padding: 10px !important; }
+
+.site-footer, .footer-col { padding: 0px !important; }
 
 /*# sourceMappingURL=style.css.map */
