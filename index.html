@@ -4,23 +4,27 @@ search_exclude: true
 image: images/logo.png
 ---
 <style>
-.image-txt-container {
+/* .image-txt-container {
   display:flex;
   align-items:flex-start;
   flex-direction: row;
-}
+} */
 .box-shadow-medium {
     box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
 }
 </style>
 
-<div class="image-txt-container">
-  <img src="{{ site.baseurl }}/images/headshot.jpg" style="width: 15%; margin-right: 30px; margin-bottom: 30px;">
-  <h4 style="margin:0px !important;">
-    <p style="margin-top: 0px !important;">A blog dedicated to exploring and explaining how machines learn, by Ryan Saxe</p>
-    <div class="flash" style="margin-bottom: 30px; font-size: 14px;">
-      {% octicon info %}
-      <strong>Disclaimer: </strong>the content on this site is my own and does not represent the views of my employer(s).
-    </div>
-  </h4>
+<div class="image-txt-container" style="margin-bottom:30px;">
+  <div class="image-container" style="width:15%; margin-right:30px;">
+    <img src="{{ site.baseurl }}/images/headshot.jpg">
+  </div>
+  div class="txt-container" style="width:85%">
+    <h4 style="margin:0px !important;">
+      <p style="margin-top: 0px !important;">A blog dedicated to exploring and explaining how machines learn, by Ryan Saxe</p>
+      <div class="flash" style="margin-bottom: 30px; font-size: 14px;">
+        {% octicon info %}
+        <strong>Disclaimer: </strong>the content on this site is my own and does not represent the views of my employer(s).
+      </div>
+    </h4>
+  </div>
 </div>
