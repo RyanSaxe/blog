@@ -122,10 +122,10 @@ canvas {
     filter: invert(100%);
 }
 
- .svg-icon .grey {
-    transform: scale(2.0);
-    -ms-transform: scale(2.0);
-    -webkit-transform: scale(2.0);
+ .svg-icon {
+    transform: scale(2.0) !important;
+    -ms-transform: scale(2.0) !important;
+    -webkit-transform: scale(2.0) !important;
     color: #4bbaff !important
 }
 
@@ -135,5 +135,5 @@ canvas {
 
 .social-media-list li a {
     border: none !important;
-    padding: 2px !important;
+    padding-right: 20px !important;
 }
