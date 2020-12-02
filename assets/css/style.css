@@ -498,6 +498,8 @@ pre, code { border-color: #3b3e42; background-color: #262a2e; }
 
 .page-description { color: rgba(255, 255, 255, 0.69); }
 
+.social-media-list li a, .pagination li a { border: none !important; padding: 2px !important; }
+
 .p-3 { position: relative !important; }
 
 .p-3 .post-meta { position: absolute !important; bottom: 12px !important; right: 16px !important; }
