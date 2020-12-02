@@ -526,10 +526,10 @@ table td { background-color: #1b1f23; border-color: #3b3e42; color: rgba(255, 25
 
 canvas { filter: invert(100%); }
 
-.svg-icon .grey { transform: scale(2); -ms-transform: scale(2); -webkit-transform: scale(2); color: #4bbaff !important; }
+.svg-icon { transform: scale(2) !important; -ms-transform: scale(2) !important; -webkit-transform: scale(2) !important; color: #4bbaff !important; }
 
 .social-media-list, .pagination { float: left; }
 
-.social-media-list li a, .pagination li a { border: none !important; padding: 2px !important; }
+.social-media-list li a, .pagination li a { border: none !important; padding-right: 20px !important; }
 
 /*# sourceMappingURL=style.css.map */
