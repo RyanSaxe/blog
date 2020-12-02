@@ -39,8 +39,8 @@ a:hover {
 }
 
 .site-header, .site-footer {
-    border-color: black !important;
-    border-width: 2px !important;
+    border-color: rgba(0,0,0,0.5) !important;
+    border-width: 1px !important;
     background-color: $overlay !important;
     position: fixed !important;
     opacity: 0.97;
