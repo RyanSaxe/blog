@@ -12,10 +12,10 @@
         </h3>
         <p class="post-meta-description">{{ post.description }}</p>
             {% if post.categories.size > 0 and site.show_tags %}
-              <p class="post-meta category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+              <p class="post-meta category-tags" style="left: 14px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i></i> 
               {% for category in  post.categories  %}
-                <a class="category-tags-link" href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
-                {% unless forloop.last %}&nbsp;{% endunless %}
+                <a class="category-tags-link" style="color: #4bbaff; opacity:0.5; font-size: 16px;" href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+                {% unless forloop.last %}, {% endunless %}
               {% endfor %}
               </p>
             {% endif %}
