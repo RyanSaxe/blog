@@ -11,9 +11,6 @@ $overlay-light: mix($dark-grey, white, 86%);
   margin-left: 0 !important;
 }
 
-.category-tags-link {
-  color: #4bbaff !important
-}
 html, body, input, textarea, select, button, .Box {   
   color: $high-emph !important;
   background-color: $dark-grey !important;
@@ -64,6 +61,11 @@ pre, code {
     position: absolute !important;
     bottom: 12px !important;
     right: 16px !important;
+}
+
+.p-3 .post-meta .category-tags {
+    color: #4bbaff !important;
+    left: 16px !important;
 }
 
 .post-meta {
