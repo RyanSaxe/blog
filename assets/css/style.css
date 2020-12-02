@@ -480,6 +480,8 @@ p code { font-size: 19px; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
+body { margin-top: 55.95px !important; margin-bottom: 55.95px !important; }
+
 html, body, input, textarea, select, button, .Box { color: rgba(255, 255, 255, 0.87) !important; background-color: #1b1f23 !important; }
 
 a { color: #4bbaff !important; }
@@ -534,9 +536,9 @@ canvas { filter: invert(100%); }
 
 .social-media-list li a, .pagination li a { border: none !important; padding: 10px !important; }
 
-.site-footer { padding: 0px !important; bottom: 0 !important; }
+.site-footer { padding: 0px !important; bottom: 0 !important; box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.75) !important; }
 
-.site-header { top: 0 !important; }
+.site-header { top: 0 !important; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.75) !important; }
 
 .footer-col { margin-bottom: 0px !important; }
 
