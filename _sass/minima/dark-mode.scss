@@ -53,11 +53,6 @@ pre, code {
     color: $med-emph;
 }
 
-.social-media-list li a {
-    border: none !important;
-    padding: 2px !important;
-}
-
 .p-3 {
   position: relative !important;
 }
@@ -125,4 +120,20 @@ table td{
 
 canvas {
     filter: invert(100%);
+}
+
+ .svg-icon grey {
+    transform: scale(2.0);
+    -ms-transform: scale(2.0);
+    -webkit-transform: scale(2.0);
+    color: #4bbaff !important
+}
+
+.social-media-list {
+  float: left
+}
+
+.social-media-list li a {
+    border: none !important;
+    padding: 2px !important;
 }
