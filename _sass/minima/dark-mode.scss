@@ -37,6 +37,9 @@ a:hover {
     border-color: black !important;
     border-width: 2px !important;
     background-color: $overlay !important;
+    position: fixed !important;
+    opacity: 0.8;
+    width: 100% !important;
 }
 
 * {
@@ -149,8 +152,12 @@ canvas {
 
 .site-footer {
     padding: 0px !important;
+    bottom: 0 !important;
 }
 
+.site-header {
+    top: 0 !important;    
+}
 .footer-col {
   margin-bottom: 0px !important;
 }
