@@ -538,4 +538,8 @@ canvas { filter: invert(100%); }
 
 .footer-col { margin-bottom: 0px !important; }
 
+::-webkit-scrollbar-track-piece:start { background: transparent url("{{ site.baseurl }}/images/transparent.png") repeat-y !important; }
+
+::-webkit-scrollbar-track-piece:end { background: transparent url("{{ site.baseurl }}/images/transparent.png") repeat-y !important; }
+
 /*# sourceMappingURL=style.css.map */
