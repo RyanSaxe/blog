@@ -11,6 +11,14 @@
           </a>
         </h3>
         <p class="post-meta-description">{{ post.description }}</p>
+            {% if post.categories.size > 0 and site.show_tags %}
+              <p class="post-meta category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+              {% for category in  post.categories  %}
+                <a class="category-tags-link" href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+                {% unless forloop.last %}&nbsp;{% endunless %}
+              {% endfor %}
+              </p>
+            {% endif %}
           <p class="post-meta">{{ post.date | date: date_format }}</p>
       </div>
   </div>
