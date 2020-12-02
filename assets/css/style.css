@@ -490,7 +490,7 @@ a:hover { color: rgba(255, 255, 255, 0.87) !important; }
 
 .site-nav { background-color: #262a2e !important; border-color: #3b3e42; }
 
-.site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #262a2e !important; }
+.site-header, .site-footer { border-color: black !important; border-width: 2px !important; background-color: #262a2e !important; position: fixed !important; opacity: 0.8; width: 100% !important; }
 
 * { scrollbar-color: #1b1f23 #3b3e42; }
 
@@ -534,7 +534,9 @@ canvas { filter: invert(100%); }
 
 .social-media-list li a, .pagination li a { border: none !important; padding: 10px !important; }
 
-.site-footer { padding: 0px !important; }
+.site-footer { padding: 0px !important; bottom: 0 !important; }
+
+.site-header { top: 0 !important; }
 
 .footer-col { margin-bottom: 0px !important; }
 
