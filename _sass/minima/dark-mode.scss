@@ -11,6 +11,11 @@ $overlay-light: mix($dark-grey, white, 86%);
   margin-left: 0 !important;
 }
 
+body {
+  margin-top: 55.95px !important;
+  margin-bottom: 55.95px !important;
+}
+
 html, body, input, textarea, select, button, .Box {   
   color: $high-emph !important;
   background-color: $dark-grey !important;
@@ -153,10 +158,12 @@ canvas {
 .site-footer {
     padding: 0px !important;
     bottom: 0 !important;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.75) !important;
 }
 
 .site-header {
-    top: 0 !important;    
+    top: 0 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
 }
 .footer-col {
   margin-bottom: 0px !important;
