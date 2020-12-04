@@ -10,8 +10,11 @@ $overlay-light: mix($dark-grey, white, 86%);
   max-height: 300px !important;
   margin-left: 0 !important;
 }
-
+body::-webkit-scrollbar {
+    display: none;
+}
 body {
+  scrollbar-width: none;
   margin-top: 55.95px !important;
   margin-bottom: 55.95px !important;
 }
@@ -167,9 +170,5 @@ canvas {
     box-shadow: 0 1px 6px rgba(0,0,0,0.5) !important;
 }
 .footer-col {
-  margin-bottom: 0px !important;
-}
-
-::-webkit-scrollbar {
-    display: none !important;
+    margin-bottom: 0px !important;
 }
