@@ -433,6 +433,8 @@ pre code { font-size: 15px !important; }
 
 .input_area pre, .input_area div { margin-bottom: 1.0rem !important; margin-top: 1.5rem !important; padding-bottom: 0 !important; padding-top: 0 !important; background: black !important; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-family: Menlo, Monaco, Consolas, "Lucida Console", Roboto, Ubuntu, monospace; border-radius: 5px; font-size: 105%; }
 
+.input_area pre { padding-top: 15px !important; }
+
 .output_area pre, .output_area div { margin-bottom: 1rem !important; margin-top: 0rem !important; padding-bottom: 0 !important; padding-top: 0 !important; }
 
 .output_area pre { margin-left: 1rem !important; font-size: 16px; }
@@ -477,6 +479,10 @@ pre code { font-size: 15px !important; }
 p code { font-size: 19px; }
 
 code, pre { overflow-x: scroll; }
+
+.katex { font-size: 110% !important; }
+
+.katex-display { font-size: 150% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
