@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -135,7 +135,6 @@ window.onload = wrap_img;
     <ul class="section-nav">
 <li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Why-Not-Neural-Networks?">Why Not Neural Networks? </a></li>
 <li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
@@ -162,29 +161,35 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Any supervised prediction problem can be described as learning some function $f$ that minimizes the error to the equation $f(x) = y$, where $x$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures with the goal of making them as transparent as linear models.</p>
 <p><img src="https://ryansaxe.com/images/nnglm.png" alt=""></p>
-<p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear regression, to generalizing the definition of a linear model, and eventually removing linearity with additive models and beyond!</p>
+<p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear regression, to generalizing the definition of a linear model with the aptly named General Linear Model (GLM), and eventually removing linearity with Generalized Additive Models (GLMs) and beyond!</p>
 <h1 id="Linear-Models">
 <a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
 </h1>
-<p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form</p>
+<p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form:</p>
 <p>
 $$y = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
 </p>
 <p>Furthermore, linear regression comes with some additional assumptions:</p>
 <ol>
-<li>Linearity: The relationship between $X$ and the mean of $Y$</li>
-<li>Homoscedasticity: The variance of residual is the same for any value of $X$.</li>
-<li>Independence: Observations are independent of each other.</li>
-<li>Normality: For any fixed value of $X$, $Y$ is normally distributed.</li>
+<li>
+<strong>Linearity</strong>: The relationship between $X$ and the mean of $Y$</li>
+<li>
+<strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$.</li>
+<li>
+<strong>Independence</strong>: Observations are independent of each other.</li>
+<li>
+<strong>Normality</strong>: For any fixed value of $X$, $Y$ is normally distributed.</li>
 </ol>
 <p>However, these assumptions are quite rigid. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The two most common answers to this question.</p>
 <ol>
-<li>Occam's Razor. Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple. </li>
-<li>Linear regression is fully interpretable with respect to the input features. Since we fit an exact equation we know apriori, when our model spits out $\beta_2$, we know that means the feature $x_2$ contributes $\beta_2 x_2$ to our prediction.</li>
+<li>
+<strong>Occam's Razor.</strong> Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple. </li>
+<li>
+<strong>Interpretable with respect to the input features.</strong> Since linear regression fits an exact equation known apriori, when the model spits out $\beta_2$, that means the feature $x_2$ contributes $\beta_2 x_2$ to the prediction.</li>
 </ol>
-<h2 id="Why-Not-Neural-Networks?">
-<a class="anchor" href="#Why-Not-Neural-Networks?" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Not Neural Networks?<a class="anchor-link" href="#Why-Not-Neural-Networks?"> </a>
-</h2>
+<p>In many scenarios, the learned $\beta$ coefficients are more valuable than the actual prediction. Let's say you (unadvisably so) devised a linear model for predicting the expected salary of an individual, and that model (also unadvisably so) contained sensitive factors like race or gender. If the model learns high coefficients with respect to those features, well, you have a sexist and/or racist model! While you probably shouldn't have even attempted building this model, at least it was fully transparent so you know it is unfair and hence won't deploy it (I hope).</p>
+<p>Today, we are going to stick with the notion that transparency is of the utmost importance. That whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above.</p>
+
 </div>
 </div>
 </div>
@@ -194,6 +199,10 @@ $$y = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
 <h2 id="Generalized-Linear-Models">
 <a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
 </h2>
+<p>Generalized Linear Models (GLMs) loosen the constraints of normality. Rather than require the expectation of $Y$ given $X$ to come from a normal distribution, we allow it to come from any distribution from the exponential family. This only broadly changes our equation:</p>
+<p>
+$$\mathbb{E}[y|X] = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
+</p>
 <h3 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h3>
