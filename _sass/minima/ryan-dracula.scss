@@ -44,6 +44,9 @@ $dt-green-light: rgb(172, 229, 145);
     border-radius: 5px;
     font-size: 105%;
 }
+.input_area pre {
+    padding-top: 15px !important
+}
 .output_area pre, .output_area div {
     margin-bottom:1rem !important;
     margin-top:0rem !important;
@@ -220,4 +223,18 @@ p code{
 
 code, pre {
  overflow-x: scroll;
+}
+
+.katex {
+  font-size:110% !important;
+}
+.katex-display {
+   font-size: 150% !important;
+   background-color: black !important;
+   -webkit-font-smoothing: antialiased !important;
+   text-rendering: optimizeLegibility !important;
+   border-radius: 5px !important;
+   border:1px solid #3b3e42 !important;
+   padding: 10px !important;
+   color: white !important;
 }
