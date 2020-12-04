@@ -480,7 +480,9 @@ code, pre { overflow-x: scroll; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
-body { margin-top: 55.95px !important; margin-bottom: 55.95px !important; }
+body::-webkit-scrollbar { display: none; }
+
+body { scrollbar-width: none; margin-top: 55.95px !important; margin-bottom: 55.95px !important; }
 
 html, body, input, textarea, select, button, .Box { color: rgba(255, 255, 255, 0.87) !important; background-color: #1b1f23 !important; }
 
@@ -541,7 +543,5 @@ canvas { filter: invert(100%); }
 .site-header { top: 0 !important; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5) !important; }
 
 .footer-col { margin-bottom: 0px !important; }
-
-::-webkit-scrollbar { display: none !important; }
 
 /*# sourceMappingURL=style.css.map */
