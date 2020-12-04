@@ -2,7 +2,7 @@
 // If you wish to override any of this CSS, do so in _sass/minima/custom-styles.css
  
 $dt-gray-dark: #282a36;  // Background
-$dt-code-cell-background: #323443;
+$dt-code-cell-background: black;
 $dt-gray: #44475a;       // Current Line & Selection
 $dt-gray-light: #f8f8f2; // Foreground
 $dt-blue: #6272a4;       // Comment
@@ -50,11 +50,8 @@ $dt-green-light: rgb(172, 229, 145);
     padding-bottom:0 !important;
     padding-top:0 !important;
 }
-.input_area pre {
-    border-left: 1px solid lightcoral;
-}
+
 .output_area pre {
-    border-left: 1px solid grey;
     margin-left: 1rem !important;
     font-size: 16px;
 }
@@ -219,4 +216,8 @@ $dt-green-light: rgb(172, 229, 145);
 
 p code{
   font-size: 19px;
+}
+
+code, pre {
+ overflow-x: scroll;
 }
