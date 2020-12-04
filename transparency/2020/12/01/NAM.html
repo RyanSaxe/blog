@@ -133,16 +133,19 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#Approximating-Functions">Approximating Functions </a>
+<li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Linear-Models">Linear Models </a></li>
+<li class="toc-entry toc-h2"><a href="#Why-Not-Neural-Networks?">Why Not Neural Networks? </a></li>
 <li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models">Generalized Additive Models </a></li>
-<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
+<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul><!--
@@ -157,30 +160,31 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Approximating-Functions">
-<a class="anchor" href="#Approximating-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Approximating Functions<a class="anchor-link" href="#Approximating-Functions"> </a>
-</h1>
-<p>Some arbitrary function is the heart of every single prediction problem. Given a dataset $X$, the goal is to learn some function $f$ such that $\forall x,y \in X \quad f(x) = y$. Most learning algorithms (e.g. neural networks, decision trees, support vector machines) are just mechanisms for finding the best $f$ according to a given objective:</p>
-<p>
-$$MIN_{\forall f \in H} \sum_{\forall x,y \in X}L(f(x), y)$$
-</p>
-<p>Where $H$ is some "hypothesis space": the set of possible functions the algorithm can use to make a prediction. And $L$ is some "loss function": a function that</p>
-<h2 id="Linear-Models">
+<p>Any supervised prediction problem can be described as learning some function $f$ that minimizes the error to the equation $f(x) = y$, where $x$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures with the goal of making them as transparent as linear models.</p>
+<p><img src="https://ryansaxe.com/images/nnglm.png" alt=""></p>
+<p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear regression, to generalizing the definition of a linear model, and eventually removing linearity with additive models and beyond!</p>
+<h1 id="Linear-Models">
 <a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
-</h2>
-<p>Different algorithms are sufficient for finding different families of functions. They have different hypothesis spaces. For example, simple linear models (e.g. linear and logistic regression) describe only functions that can be written as:</p>
+</h1>
+<p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form</p>
 <p>
 $$y = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
 </p>
-<p>For linear regression, this comes with some additional assumptions[CITATION]:</p>
+<p>Furthermore, linear regression comes with some additional assumptions:</p>
 <ol>
 <li>Linearity: The relationship between $X$ and the mean of $Y$</li>
 <li>Homoscedasticity: The variance of residual is the same for any value of $X$.</li>
 <li>Independence: Observations are independent of each other.</li>
 <li>Normality: For any fixed value of $X$, $Y$ is normally distributed.</li>
 </ol>
-<p>These assumptions inform the hypothesis space. And hence any function $f$ that does not conform to these assumptions cannot be in $H$.</p>
-
+<p>However, these assumptions are quite rigid. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The two most common answers to this question.</p>
+<ol>
+<li>Occam's Razor. Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple. </li>
+<li>Linear regression is fully interpretable with respect to the input features. Since we fit an exact equation we know apriori, when our model spits out $\beta_2$, we know that means the feature $x_2$ contributes $\beta_2 x_2$ to our prediction.</li>
+</ol>
+<h2 id="Why-Not-Neural-Networks?">
+<a class="anchor" href="#Why-Not-Neural-Networks?" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Not Neural Networks?<a class="anchor-link" href="#Why-Not-Neural-Networks?"> </a>
+</h2>
 </div>
 </div>
 </div>
@@ -279,9 +283,9 @@ $$y = \beta_0 + \beta_1 g(X_1) + \beta_2 g(X_2) + \cdots + \beta_N g(X_N)$$
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Neural-Additive-Models">
+<h3 id="Neural-Additive-Models">
 <a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
-</h2>
+</h3>
 <p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
 
 </div>
