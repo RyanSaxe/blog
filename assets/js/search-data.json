@@ -1,18 +1,15 @@
 {
   
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-  
-
+    
+        "post0": {
+            "title": "Neural Networks as Interpretable as Linear Models",
+            "content": "Approximating Functions . Some arbitrary function is the heart of every single prediction problem. Given a dataset $X$, the goal is to learn some function $f$ such that $ forall x,y in X quad f(x) = y$. Most learning algorithms (e.g. neural networks, decision trees, support vector machines) are just mechanisms for finding the best $f$ according to a given objective: . $$MIN_{ forall f in H} sum_{ forall x,y in X}L(f(x), y)$$ . Where $H$ is some &quot;hypothesis space&quot;: the set of possible functions the algorithm can use to make a prediction. And $L$ is some &quot;loss function&quot;: a function that . Linear Models . Different algorithms are sufficient for finding different families of functions. They have different hypothesis spaces. For example, simple linear models (e.g. linear and logistic regression) describe only functions that can be written as: . $$y = X^T beta = beta_0 + beta_1 X_1 + beta_2 X_2 + cdots + beta_N X_N$$ . For linear regression, this comes with some additional assumptions[CITATION]: . Linearity: The relationship between $X$ and the mean of $Y$ | Homoscedasticity: The variance of residual is the same for any value of $X$. | Independence: Observations are independent of each other. | Normality: For any fixed value of $X$, $Y$ is normally distributed. | These assumptions inform the hypothesis space. And hence any function $f$ that does not conform to these assumptions cannot be in $H$. . Generalized Linear Models . Relating to Neural Networks . Generalized Additive Models . Neural Additive Models . Opening The Hypothesis Space . gam = LinearGAM(spline(0) + spline(1) + spline(2)).fit(X, y) . # relu helps learn more jagged functions if necessary class MLP(tf.keras.Model): def __init__( self, name=None ): super().__init__(name=name) self.l1 = tf.keras.layers.Dense(8, activation=&#39;relu&#39;) self.l2 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.l3 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.l4 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.output_layer = tf.keras.layers.Dense(1) def call(self, x, training=None): x = self.l1(x) x = self.l2(x) x = self.l3(x) x = self.l4(x) return self.output_layer(x) #define a Neural Additive Model for n features class NAM(tf.keras.Model): def __init__( self, n_features, name=None ): super().__init__(name=name) self.n_features = n_features self.components = [MLP() for i in range(n_features)] self.linear_combination = tf.keras.layers.Dense(1) @tf.function def call(self, x, training=None): individual_features = tf.split(x, self.n_features, axis=1) components = [] for f_idx,individual_feature in enumerate(individual_features): component = self.components[f_idx](individual_feature) components.append(component) components = tf.concat(components, axis=1) return self.linear_combination(components) . Train on 1000000 samples Epoch 1/10 1000000/1000000 [==============================] - 60s 60us/sample - loss: 414.4350 - mean_absolute_error: 10.9988 Epoch 2/10 1000000/1000000 [==============================] - 57s 57us/sample - loss: 120.1113 - mean_absolute_error: 4.9874 Epoch 3/10 1000000/1000000 [==============================] - 55s 55us/sample - loss: 74.6649 - mean_absolute_error: 3.6563 Epoch 4/10 1000000/1000000 [==============================] - 54s 54us/sample - loss: 59.5442 - mean_absolute_error: 3.0831 Epoch 5/10 1000000/1000000 [==============================] - 56s 56us/sample - loss: 51.1148 - mean_absolute_error: 2.6067 Epoch 6/10 1000000/1000000 [==============================] - 56s 56us/sample - loss: 46.4825 - mean_absolute_error: 2.3151 Epoch 7/10 1000000/1000000 [==============================] - 55s 55us/sample - loss: 43.2321 - mean_absolute_error: 2.1660 Epoch 8/10 1000000/1000000 [==============================] - 56s 56us/sample - loss: 41.0939 - mean_absolute_error: 2.0531 Epoch 9/10 1000000/1000000 [==============================] - 56s 56us/sample - loss: 39.4331 - mean_absolute_error: 1.9772 Epoch 10/10 1000000/1000000 [==============================] - 56s 56us/sample - loss: 37.6433 - mean_absolute_error: 1.9064 . &lt;tensorflow.python.keras.callbacks.History at 0x21904d6d948&gt; .",
+            "url": "https://ryansaxe.com/transparency/2020/12/01/NAM.html",
+            "relUrl": "/transparency/2020/12/01/NAM.html",
+            "date": " • Dec 1, 2020"
+        }
+        
+    
   
 
   
@@ -23,6 +20,17 @@
   
 
   
+
+  
+  
+
+  
+
+  
+  
+
+  
+
   
 
   
@@ -32,7 +40,10 @@
   
 
   
-      "page12": {
+  
+
+  
+      ,"page12": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://ryansaxe.com/robots.txt",
