@@ -425,7 +425,7 @@ pre code { font-size: 15px !important; }
 /*----- ADD YOUR STYLES BELOW -------*/
 .language-python + .language-plaintext { border-left: 1px solid grey; margin-left: 1rem !important; }
 
-[class^="language-"]:not(.language-plaintext) pre, [class^="language-"]:not(.language-plaintext) code { background-color: #323443 !important; color: #f8f8f2; }
+[class^="language-"]:not(.language-plaintext) pre, [class^="language-"]:not(.language-plaintext) code { background-color: black !important; color: #f8f8f2; }
 
 .language-python + .language-plaintext code { background-color: white !important; }
 
@@ -435,22 +435,20 @@ pre code { font-size: 15px !important; }
 
 .output_area pre, .output_area div { margin-bottom: 1rem !important; margin-top: 0rem !important; padding-bottom: 0 !important; padding-top: 0 !important; }
 
-.input_area pre { border-left: 1px solid lightcoral; }
-
-.output_area pre { border-left: 1px solid grey; margin-left: 1rem !important; font-size: 16px; }
+.output_area pre { margin-left: 1rem !important; font-size: 16px; }
 
 .code_cell table { width: auto; }
 
 /* Dracula Theme v1.2.5 https://github.com/zenorocha/dracula-theme Copyright 2016, All rights reserved Code licensed under the MIT license */
-.highlight { background: #323443 !important; color: #f8f8f2 !important; }
+.highlight { background: black !important; color: #f8f8f2 !important; }
 
-.highlight pre, .highlight code { background: #323443; color: #f8f8f2; font-size: 110%; }
+.highlight pre, .highlight code { background: black; color: #f8f8f2; font-size: 110%; }
 
 .highlight .hll, .highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss { color: #e7997a; }
 
 .highlight .go { color: #44475a; }
 
-.highlight .err, .highlight .g, .highlight .l, .highlight .n, .highlight .x, .highlight .ge, .highlight .gr, .highlight .gh, .highlight .gi, .highlight .gp, .highlight .gs, .highlight .gu, .highlight .gt, .highlight .ld, .highlight .no, .highlight .nd, .highlight .pi, .highlight .ni, .highlight .ne, .highlight .nn, .highlight .nx, .highlight .py, .highlight .w, .highlight .bp { color: #f8f8f2; background-color: #323443 !important; }
+.highlight .err, .highlight .g, .highlight .l, .highlight .n, .highlight .x, .highlight .ge, .highlight .gr, .highlight .gh, .highlight .gi, .highlight .gp, .highlight .gs, .highlight .gu, .highlight .gt, .highlight .ld, .highlight .no, .highlight .nd, .highlight .pi, .highlight .ni, .highlight .ne, .highlight .nn, .highlight .nx, .highlight .py, .highlight .w, .highlight .bp { color: #f8f8f2; background-color: black !important; }
 
 .highlight .p { font-weight: bold; color: #66d9ef; }
 
@@ -477,6 +475,8 @@ pre code { font-size: 15px !important; }
 .highlight .gd { color: #ff5555; }
 
 p code { font-size: 19px; }
+
+code, pre { overflow-x: scroll; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
