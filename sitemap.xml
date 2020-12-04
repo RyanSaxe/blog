@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://ryansaxe.com/transparency/2020/12/01/NAM.html</loc>
-<lastmod>2020-12-01T00:00:00-06:00</lastmod>
-</url>
-<url>
 <loc>https://ryansaxe.com/about/</loc>
 </url>
 <url>
@@ -24,6 +20,6 @@
 </url>
 <url>
 <loc>https://ryansaxe.com/images/resume.pdf</loc>
-<lastmod>2020-12-04T00:08:53-06:00</lastmod>
+<lastmod>2020-12-04T00:12:35-06:00</lastmod>
 </url>
 </urlset>
