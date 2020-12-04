@@ -1,16 +1,5 @@
 {
   
-    
-        "post0": {
-            "title": "Neural Networks as Interpretable as Linear Models",
-            "content": ". import tensorflow as tf import matplotlib.pyplot as plt import pandas as pd import numpy as np . columns = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;] n_data = 100000 mean = 0.0 std = 1.0 #create the dataset data = { col: np.random.normal( size=n_data, loc=mean, scale=std ) for col in columns } df = pd.DataFrame(data) #apply nonlinear transforms to the data functions = { &#39;a&#39;: lambda x: 5 * (2 ** x), &#39;b&#39;: lambda x: x**4 + x**3 - 10 * x**2 + x, &#39;c&#39;: lambda x: 10 / ((abs(x) ** 0.5) + 1e-1), } for col in columns: df[f&#39;{col}_transform&#39;] = df[col].apply(functions[col]) #set up a prediction task where the target is a composition of # the nonlinear transforms, but the training data is the normally # distributed data prior to being transformed X = df[[c for c in df.columns if not c.endswith(&#39;_transform&#39;)]] y = df[[c for c in df.columns if c.endswith(&#39;_transform&#39;)]].sum(1) X.assign(target=y).head() . a b c target . 0 -1.077278 | 1.192369 | -1.397477 | 0.860538 | . 1 -0.590783 | -0.658800 | 0.402334 | 11.841833 | . 2 1.133968 | -0.196243 | -1.024683 | 19.376303 | . 3 -0.895441 | -1.490606 | -0.741089 | -8.989580 | . 4 1.649055 | 0.582163 | 0.575812 | 24.830456 | . class MLP(tf.keras.Model): def __init__( self, name=None ): super().__init__(name=name) self.layer1 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.layer2 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.layer3 = tf.keras.layers.Dense(8, activation=&#39;softplus&#39;) self.output_layer = tf.keras.layers.Dense(1) def call(self, x, training=None): x = self.layer1(x) x = self.layer2(x) x = self.layer3(x) return self.output_layer(x) #define a Neural Additive Model for n features class NAM(tf.keras.Model): def __init__( self, n_features, name=None ): super().__init__(name=name) self.n_features = n_features self.components = [MLP() for i in range(n_features)] @tf.function def call(self, x, training=None): individual_features = tf.split(x, self.n_features, axis=1) components = [] for f_idx,individual_feature in enumerate(individual_features): component = self.components[f_idx](individual_feature) components.append(component) return tf.add_n(components) . model = NAM(len(X.columns)) model.compile( optimizer=tf.keras.optimizers.Adam(), loss=&#39;mean_squared_error&#39;, metrics=[&#39;mean_absolute_error&#39;] ) model.fit( X.to_numpy(), y.to_numpy(), epochs=50, batch_size=32, ) .",
-            "url": "https://ryansaxe.com/transparency/2020/12/01/NAM.html",
-            "relUrl": "/transparency/2020/12/01/NAM.html",
-            "date": " • Dec 1, 2020"
-        }
-        
-    
-  
 
   
   
@@ -43,7 +32,7 @@
   
 
   
-      ,"page12": {
+      "page12": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://ryansaxe.com/robots.txt",
