@@ -174,5 +174,7 @@ canvas {
 }
 
 .section-nav {
-  float: right !important;
+    float: right !important;
+    border: 1px $overlay-light solid !important;
+    background-color: $overlay !important;
 }
