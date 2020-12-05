@@ -177,4 +177,7 @@ canvas {
     float: right !important;
     border: 1px $overlay-light solid !important;
     background-color: $overlay !important;
+    border-radius: 5px !important;
+    list-style-position: inside !important;
+    padding: 20px !important;
 }
