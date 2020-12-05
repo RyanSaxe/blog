@@ -4,9 +4,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Neural Networks as Interpretable as Linear Models | Opening the Black Box</title>
+<title>Designing Interpretable Neural Networks | Opening the Black Box</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Neural Networks as Interpretable as Linear Models" />
+<meta property="og:title" content="Designing Interpretable Neural Networks" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent." />
 <meta property="og:description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent." />
@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-12-01T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Neural Networks as Interpretable as Linear Models","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent.","@context":"https://schema.org"}</script>
+{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -88,13 +88,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Neural Networks as Interpretable as Linear Models</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-12-01T00:00:00-06:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Designing Interpretable Neural Networks</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-12-01T00:00:00-06:00" itemprop="datePublished">
         Dec 1, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      6 min read
     
 </span></p>
 
@@ -159,26 +159,33 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Any supervised prediction problem can be described as learning some function $f$ that minimizes the error to the equation $f(x) = y$, where $x$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures with the goal of making them as transparent as linear models.</p>
-<p><img src="https://ryansaxe.com/images/nnglm.png" alt=""></p>
-<p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear regression, to generalizing the definition of a linear model with the aptly named General Linear Model (GLM), and eventually removing linearity with Generalized Additive Models (GLMs) and beyond!</p>
+<p>Any supervised prediction problem can be described as learning some function $f$ that minimizes the error to the equation $f(x) = y$, where $x$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures to learn such functions, with the additional goal of making them as transparent as linear models.</p>
+<p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear models, to generalizing them with the aptly named General Linear Model (GLM), and eventually removing linearity with Generalized Additive Models (GLMs) and beyond!</p>
 <h1 id="Linear-Models">
 <a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
 </h1>
 <p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form:</p>
 <p>
-$$y = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
+$$y = X^T\beta +\epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
 </p>
-<p>Furthermore, linear regression comes with some additional assumptions:</p>
+<p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $\epsilon$ is the error-term (often referred to as the residual). Furthermore, linear regression comes with some additional assumptions:</p>
 <ol>
 <li>
-<strong>Linearity</strong>: The relationship between $X$ and the mean of $Y$</li>
+<p><strong>Linearity</strong>: The relationship between $X$ and the mean of $Y$</p>
+<p>The namesake of linear models: linearity. This is a rigid assumption. Linear regression cannot properly solve a problem where this does not hold. In fact, a lack of this relationship will often be reflected in the error terms in a way that breaks the other assumptions.</p>
+</li>
 <li>
-<strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$.</li>
+<p><strong>Independence</strong>: Observations are independent of each other.</p>
+<p>Linear regression assumes that there are no relationships between the features. For example, a model that has a feature for price and a feature for discount would break this assumption. As discount changes, the price changes accordingly, creating a dependence between these features. This type of dependence is referred to as multicolinearity.</p>
+</li>
 <li>
-<strong>Independence</strong>: Observations are independent of each other.</li>
+<p><strong>Normality</strong>: We assume that $y$ given $X$ is a gaussian with mean dependent only on $X$ and covariance $\sigma^2 I$</p>
+<p>Placeholder explanation</p>
+</li>
 <li>
-<strong>Normality</strong>: For any fixed value of $X$, $Y$ is normally distributed.</li>
+<p><strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$</p>
+<p>Homoscedasticity is a very nice property. Regardless of the input features, the error in your model stays the same. It has no variance. Heteroscedasticity often implies a lack of linearity, independence, or normality. It's a hint that there are complexities in the data that cannot be represented by your current model. If your linear model has variance within the error terms, this implies that you should probably explore other methodologies, but not that your model is objectively wrong.</p>
+</li>
 </ol>
 <p>However, these assumptions are quite rigid. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The two most common answers to this question.</p>
 <ol>
@@ -199,9 +206,10 @@ $$y = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
 <h2 id="Generalized-Linear-Models">
 <a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
 </h2>
-<p>Generalized Linear Models (GLMs) loosen the constraints of normality. Rather than require the expectation of $Y$ given $X$ to come from a normal distribution, we allow it to come from any distribution from the exponential family. This only broadly changes our equation:</p>
+<p>Given the assumption of normality, $\mu(x) = \mathbb{E}[y|X]$ was always the mean from the normal distribution. Generalized Linear Models (GLMs) loosen the constraints of normality. Now, $\mu$ can represent an expectation that can come from any distribution in the exponential family, which just means that an exponential shows up in the probility density function (pdf). This includes quite a lot of extra distributions, such as gamma, bernoulli, poisson, and more!</p>
+<p>However, not all of these distributions range from $-\infty$ to $+\infty$, which is necessary for solving regression problems in the linear form $y = X^T\beta$. In order for us to maintain a linear model, we transform the mean of the distribution ( $\mu(x) = \mathbb{E}[y|X]$ ) using a specified function $g$. $g$ is called the link function.</p>
 <p>
-$$\mathbb{E}[y|X] = X^T\beta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N$$
+$$g(\mu(x)) = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
 </p>
 <h3 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
