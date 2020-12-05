@@ -550,6 +550,6 @@ canvas { filter: invert(100%); }
 
 .footer-col { margin-bottom: 0px !important; }
 
-.section-nav { float: right !important; border: 1px #3b3e42 solid !important; background-color: #262a2e !important; border-radius: 5px !important; list-style-position: inside !important; padding: 20px !important; }
+.section-nav { float: right !important; border: 1px #3b3e42 solid !important; background-color: #262a2e !important; border-radius: 5px !important; list-style-position: inside !important; padding: 20px !important; opacity: 0.75 !important; margin-left: 0px !important; margin-right: 20px !important; }
 
 /*# sourceMappingURL=style.css.map */
