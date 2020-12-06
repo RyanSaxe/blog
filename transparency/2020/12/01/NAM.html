@@ -94,7 +94,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      7 min read
     
 </span></p>
 
@@ -133,18 +133,19 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
+<li class="toc-entry toc-h1"><a href="#Linear-Regression">Linear Regression </a></li>
+<li class="toc-entry toc-h1"><a href="#Generalized-Linear-Models">Generalized Linear Models </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a>
+<li class="toc-entry toc-h2"><a href="#Logistic-Regression">Logistic Regression </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
 </ul>
 </li>
 </ul><!--
@@ -161,12 +162,12 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Any supervised prediction problem can be described as learning some function $f$ that minimizes the error to the equation $f(x) = y$, where $x$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures to learn such functions, with the additional goal of making them as transparent as linear models.</p>
 <p>Prior to delving straight into the neural networks, we should work our way up the hierarchy of linear models. Starting from basic linear models, to generalizing them with the aptly named General Linear Model (GLM), and eventually removing linearity with Generalized Additive Models (GLMs) and beyond!</p>
-<h1 id="Linear-Models">
-<a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
+<h1 id="Linear-Regression">
+<a class="anchor" href="#Linear-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a>
 </h1>
 <p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form:</p>
 <p>
-$$y = X^T\beta +\epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
+$$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
 </p>
 <p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $\epsilon$ is the error-term (often referred to as the residual). Furthermore, linear regression comes with some additional assumptions:</p>
 <ol>
@@ -179,23 +180,32 @@ $$y = X^T\beta +\epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_
 <p>Linear regression assumes that there are no relationships between the features. For example, a model that has a feature for price and a feature for discount would break this assumption. As discount changes, the price changes accordingly, creating a dependence between these features. This type of dependence is referred to as multicolinearity.</p>
 </li>
 <li>
-<p><strong>Normality</strong>: We assume that $y$ given $X$ is a gaussian with mean dependent only on $X$ and covariance $\sigma^2 I$</p>
-<p>Placeholder explanation</p>
-</li>
-<li>
-<p><strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$</p>
-<p>Homoscedasticity is a very nice property. Regardless of the input features, the error in your model stays the same. It has no variance. Heteroscedasticity often implies a lack of linearity, independence, or normality. It's a hint that there are complexities in the data that cannot be represented by your current model. If your linear model has variance within the error terms, this implies that you should probably explore other methodologies, but not that your model is objectively wrong.</p>
+<p><strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</p>
+<p>More specifically, we say that $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$. The expectation of a normal distribution is the mean. Hence linear regression can actually be written as</p>
 </li>
 </ol>
-<p>However, these assumptions are quite rigid. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The two most common answers to this question.</p>
+<p>
+$$y = \mathbb{E}[y|X] = \mu(x) = X^T\beta + \epsilon$$
+</p>
 <ol>
 <li>
-<strong>Occam's Razor.</strong> Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple. </li>
-<li>
-<strong>Interpretable with respect to the input features.</strong> Since linear regression fits an exact equation known apriori, when the model spits out $\beta_2$, that means the feature $x_2$ contributes $\beta_2 x_2$ to the prediction.</li>
+<p><strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$</p>
+<p>This is a direct corollary from $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$. $\sigma^2 I$ implies that the variance of the distribution is not dependent on $X$, and each $X$ has the same variance. Heteroscedasticity often implies a lack of linearity, independence, or normality. It's a hint that there are complexities in the data that cannot be represented by your current model. If your linear model has variance within the error terms, this implies that you should probably explore other methodologies, as a linear model was not able to properly capture $\mathbb{E}[y|X]$.</p>
+</li>
 </ol>
-<p>In many scenarios, the learned $\beta$ coefficients are more valuable than the actual prediction. Let's say you (unadvisably so) devised a linear model for predicting the expected salary of an individual, and that model (also unadvisably so) contained sensitive factors like race or gender. If the model learns high coefficients with respect to those features, well, you have a sexist and/or racist model! While you probably shouldn't have even attempted building this model, at least it was fully transparent so you know it is unfair and hence won't deploy it (I hope).</p>
-<p>Today, we are going to stick with the notion that transparency is of the utmost importance. That whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above.</p>
+<p>These assumptions are quite rigid for the real world. Many datasets and/or problem spaces do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? Two common answers to this question are:</p>
+<ol>
+<li>
+<p><strong>Occam's Razor</strong></p>
+<p>Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple.</p>
+</li>
+<li>
+<p><strong>Interpretability</strong></p>
+<p>Linear regression fits an exact equation known apriori. When the model spits out $\beta_2$, that means that, according to the model, the feature $X_2$ contributes $\beta_2 X_2$ to the outcome.</p>
+</li>
+</ol>
+<p>In many scenarios, the learned $\beta$ coefficients are more valuable than the actual prediction. Let's say you (unadvisably so) devised a linear model for predicting the expected salary of an individual, and that model (also unadvisably so) contained sensitive factors like race or gender. If the model learns high coefficients with respect to those features, well, you have a sexist and/or racist model! While you probably shouldn't have even attempted building this model in the first place, at least it was fully transparent so you know it is unfair and hence won't deploy it (I hope).</p>
+<p>Today, we are going to stick with the notion that transparency is of the utmost importance. Whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above.</p>
 
 </div>
 </div>
@@ -203,14 +213,25 @@ $$y = X^T\beta +\epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generalized-Linear-Models">
+<h1 id="Generalized-Linear-Models">
 <a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
-</h2>
-<p>Given the assumption of normality, $\mu(x) = \mathbb{E}[y|X]$ was always the mean from the normal distribution. Generalized Linear Models (GLMs) loosen the constraints of normality. Now, $\mu$ can represent an expectation that can come from any distribution in the exponential family, which just means that an exponential shows up in the probility density function (pdf). This includes quite a lot of extra distributions, such as gamma, bernoulli, poisson, and more!</p>
+</h1>
+<p>Generalized Linear Models (GLMs) are exactly what they sound like, a generalization of the definitions described above. Technically, linear regression is a GLM. However, the set of potential GLMs describe a much wider array of functions.</p>
+<p>GLMs loosen the constraints of normality. Now the mean of the distribution connecting $y$ to $X$ can represent an expectation from any distribution in the exponential family<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>. This includes quite a lot of extra distributions, such as normal, bernoulli, poisson, and more!</p>
 <p>However, not all of these distributions range from $-\infty$ to $+\infty$, which is necessary for solving regression problems in the linear form $y = X^T\beta$. In order for us to maintain a linear model, we transform the mean of the distribution ( $\mu(x) = \mathbb{E}[y|X]$ ) using a specified function $g$. $g$ is called the link function.</p>
 <p>
-$$g(\mu(x)) = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
+$$g(\mu(x)) = X^T\beta + \epsilon$$
 </p>
+<p>Observe that this also loosens the constraints of linearity. Recall that $\mu(x)$ is just our expectation for $y$ given $X$. So, if we substitute back $y$, and take the inverse to get rid of $g$ in relationship to $y$, we get:</p>
+<p>
+$$y = g^{-1}(X^T\beta) + \epsilon$$
+</p>
+<p>Hence the relationship between $y$ and $X$ is no longer required to be exactly linear. However, the relationship between the resulting $g(y)$ transformed by the link function and $X$ must be linear.</p>
+<p>Note that this clarification implies that L $g$ is the identity function $g(\mu) = \mu$, then the GLM is just normal linear regression.</p>
+<h2 id="Logistic-Regression">
+<a class="anchor" href="#Logistic-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logistic Regression<a class="anchor-link" href="#Logistic-Regression"> </a>
+</h2>
+<p>Logistic regression is actually a GLM! For simplicity, this section will cover only binary logistic regression. This means that $y$ will be either 0 or 1, and hence can be described by a bernoulli distribution. In order to squash the regression results to be between 0 and 1, we use the logit link function $g(\mu) = log(\frac{\mu}{1 - \mu})$.</p>
 <h3 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h3>
@@ -222,9 +243,9 @@ $$g(\mu(x)) = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generalized-Additive-Models">
+<h1 id="Generalized-Additive-Models">
 <a class="anchor" href="#Generalized-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Models<a class="anchor-link" href="#Generalized-Additive-Models"> </a>
-</h2>
+</h1>
 <p>GAMs take another step towards reducing the restrictions within linear models. There is exactly one modification on GLMs that turn them into GAMs:</p>
 <p>
 $$y = \beta_0 + \beta_1 g(X_1) + \beta_2 g(X_2) + \cdots + \beta_N g(X_N)$$
@@ -472,6 +493,15 @@ Epoch 10/10
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="footnotes"><p id="fn-15">15. which just means that an exponential shows up in the probility density function (pdf)<a href="#fnref-15" class="footnote footnotes">↩</a></p></div>
+
+</div>
+</div>
+</div>
 </div>
 
 
