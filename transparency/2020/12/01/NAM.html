@@ -181,7 +181,7 @@ $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta
 </li>
 <li>
 <p><strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</p>
-<p>More specifically, we say that $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$. The expectation of a normal distribution is the mean. Hence linear regression can actually be written as</p>
+<p>More specifically, we say that $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$, which also implies that the distribution of the residuals is normal and independent of $X$. Furthermore, this means we can consider linear regression as predicting the mean of a normal distribution.</p>
 </li>
 </ol>
 <p>
@@ -190,17 +190,17 @@ $$y = \mathbb{E}[y|X] = \mu(x) = X^T\beta + \epsilon$$
 <ol>
 <li>
 <p><strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$</p>
-<p>This is a direct corollary from $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$. $\sigma^2 I$ implies that the variance of the distribution is not dependent on $X$, and each $X$ has the same variance. Heteroscedasticity often implies a lack of linearity, independence, or normality. It's a hint that there are complexities in the data that cannot be represented by your current model. If your linear model has variance within the error terms, this implies that you should probably explore other methodologies, as a linear model was not able to properly capture $\mathbb{E}[y|X]$.</p>
+<p>This is a direct corollary from $y \in \mathcal{N}(X^T\beta, \sigma^2 I)$. $\sigma^2 I$ implies that the variance of the distribution is not dependent on $X$, and each $X$ has the same variance. Heteroscedasticity often implies a lack of linearity, independence, or normality. It's a hint that there are complexities in the data that cannot be represented by your current model. If your linear model has variance within the error terms, this implies that you should probably explore other methodologies, as a classic linear model was not able to properly capture $\mathbb{E}[y|X]$.</p>
 </li>
 </ol>
 <p>These assumptions are quite rigid for the real world. Many datasets and/or problem spaces do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? Two common answers to this question are:</p>
 <ol>
 <li>
-<p><strong>Occam's Razor</strong></p>
+<p><strong>Occam's Razor</strong>: Don't add complexity without necessity.</p>
 <p>Linear regression is the simplest way of solving a regression problem, and it's often a good idea to start simple.</p>
 </li>
 <li>
-<p><strong>Interpretability</strong></p>
+<p><strong>Interpretability</strong>: The decisions of the model can be explained with respect to $X$ and $y$.</p>
 <p>Linear regression fits an exact equation known apriori. When the model spits out $\beta_2$, that means that, according to the model, the feature $X_2$ contributes $\beta_2 X_2$ to the outcome.</p>
 </li>
 </ol>
@@ -248,9 +248,9 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 </h1>
 <p>GAMs take another step towards reducing the restrictions within linear models. There is exactly one modification on GLMs that turn them into GAMs:</p>
 <p>
-$$y = \beta_0 + \beta_1 g(X_1) + \beta_2 g(X_2) + \cdots + \beta_N g(X_N)$$
+$$y = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2) + \cdots + \beta_N h_N(X_N) + \epsilon$$
 </p>
-<p>where $g$ is allowed to be a non-linear function. This eliminates the restriction of linearity. Furthermore, GAMs are allowed to model dependent features</p>
+<p>where each function $h_i$ is allowed to be a non-linear function. This eliminates the restriction of linearity. Furthermore, GAMs are allowed to model dependent features</p>
 
 </div>
 </div>
@@ -497,7 +497,7 @@ Epoch 10/10
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-15">15. which just means that an exponential shows up in the probility density function (pdf)<a href="#fnref-15" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. which just means that an exponential shows up in the probility density function (pdf)<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 
 </div>
 </div>
