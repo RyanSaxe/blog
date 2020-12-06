@@ -15,8 +15,12 @@ body::-webkit-scrollbar {
     background-color: $overlay !important;
 }
 body {
-  margin-top: 55.95px !important;
-  margin-bottom: 55.95px !important;
+    margin-top: 55.95px !important;
+    margin-bottom: 55.95px !important;
+}
+
+* {
+    scroll-margin-top: 55.95px;
 }
 
 html, body, input, textarea, select, button, .Box {   
