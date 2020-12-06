@@ -490,6 +490,8 @@ body::-webkit-scrollbar { border-left: 1px rgba(0, 0, 0, 0.5) solid !important; 
 
 body { margin-top: 55.95px !important; margin-bottom: 55.95px !important; }
 
+* { scroll-margin-top: 55.95px; }
+
 html, body, input, textarea, select, button, .Box { color: rgba(255, 255, 255, 0.87) !important; background-color: #1b1f23 !important; }
 
 a { color: #4bbaff !important; }
