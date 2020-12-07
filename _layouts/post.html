@@ -2,6 +2,17 @@
 layout: default
 ---
 
+{%- if page.annotations -%}
+<script>
+  window.hypothesisConfig = function () {
+    return {
+      "theme": "clean",
+      "openSidebar": true,
+    };
+  };
+</script>
+{%- if page.annotations -%}
+
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
