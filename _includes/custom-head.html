@@ -7,6 +7,14 @@
 
 {%- if page.annotations -%}
 <script async src="https://hypothes.is/embed.js"></script>
+window.hypothesisConfig = function () {
+  return {
+    branding: {
+      appBackgroundColor: '#262a2e',
+      ctaTextColor: 'white',
+    },
+  };
+};
 {%- endif -%}
 
 {%- include favicons.html -%}
