@@ -482,7 +482,7 @@ code, pre { overflow-x: scroll; }
 
 .katex { font-size: 110% !important; }
 
-.katex-display { font-size: 150% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; }
+.katex-display { font-size: 150% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; overflow-y: scroll !important; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
