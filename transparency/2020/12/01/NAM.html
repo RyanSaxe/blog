@@ -8,8 +8,8 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Designing Interpretable Neural Networks" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent." />
-<meta property="og:description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent." />
+<meta name="description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. Generalized Linear Models (GLMs) and Generalized Additive Models (GAMs) are classic transparent approaches to supervised learning. This post builds off of those approaches to demonstrate that it’s possible to design NNs just as transparent!" />
+<meta property="og:description" content="The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. Generalized Linear Models (GLMs) and Generalized Additive Models (GAMs) are classic transparent approaches to supervised learning. This post builds off of those approaches to demonstrate that it’s possible to design NNs just as transparent!" />
 <link rel="canonical" href="https://ryansaxe.com/transparency/2020/12/01/NAM.html" />
 <meta property="og:url" content="https://ryansaxe.com/transparency/2020/12/01/NAM.html" />
 <meta property="og:site_name" content="Opening the Black Box" />
@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-12-01T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. This post delves into the history of General Linear Models (GLMs), and shows that with intentional design, NNs can be just as transparent.","@context":"https://schema.org"}</script>
+{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"The classic Neural Network (NN) with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. Generalized Linear Models (GLMs) and Generalized Additive Models (GAMs) are classic transparent approaches to supervised learning. This post builds off of those approaches to demonstrate that it’s possible to design NNs just as transparent!","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" /><script async src="https://hypothes.is/embed.js"></script>
 <!-- <script>
@@ -103,7 +103,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      10 min read
     
 </span></p>
 
@@ -149,9 +149,10 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
+<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a></li>
+<li class="toc-entry toc-h1"><a href="#Neural-Additive-Models">Neural Additive Models </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
+<li class="toc-entry toc-h2"><a href="#Introducing-Priors">Introducing Priors </a></li>
 </ul>
 </li>
 </ul><!--
@@ -173,7 +174,7 @@ window.onload = wrap_img;
 </h1>
 <p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models like linear regression can only learn to make predictions according to functions of the form:</p>
 <p>
-$$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_N X_N + \epsilon$$
+$$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
 </p>
 <p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $\epsilon$ is the error-term (often referred to as the residual). Furthermore, linear regression comes with some additional assumptions:</p>
 <ol>
@@ -237,7 +238,8 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 <h2 id="Logistic-Regression">
 <a class="anchor" href="#Logistic-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logistic Regression<a class="anchor-link" href="#Logistic-Regression"> </a>
 </h2>
-<p>Logistic regression is actually a GLM! For simplicity, this section will cover only binary logistic regression. This means that $y$ will be either 0 or 1, and hence can be described by a bernoulli distribution. In order to squash the regression results to be between 0 and 1, we use the logit link function $g(\mu) = log(\frac{\mu}{1 - \mu})$.</p>
+<p>Logistic regression is actually a GLM! Let's say we're trying to predict some binary variable, which means that $y$ will be either 0 or 1. This can be described by a bernoulli distribution. In order to squash the regression results to be between 0 and 1, we use the logit link function $g(\mu) = log(\frac{\mu}{1 - \mu})$.</p>
+<p>And GLMs are as easy as that! Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $y = X^T\beta$.</p>
 <h2 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h2>
@@ -262,11 +264,11 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># linear regression uses the identity as the link function</span>
         <span class="c1">#    and the inverse of the identity is a linear activation</span>
-        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">'linear'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">style</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'linear'</span><span class="p">:</span>
             <span class="n">activation</span> <span class="o">=</span> <span class="s1">'linear'</span>
         <span class="c1"># logistic regression uses the logit link function, and the</span>
         <span class="c1">#    inverse of logit is a sigmoid activation function</span>
-        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">'logistic'</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">style</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'logistic'</span><span class="p">:</span>
             <span class="n">activation</span> <span class="o">=</span> <span class="s1">'sigmoid'</span>
         <span class="c1"># no other options are supported</span>
         <span class="k">else</span><span class="p">:</span>
@@ -376,11 +378,20 @@ Epoch 10/10
 <h1 id="Generalized-Additive-Models">
 <a class="anchor" href="#Generalized-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Models<a class="anchor-link" href="#Generalized-Additive-Models"> </a>
 </h1>
-<p>GAMs take another step towards reducing the restrictions within linear models. There is exactly one modification on GLMs that turn them into GAMs:</p>
+<p>Generalized Additive Models (GAMs) take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:</p>
+<ol>
+<li>
+<p>Elimination of the linearity restriction.</p>
+<p>GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth (differentiable everywhere).</p>
+</li>
+<li>
+<p>A change to the independence criterion.</p>
+<p>Linear models make the assumption that $X_i$ and $X_j$ are independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. Essentially, this just means that when you set up a GAM, you are allowed to have $h_i(X_i,X_j, \cdots)$ be a part of the equation.</p>
+</li>
+</ol>
 <p>
-$$y = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2) + \cdots + \beta_N h_N(X_N) + \epsilon$$
+$$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \beta_m h_m(X_n) + \epsilon$$
 </p>
-<p>where each function $h_i$ is allowed to be a non-linear function. This eliminates the restriction of linearity. Furthermore, GAMs are allowed to model dependent features</p>
 
 </div>
 </div>
@@ -415,7 +426,9 @@ $$y = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2) + \cdots + \beta_N h_N(X_N) 
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gam</span> <span class="o">=</span> <span class="n">LinearGAM</span><span class="p">(</span><span class="n">spline</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">LinearGam</span>
+<span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">s</span> <span class="k">as</span> <span class="n">spline</span>
+<span class="n">gam</span> <span class="o">=</span> <span class="n">LinearGAM</span><span class="p">(</span><span class="n">spline</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -451,9 +464,9 @@ $$y = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2) + \cdots + \beta_N h_N(X_N) 
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Neural-Additive-Models">
+<h1 id="Neural-Additive-Models">
 <a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
-</h2>
+</h1>
 <p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
 
 </div>
@@ -647,8 +660,19 @@ Epoch 10/10
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introducing-Priors">
+<a class="anchor" href="#Introducing-Priors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introducing Priors<a class="anchor-link" href="#Introducing-Priors"> </a>
+</h2>
+<p>This is the fun part. This is where all your creativity for problem solving given domain knowledge yields an extremely flexible, powerful, and interpretable model!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. which just means that an exponential shows up in the probility density function (pdf)<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the &lt;a href=<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 
 </div>
 </div>
