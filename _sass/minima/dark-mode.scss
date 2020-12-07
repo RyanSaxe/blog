@@ -190,7 +190,7 @@ social-media-list .svg-icon:hover {
 }
 
 .annotator-toolbar {
-    top: 56px;
+    top: 56px !important;
 }
 
 .annotator-toolbar__sidebar-toggle {
@@ -203,6 +203,6 @@ social-media-list .svg-icon:hover {
     display:none !important;
 }
 
-annotator-bucket-bar {
+.annotator-bucket-bar {
     display: none !important;
 }
