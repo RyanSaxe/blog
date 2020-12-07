@@ -2,4 +2,13 @@
 layout: post
 ---
 
+<script>
+  $(document).ready(function(){
+    var toc = document.getElementByClassName("section-nav");
+    var title = document.createElement("p");
+    title.innerHTML = "Table of Contents";
+    toc.innerHTML = title + toc.innerHTML;
+  });
+</script>
+
 {{ content }}
