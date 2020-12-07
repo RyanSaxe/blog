@@ -189,13 +189,20 @@ social-media-list .svg-icon:hover {
     margin-right: 20px !important;
 }
 
+.annotator-toolbar {
+    top: 56px;
+}
+
 .annotator-toolbar__sidebar-toggle {
-    top: 56px !important;
     border-left: 1px rgba(0,0,0,0.5) solid !important;
     border-bottom: 1px rgba(0,0,0,0.5) solid !important;
     background-color: $overlay !important;
 }
 
 .annotator-toolbar-buttonbar {
-  display:none !important
+    display:none !important;
+}
+
+annotator-bucket-bar {
+    display: none !important;
 }
