@@ -5,15 +5,8 @@
   2. Customize default _includes/custom-head.html in your source directory and insert the given code snippet.
 {% endcomment %}
 
-{%- if site.annotations -%}
+{%- if page.annotations -%}
 <script async src="https://hypothes.is/embed.js"></script>
-<!-- <script>
-  window.hypothesisConfig = function () {
-    return {
-      "theme": "clean",
-    };
-  };
-</script> -->
 {%- endif -%}
 
 {%- include favicons.html -%}
