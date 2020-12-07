@@ -74,10 +74,12 @@ window.onload = wrap_img;
 </script>
 
 <script>
-    toc = document.getElementByClassName("section-nav");
-    title = document.createElement("p");
+  document.addEventListener("DOMContentLoaded", function(){
+    var toc = document.getElementByClassName("section-nav");
+    var title = document.createElement("p");
     title.innerHTML = "Table of Contents";
     toc.innerHTML = title + toc.innerHTML;
+  });
 </script>
 </head>
 <body><header class="site-header">
