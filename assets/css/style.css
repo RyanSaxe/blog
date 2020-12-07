@@ -538,9 +538,9 @@ table td { background-color: #1b1f23; border-color: #3b3e42; color: rgba(255, 25
 
 canvas { filter: invert(100%); }
 
-.svg-icon { transform: scale(1.5) !important; -ms-transform: scale(1.5) !important; -webkit-transform: scale(1.5) !important; color: #4bbaff !important; opacity: 0.5 !important; transition: 0.5s; }
+.social-media-list .svg-icon, .pagination .svg-icon { transform: scale(1.5) !important; -ms-transform: scale(1.5) !important; -webkit-transform: scale(1.5) !important; color: #4bbaff !important; opacity: 0.5 !important; transition: 0.5s; }
 
-.svg-icon:hover { transform: scale(2) !important; -ms-transform: scale(2) !important; -webkit-transform: scale(2) !important; opacity: 1.0 !important; }
+social-media-list .svg-icon:hover { transform: scale(2) !important; -ms-transform: scale(2) !important; -webkit-transform: scale(2) !important; opacity: 1.0 !important; }
 
 .social-media-list, .pagination { float: left; }
 
@@ -553,5 +553,9 @@ canvas { filter: invert(100%); }
 .footer-col { margin-bottom: 0px !important; }
 
 .section-nav { float: left !important; border: 1px #3b3e42 solid !important; background-color: #262a2e !important; border-radius: 5px !important; list-style-position: inside !important; padding: 20px !important; opacity: 0.75 !important; margin-left: 0px !important; margin-right: 20px !important; }
+
+.annotator-toolbar__sidebar-toggle { top: 56px !important; border-left: 1px rgba(0, 0, 0, 0.5) solid !important; border-bottom: 1px rgba(0, 0, 0, 0.5) solid !important; background-color: #262a2e !important; }
+
+.annotator-toolbar-buttonbar { display: none !important; }
 
 /*# sourceMappingURL=style.css.map */
