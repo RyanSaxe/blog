@@ -67,6 +67,21 @@ window.onload = wrap_img;
     elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+
+<script>
+    toc = document.getElementByClassName("section-nav");
+    title = document.createElement("p");
+    title.innerHTML = "Table of Contents";
+    toc.innerHTML = title + toc.innerHTML;
+</script>
 </head>
 <body><header class="site-header">
 
