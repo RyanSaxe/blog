@@ -4,10 +4,7 @@ layout: post
 
 <script>
   $(document).ready(function(){
-    var toc = document.getElementByClassName("section-nav");
-    var title = document.createElement("p");
-    title.innerHTML = "Table of Contents";
-    toc.innerHTML = title + toc.innerHTML;
+    $(".section-nav").prepend("<p style='font-size:24px; text-align:center'>Table of Contents</p>");
   });
 </script>
 
