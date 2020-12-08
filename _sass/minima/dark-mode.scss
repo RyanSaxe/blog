@@ -148,10 +148,10 @@ canvas {
     transition: 0.5s;
 }
 
-social-media-list .svg-icon:hover {
-    transform: scale(2.0) !important;
-    -ms-transform: scale(2.0) !important;
-    -webkit-transform: scale(2.0) !important;
+.social-media-list .svg-icon:hover {
+    transform: scale(1.75) !important;
+    -ms-transform: scale(1.75) !important;
+    -webkit-transform: scale(1.75) !important;
     opacity: 1.0 !important;
 }
 
