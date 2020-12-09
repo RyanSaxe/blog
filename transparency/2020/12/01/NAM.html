@@ -106,7 +106,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      10 min read
     
 </span></p>
 
@@ -342,7 +342,8 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logistic_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'logistic'</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logistic regression setup</span>
+<span class="n">logistic_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'logistic'</span><span class="p">)</span>
 <span class="n">logistic_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
     <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span>
@@ -357,60 +358,6 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Train on 100000 samples
-Epoch 1/20
-100000/100000 [==============================] - 4s 37us/sample - loss: 0.7754 - mean_absolute_error: 0.4888
-Epoch 2/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.6278 - mean_absolute_error: 0.4604
-Epoch 3/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.5729 - mean_absolute_error: 0.4327
-Epoch 4/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.5302 - mean_absolute_error: 0.4069
-Epoch 5/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.4937 - mean_absolute_error: 0.3836
-Epoch 6/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.4624 - mean_absolute_error: 0.3629
-Epoch 7/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.4352 - mean_absolute_error: 0.3443
-Epoch 8/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.4114 - mean_absolute_error: 0.3277
-Epoch 9/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3901 - mean_absolute_error: 0.3125
-Epoch 10/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3716 - mean_absolute_error: 0.2991
-Epoch 11/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3551 - mean_absolute_error: 0.2869
-Epoch 12/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3405 - mean_absolute_error: 0.2760
-Epoch 13/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3273 - mean_absolute_error: 0.2661
-Epoch 14/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3153 - mean_absolute_error: 0.2570
-Epoch 15/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.3045 - mean_absolute_error: 0.2487
-Epoch 16/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.2947 - mean_absolute_error: 0.2412
-Epoch 17/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.2858 - mean_absolute_error: 0.2343
-Epoch 18/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.2774 - mean_absolute_error: 0.2277
-Epoch 19/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.2698 - mean_absolute_error: 0.2218
-Epoch 20/20
-100000/100000 [==============================] - 3s 34us/sample - loss: 0.2626 - mean_absolute_error: 0.2162
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -445,7 +392,8 @@ Epoch 20/20
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">linear_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#linear regression setup</span>
+<span class="n">linear_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">)</span>
 <span class="n">linear_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
     <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">,</span>
@@ -460,60 +408,6 @@ Epoch 20/20
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Train on 100000 samples
-Epoch 1/20
-100000/100000 [==============================] - 4s 35us/sample - loss: 16.7596 - mean_absolute_error: 2.5893
-Epoch 2/20
-100000/100000 [==============================] - 3s 32us/sample - loss: 0.5011 - mean_absolute_error: 0.5516
-Epoch 3/20
-100000/100000 [==============================] - 3s 33us/sample - loss: 0.0413 - mean_absolute_error: 0.1400
-Epoch 4/20
-100000/100000 [==============================] - 3s 33us/sample - loss: 0.0023 - mean_absolute_error: 0.0365
-Epoch 5/20
-100000/100000 [==============================] - 3s 33us/sample - loss: 9.4708e-05 - mean_absolute_error: 0.0057
-Epoch 6/20
-100000/100000 [==============================] - 3s 33us/sample - loss: 1.6401e-09 - mean_absolute_error: 1.3697e-05
-Epoch 7/20
-100000/100000 [==============================] - 3s 32us/sample - loss: 1.4325e-07 - mean_absolute_error: 1.0512e-04
-Epoch 8/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.8288e-07 - mean_absolute_error: 1.8046e-04
-Epoch 9/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.9753e-07 - mean_absolute_error: 2.3565e-04
-Epoch 10/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.0450e-07 - mean_absolute_error: 2.3890e-04
-Epoch 11/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.5764e-07 - mean_absolute_error: 1.9322e-04
-Epoch 12/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.7682e-07 - mean_absolute_error: 1.4774e-04
-Epoch 13/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.1005e-07 - mean_absolute_error: 2.1238e-04
-Epoch 14/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.0354e-07 - mean_absolute_error: 1.9896e-04
-Epoch 15/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.2435e-07 - mean_absolute_error: 2.0558e-04
-Epoch 16/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.8651e-07 - mean_absolute_error: 1.4816e-04
-Epoch 17/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.0956e-07 - mean_absolute_error: 2.1453e-04
-Epoch 18/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.9873e-07 - mean_absolute_error: 2.5622e-04
-Epoch 19/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 2.0934e-07 - mean_absolute_error: 1.9631e-04
-Epoch 20/20
-100000/100000 [==============================] - 3s 31us/sample - loss: 1.9702e-07 - mean_absolute_error: 1.9863e-04
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -846,12 +740,14 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 <p>
 $$y = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i)$$
 </p>
-<p>Now, $h_i$ is some non-linear function learned via a multi-layer perceptron. Given that any function can have an intercept, we can say that $h_i(X_i) = \alpha_i + f(x_i)$ where $f(x_i)$ represents all of the aspects of $h(x_i)$ dependent on $x_i$.</p>
+<p>Now, $h_i$ is some non-linear function learned via a multi-layer perceptron. Given that any function can have an intercept, we can say that $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ dependent on $X_i$.</p>
 $$
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_(X_i)) \\
+\begin{align}
+y &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
 y &amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
-$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation had $\beta_i = 1 \forall i$ and $\alpha_i = 2 \forall i$. In this case, the first half of $\alpha$ could be zero, and the second half could be four. That would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence it is impossible to guarantee learning correct intercepts for any additive model.</p>
-<p>Furthermore, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
+\end{align}
+$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, the first half of $\alpha$ could be zero, and the second half could be four. That would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
+<p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
 
 </div>
 </div>
@@ -899,7 +795,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is <a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^1 X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_b(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
 <div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the <a href="https://en.wikipedia.org/wiki/Exponential_family">Wiki</a>.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
 
