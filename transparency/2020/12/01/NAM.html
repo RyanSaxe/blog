@@ -795,7 +795,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^1 X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_b(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^-1 X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
 <div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the <a href="https://en.wikipedia.org/wiki/Exponential_family">Wiki</a>.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
 
