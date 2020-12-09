@@ -747,13 +747,8 @@ $$
 y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
 &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
 &amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i) \\
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
-&amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
-&amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i) \\
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
-&amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
-&amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
 \end{aligned}
+y = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
 $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
 <p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
 
@@ -802,7 +797,6 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$\gdef\inv1$</p>
 <p></p>
 <div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
