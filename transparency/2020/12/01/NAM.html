@@ -738,14 +738,11 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>At first glance, these results look good, but not perfect. While the Neural Additive Model was capable of learning the general shapes of the functions, it looks like it's off on the intercepts for all of them. This should not discount the validity of the model. The corresponding math demonstrates perfectly fitting intercepts of an additive model cannot be guaranteed.</p>
 <p>Let $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ that dependent on $X_i$, and $\alpha_i$ represents the intercept.</p>
-<p>$
-\begin{align}
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
-\end{align}
-$</p>
-<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
+$$
+y = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
+y = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
+y = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
+$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
 <p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
 
 </div>
