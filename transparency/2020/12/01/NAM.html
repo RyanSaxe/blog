@@ -738,13 +738,13 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>At first glance, these results look good, but not perfect. While the Neural Additive Model was capable of learning the general shapes of the functions, it looks like it's off on the intercepts for all of them. This should not discount the validity of the model. The corresponding math demonstrates perfectly fitting intercepts of an additive model cannot be guaranteed. Our NAM is fitting the following function for n features:</p>
 <p>
-$$y = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i)$$
+$$y = \beta_0 + \sum\_{i=1}^n \beta_i h_i(X_i)$$
 </p>
 <p>Now, $h_i$ is some non-linear function learned via a multi-layer perceptron. Given that any function can have an intercept, we can say that $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ dependent on $X_i$.</p>
 $$
 \begin{align}
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
-y &amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
+y &amp; = \beta_0 + \sum\_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
+y &amp; = \beta_0 + \sum\_{i=1}^n \beta_i \alpha_i + \sum\_{i=1}^n \beta_i f_i(X_i)
 \end{align}
 $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, the first half of $\alpha$ could be zero, and the second half could be four. That would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
 <p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
@@ -795,7 +795,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^-1 X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^- ^1 X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
 <div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the <a href="https://en.wikipedia.org/wiki/Exponential_family">Wiki</a>.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
 
