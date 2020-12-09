@@ -40,20 +40,17 @@ window.hypothesisConfig = function () {
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement( document.body, {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "[%", right: "%]", display: true},
-            {left: "$", right: "$", display: false}
-        ]}
-        );
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "[%", right: "%]", display: true},
+                {left: "$", right: "$", display: false}
+            ],
+            macros: {
+            // Algebra-Precal
+            "\\inv": "{-1}",
+            }
+        });
     });
-    window.MathJax = {
-      tex: {
-        macros: {
-          inv: "{-1}"
-        }
-      }
-    };
     </script>
 
 
