@@ -92,26 +92,34 @@ window.onload = wrap_img;
 <script>
 $(document).ready(function(){
     $('.footnote-ref a').hover(function(event) {
+        // find the footnote corresponding to the link
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
+            // get location of mousehover
             var x = event.pageX + 20;
             var y = event.pageY - 20;
             var fndiv = $(fnid).clone()
+            // remove the "return to line" part of footnote
+            fndiv.children("a:last").remove();
+            // set new footnote to where the hover happened
             fndiv.css({
                 top: y,
                 left: x,
             });
+            // change id to control look of popup
             fndiv.attr({
                 id: 'footnote-popup',
             });
+            // set up fadein transition
             fndiv.hide();
             $('body').append(fndiv);
             fndiv.fadeIn(1000);
         }
     }, function() {
+        // remove footnote when no longer hovering
         $('#footnote-popup').fadeOut(1000, function(){
             $(this).remove();
-        }); 
+        });
     });
 });
 </script></head>
@@ -267,7 +275,7 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 <li>
 <strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>).</li>
 <li>
-<strong>Systematic Component</strong>: the system of explanatory variables for predicting the random component (often $X^T\beta$).</li>
+<strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (often $X^T\beta$).</li>
 <li>
 <strong>Link Function</strong>: A function $g$ that links systematic component and the random component.</li>
 </ol>
@@ -281,7 +289,7 @@ $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 <p>
 $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
-<p>And GLMs are as easy as that! Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$.</p>
+<p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, Ordinary Least Squares may no longer have a closed form solution in this case. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
 <p>TALK ABOUT MAXIMUM LIKELIHOOD ESTIMATION HERE</p>
 <h2 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
@@ -727,9 +735,8 @@ $$
 \begin{aligned}
 y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
 &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
-&amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i) \\
+&amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
 \end{aligned}
-y = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
 $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
 <p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
 
