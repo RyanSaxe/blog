@@ -484,7 +484,7 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .katex-display { font-size: 125% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; overflow-y: scroll !important; }
 
-.katex-display .mtable { font-size: 150% !important; }
+.katex-display .mtable { font-size: 125% !important; }
 
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
@@ -564,6 +564,6 @@ canvas { filter: invert(100%); }
 
 .annotator-bucket-bar { display: none !important; }
 
-#footnote-popup { position: absolute; z-index: 99999999999; box-shadow: 0 3px 10px black; padding: 10px; max-width: 400px; }
+#footnote-popup { position: absolute; z-index: 99999999999; box-shadow: 0 3px 10px black; padding: 10px; max-width: 400px; border: 2px rgba(255, 255, 255, 0.69) solid !important; background-color: black !important; }
 
 /*# sourceMappingURL=style.css.map */

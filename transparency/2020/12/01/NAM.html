@@ -103,7 +103,6 @@ $(document).ready(function(){
             });
             fndiv.attr({
                 id: 'footnote-popup',
-                class: 'Box',
             });
             fndiv.hide();
             $('body').append(fndiv);
@@ -142,7 +141,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      10 min read
+      9 min read
     
 </span></p>
 
@@ -184,13 +183,7 @@ $(document).ready(function(){
 <li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#Linear-Regression">Linear Regression </a></li>
-<li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#The-Link-Function">The Link Function </a></li>
-<li class="toc-entry toc-h3"><a href="#Maximum-Likelihood-Estimation">Maximum Likelihood Estimation </a></li>
-<li class="toc-entry toc-h3"><a href="#Example:-Logistic-Regression">Example: Logistic Regression </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a></li>
 <li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
 </li>
@@ -254,9 +247,9 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 <li>
 <strong>Occam's Razor</strong>: Don't add complexity without necessity.    </li>
 <li>
-<strong>Little Data</strong>: Ordinary Least Squares (OLS) is an estimation method for linear regression with a closed form solution<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</li>
+<strong>Little Data</strong>: Ordinary Least Squares (OLS) is a closed form solution to linear regression<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</li>
 <li>
-<strong>Interpretability</strong>: The prediction $y$ can always be explained with respect to the input features $X$ connected to the learned coefficients $\beta$.</li>
+<strong>Interpretability</strong>: $y$ can be explained with respect to how $X$ interacts with the $\beta$ coefficients.</li>
 </ol>
 <p>Today, we are going to stick with the notion that transparency is of the utmost importance, and assume we have a significant amount of data. Whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above in order to be comparably interpretable.</p>
 
@@ -283,29 +276,13 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 </p>
 <p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the GLM is exactly linear regression! Hence the functions that GLMs can describe are simply a superset of the functions linear regression can describe. Furthermore, recognize that the random component loosens the constraint of normality, and that the link function alters the constraint of linearity. The relationship between $X$ and the mean of $y$ can be non-linear as long as the relationship between $X$ and the mean of $g(y)$ is linear. Lastly, the residuals are allowed to be heteroscedastic. The only restriction from linear regression that fully remains is the independence of the explanatory variables.</p>
-<h3 id="The-Link-Function">
-<a class="anchor" href="#The-Link-Function" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Link Function<a class="anchor-link" href="#The-Link-Function"> </a>
-</h3>
-<p>Non-normal random components necessitate a link function. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$.</p>
-<p>However, not all of these distributions range from $-\infty$ to $+\infty$, which is necessary for solving regression problems in the linear form $y = X^T\beta$. In order for us to maintain a linear model, we transform the mean of the distribution ( $\mu(x) = \mathbb{E}[y|X]$ ) using a specified function $g$. $g$ is called the link function.</p>
+<p>The link function is the most important aspect to any GLM. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$. Link functions are selected according to the given random component.</p>
+<p>For example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means $\mu(x)$ is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and a logit function is sufficient for this:</p>
 <p>
-$$g(\mu(x)) = X^T\beta + \epsilon$$
+$$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
-<p>Observe that this also loosens the constraints of linearity. Recall that $\mu(x)$ is just our expectation for $y$ given $X$. So, if we substitute back $y$, and take the inverse to get rid of $g$ in relationship to $y$, we get:</p>
-<p>
-$$y = g^{-1}(X^T\beta) + \epsilon$$
-</p>
-<p>Hence the relationship between $y$ and $X$ is no longer required to be exactly linear. However, the relationship between the resulting $g(y)$ transformed by the link function and $X$ must be linear.</p>
-<p>Note that this clarification implies that L $g$ is the identity function $g(\mu) = \mu$, then the GLM is just normal linear regression.</p>
-<h3 id="Maximum-Likelihood-Estimation">
-<a class="anchor" href="#Maximum-Likelihood-Estimation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maximum Likelihood Estimation<a class="anchor-link" href="#Maximum-Likelihood-Estimation"> </a>
-</h3>
-<p>Note: OLS = MLE under normality constraint</p>
-<h3 id="Example:-Logistic-Regression">
-<a class="anchor" href="#Example:-Logistic-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example: Logistic Regression<a class="anchor-link" href="#Example:-Logistic-Regression"> </a>
-</h3>
-<p>Logistic regression is actually a GLM! Let's say we're trying to predict some binary variable, which means that $y$ will be either 0 or 1. This can be described by a bernoulli distribution. In order to squash the regression results to be between 0 and 1, we use the logit link function $g(\mu) = log(\frac{\mu}{1 - \mu})$.</p>
-<p>And GLMs are as easy as that! Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $y = X^T\beta$.</p>
+<p>And GLMs are as easy as that! Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$.</p>
+<p>TALK ABOUT MAXIMUM LIKELIHOOD ESTIMATION HERE</p>
 <h2 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h2>
@@ -486,19 +463,17 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 <p>Generalized Additive Models (GAMs) take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:</p>
 <ol>
 <li>
-<p>Full elimination of the linearity restriction.</p>
-<p>GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth (differentiable everywhere). It also can be non-parametric.</p>
+<p><strong>Allow non-linearity</strong>: GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth (differentiable everywhere). It also can be non-parametric.</p>
 </li>
 <li>
-<p>A change to the independence criterion.</p>
-<p>Linear models make the assumption that $X_i$ and $X_j$ are independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
+<p><strong>Allow dependence</strong>: Linear models make the assumption that $X_i$ and $X_j$ are independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
 </li>
 </ol>
 <p>Hence, equations for GAMs look like this:</p>
 <p>
 $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \beta_m h_m(X_n) + \epsilon$$
 </p>
-<p>Technically, this makes GLMs a special case of GAMs where all functions $h$</p>
+<p>Technically, this makes GLMs a special case of GAMs where all functions $h$ are the identity function.</p>
 <h2 id="Fitting-Smooth-Functions">
 <a class="anchor" href="#Fitting-Smooth-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fitting Smooth Functions<a class="anchor-link" href="#Fitting-Smooth-Functions"> </a>
 </h2>
@@ -807,9 +782,16 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
-<div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the <a href="https://en.wikipedia.org/wiki/Exponential_family">Wiki</a>.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 
 </div>
 </div>
