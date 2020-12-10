@@ -240,3 +240,12 @@ code, pre {
    color: white !important;
    overflow-y: scroll !important;
 }
+
+.katex-display .mtable {
+  font-size: 150% !important;
+}
+
+#footnote-popup {
+  position: absolute;
+  z-index: 99999999999;
+}
