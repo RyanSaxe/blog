@@ -208,3 +208,12 @@ canvas {
 .annotator-bucket-bar {
     display: none !important;
 }
+
+#footnote-popup {
+    position: absolute;
+    z-index: 99999999999;
+    box-shadow: 0 3px 10px black;
+    padding: 10px;
+    max-width: 400px;
+}
+  
