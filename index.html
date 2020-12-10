@@ -82,7 +82,7 @@ $(document).ready(function(){
     $('.footnote-ref a').hover(function(event) {
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
-        var footnote = $(fnid).text()
+        var footnote = $(fnid).html()
         var x = event.pageX + 20;
         var y = event.pageY - 20;
         var fndiv = $('<div/>',{
