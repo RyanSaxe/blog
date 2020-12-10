@@ -94,21 +94,20 @@ $(document).ready(function(){
     $('.footnote-ref a').hover(function(event) {
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
-        var footnote = $(fnid).html()
-        var x = event.pageX + 20;
-        var y = event.pageY - 20;
-        var fndiv = $('<div/>',{
-            id: 'footnote-popup',
-            class: 'Box',
-            text: footnote,
-        });
-        fndiv.css({
-            top: y,
-            left: x,
-        });
-        $(fndiv).hide();
-        $('body').append(fndiv);
-        $(fndiv).fadeIn(1000);
+            var x = event.pageX + 20;
+            var y = event.pageY - 20;
+            var fndiv = $(fnid).clone()
+            fndiv.css({
+                top: y,
+                left: x,
+            });
+            fndiv.attr({
+                id: 'footnote-popup',
+                class: 'Box',
+            });
+            fndiv.hide();
+            $('body').append(fndiv);
+            fndiv.fadeIn(1000);
         }
     }, function() {
         $('#footnote-popup').fadeOut(1000, function(){

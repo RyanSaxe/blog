@@ -486,8 +486,6 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .katex-display .mtable { font-size: 150% !important; }
 
-#footnote-popup { position: absolute; z-index: 99999999999; }
-
 .post img { max-height: 300px !important; margin-left: 0 !important; }
 
 body::-webkit-scrollbar { border-left: 1px rgba(0, 0, 0, 0.5) solid !important; background-color: #262a2e !important; }
@@ -565,5 +563,7 @@ canvas { filter: invert(100%); }
 .annotator-toolbar-buttonbar { display: none !important; }
 
 .annotator-bucket-bar { display: none !important; }
+
+#footnote-popup { position: absolute; z-index: 99999999999; box-shadow: 0 3px 10px black; padding: 10px; max-width: 400px; }
 
 /*# sourceMappingURL=style.css.map */
