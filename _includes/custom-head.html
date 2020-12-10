@@ -83,26 +83,34 @@ window.onload = wrap_img;
 <script>
 $(document).ready(function(){
     $('.footnote-ref a').hover(function(event) {
+        // find the footnote corresponding to the link
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
+            // get location of mousehover
             var x = event.pageX + 20;
             var y = event.pageY - 20;
             var fndiv = $(fnid).clone()
+            // remove the "return to line" part of footnote
+            fndiv.children("a:last").remove();
+            // set new footnote to where the hover happened
             fndiv.css({
                 top: y,
                 left: x,
             });
+            // change id to control look of popup
             fndiv.attr({
                 id: 'footnote-popup',
             });
+            // set up fadein transition
             fndiv.hide();
             $('body').append(fndiv);
             fndiv.fadeIn(1000);
         }
     }, function() {
+        // remove footnote when no longer hovering
         $('#footnote-popup').fadeOut(1000, function(){
             $(this).remove();
-        }); 
+        });
     });
 });
 </script>
