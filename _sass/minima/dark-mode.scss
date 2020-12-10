@@ -7,7 +7,7 @@ $overlay: mix($dark-grey, white, 95%);
 $overlay-light: mix($dark-grey, white, 86%);
 
 .post img {
-  max-height: 300px !important;
+  max-width: 500px !important;
   margin-left: 0 !important;
 }
 body::-webkit-scrollbar {
@@ -93,6 +93,8 @@ pre, code {
 .post-meta-description {
     color: $low-emph !important;
     padding-bottom: 30px !important;
+    text-overflow: ellipsis;
+    max-height: 200px;
 }
 
 .post-content p, .post-content li {
