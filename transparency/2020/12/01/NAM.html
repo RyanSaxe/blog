@@ -19,7 +19,12 @@
 <script type="application/ld+json">
 {"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"A Neural Network with many layers and non-linear activation functions is difficult to interpret. However, that doesn’t mean all NNs are opaque. Generalized Linear Models and Generalized Additive Models are classic transparent approaches to supervised learning. This post builds off of those approaches to demonstrate that it’s possible to design Neural Networks that are just as transparent!","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" /><script async src="https://hypothes.is/embed.js"></script>
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" />
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script><script async src="https://hypothes.is/embed.js"></script>
 <!-- <script>
 window.hypothesisConfig = function () {
   return {
@@ -83,7 +88,35 @@ window.onload = wrap_img;
     elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
     });
 </script>
-</head>
+
+<script>
+$(document).ready(function(){
+    $('.footnote-ref a').hover(function(event) {
+        var fnid = $(this).attr('href');
+        if (!$('#footnote-popup').length){
+        var footnote = $(fnid).text()
+        var x = event.pageX + 20;
+        var y = event.pageY - 20;
+        var fndiv = $('<div/>',{
+            id: 'footnote-popup',
+            class: 'Box',
+            text: footnote,
+        });
+        fndiv.css({
+            top: y,
+            left: x,
+        });
+        $(fndiv).hide();
+        $('body').append(fndiv);
+        $(fndiv).fadeIn(1000);
+        }
+    }, function() {
+        $('#footnote-popup').fadeOut(1000, function(){
+            $(this).remove();
+        }); 
+    });
+});
+</script></head>
 <body><header class="site-header">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/">Opening the Black Box</a><nav class="site-nav">
@@ -159,23 +192,14 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Example:-Logistic-Regression">Example: Logistic Regression </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#Link-Function-->-Activation-Function">Link Function -&gt; Activation Function </a></li>
-<li class="toc-entry toc-h3"><a href="#Maximum-Likelihood-Estimation-->-Loss-Function">Maximum Likelihood Estimation -&gt; Loss Function </a></li>
-<li class="toc-entry toc-h3"><a href="#Code-Example">Code Example </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#Fitting-Smooth-Functions">Fitting Smooth Functions </a></li>
-<li class="toc-entry toc-h2"><a href="#Additive-Neural-Networks">Additive Neural Networks </a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#Example-Code">Example Code </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h2"><a href="#Additive-Neural-Networks">Additive Neural Networks </a></li>
+<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h1"><a href="#Interpretable-Neural-Networks">Interpretable Neural Networks </a>
@@ -288,15 +312,7 @@ $$y = g^{-1}(X^T\beta) + \epsilon$$
 </h2>
 <p>Note: MLE -&gt; crossentropy</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
-<h3 id="Link-Function--&gt;-Activation-Function">
-<a class="anchor" href="#Link-Function--&gt;-Activation-Function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Link Function -&gt; Activation Function<a class="anchor-link" href="#Link-Function--&gt;-Activation-Function"> </a>
-</h3>
-<h3 id="Maximum-Likelihood-Estimation--&gt;-Loss-Function">
-<a class="anchor" href="#Maximum-Likelihood-Estimation--&gt;-Loss-Function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maximum Likelihood Estimation -&gt; Loss Function<a class="anchor-link" href="#Maximum-Likelihood-Estimation--&gt;-Loss-Function"> </a>
-</h3>
-<h3 id="Code-Example">
-<a class="anchor" href="#Code-Example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code Example<a class="anchor-link" href="#Code-Example"> </a>
-</h3>
+
 </div>
 </div>
 </div>
@@ -589,15 +605,6 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Example-Code">
-<a class="anchor" href="#Example-Code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example Code<a class="anchor-link" href="#Example-Code"> </a>
-</h3>
-</div>
-</div>
-</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -781,6 +788,9 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Neural-Additive-Models">
+<a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
+</h2>
 <h1 id="Interpretable-Neural-Networks">
 <a class="anchor" href="#Interpretable-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Interpretable Neural Networks<a class="anchor-link" href="#Interpretable-Neural-Networks"> </a>
 </h1>
@@ -798,7 +808,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent, which is satisfied by our assumption of independence. Without this, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
 <div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions containing an exponential in their probability density function. For further light reading on the topic, please refer to the <a href="https://en.wikipedia.org/wiki/Exponential_family">Wiki</a>.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
 
