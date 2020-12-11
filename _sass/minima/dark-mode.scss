@@ -6,7 +6,7 @@ $dark-grey : #1b1f23;// #121212;
 $overlay: mix($dark-grey, white, 95%);
 $overlay-light: mix($dark-grey, white, 86%);
 
-.post img {
+.post p img {
   max-width: 500px !important;
   margin-left: 0 !important;
 }
