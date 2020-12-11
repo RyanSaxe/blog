@@ -93,7 +93,7 @@ pre, code {
 .post-meta-description {
     color: $low-emph !important;
     padding-bottom: 30px !important;
-    text-overflow: ellipsis;
+    overflow: hidden;
     max-height: 200px;
 }
 
