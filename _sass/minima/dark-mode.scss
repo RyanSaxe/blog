@@ -10,6 +10,11 @@ $overlay-light: mix($dark-grey, white, 86%);
   max-width: 500px !important;
   margin-left: 0 !important;
 }
+
+.post-header {
+    margin-bottom: 0px !important;
+}
+
 body::-webkit-scrollbar {
     border-left: 1px rgba(0,0,0,0.5) solid !important;
     background-color: $overlay !important;
@@ -191,6 +196,7 @@ canvas {
     opacity: 0.75 !important;
     margin-left: 0px !important;
     margin-right: 20px !important;
+    margin-bottom: 20px !important;
 }
 
 .annotator-toolbar {
@@ -244,12 +250,12 @@ canvas {
     padding-bottom: 30px;
 }
 
-.px-2 {
+.notebook-link {
     padding-left: 0px !important;
     padding-right: 16px !important;
 }
 
-.pb-5 {
+.notebook-link-group {
     padding-bottom: 0px !important;
 }
 

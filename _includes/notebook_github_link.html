@@ -1,4 +1,4 @@
-<div class="px-2">
+<div class="notebook-link">
 {% if page.layout == 'notebook' %}
     <a href="https://github.com/{{site.github_username}}/{{site.github_repo | default: site.baseurl | remove: "/" }}/tree/{{page.branch | default: "master" }}/{{page.nb_path}}" role="button" target="_blank">
 {% elsif page.layout == 'post' %}
