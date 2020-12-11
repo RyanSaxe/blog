@@ -118,7 +118,7 @@ pre, code {
 }
 
 .box-shadow-medium {
-    box-shadow: 0 10px 10px rgba(0,0,0,0.8) !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
 }
 
 table th{
@@ -222,3 +222,58 @@ canvas {
     background-color: black !important;
 }
   
+.image-txt-container {
+    display:flex;
+    align-items:flex-start;
+    flex-direction: row;
+    margin-bottom:30px;
+}
+  
+.image-container {
+    width:13.25%; 
+    margin-right:30px;
+}
+  
+.txt-container {
+    width:86.75%
+}
+
+.face {
+    width: 30%; 
+    padding-right: 30px; 
+    padding-bottom: 30px;
+}
+
+// handling sizing display issues
+  
+@media (max-width: 900px) {
+    .image-container {display:none;}
+    .txt-container {width:100%;}
+}
+
+@media (max-width: 600px) {
+    .footer-col p {
+        display:none;
+    }
+    
+    body {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+
+    * {
+        scroll-margin-top: 0px !important;
+    }
+    .site-header, .site-footer {
+        position: relative;
+    }
+
+    .face {
+        width: 100%;
+        padding-right: 0px;
+    }
+
+    .image-txt-container {
+        display: block;
+    }
+}
