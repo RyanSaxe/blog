@@ -251,8 +251,7 @@ canvas {
 }
 
 .notebook-link {
-    padding-left: 0px !important;
-    padding-right: 16px !important;
+    padding: 8px 16px 4px 0px !important;
 }
 
 .notebook-link-group {
@@ -300,5 +299,20 @@ canvas {
 
     .post p img {
         width: 100% !important;
+    }
+}
+
+@media (max-height: 600px) {
+    body {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+
+    * {
+        scroll-margin-top: 0px !important;
+    }
+    .site-header, .site-footer {
+        position: relative !important;
+        box-shadow: none !important;
     }
 }
