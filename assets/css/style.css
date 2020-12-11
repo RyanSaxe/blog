@@ -558,7 +558,7 @@ canvas { filter: invert(100%); }
 
 .footer-col { margin-bottom: 0px !important; }
 
-.section-nav { list-style-position: inside !important; opacity: 0.9 !important; margin-left: 0px !important; font-size: 18px !important; }
+.section-nav { list-style-position: inside !important; opacity: 0.9 !important; margin-left: 0px !important; font-size: 16px !important; }
 
 .annotator-toolbar { top: 56px !important; }
 
