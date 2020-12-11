@@ -44,7 +44,7 @@ layout: default
       </p>
     {% endif %}
 
-    {% toc %}
+    {{ content | toc_only }}
 
     {% if page.layout == 'notebook' %}
       {% if page.badges or page.badges == nil %}
@@ -58,7 +58,7 @@ layout: default
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    {{ content }}
+    {{ content | inject_anchors }}
   </div>
   {%- if page.comments -%}
     {%- include utterances.html -%}
