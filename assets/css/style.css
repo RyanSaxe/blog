@@ -486,7 +486,7 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .katex-display .mtable { font-size: 125% !important; }
 
-.post img { max-width: 500px !important; margin-left: 0 !important; }
+.post p img { max-width: 500px !important; margin-left: 0 !important; }
 
 body::-webkit-scrollbar { border-left: 1px rgba(0, 0, 0, 0.5) solid !important; background-color: #262a2e !important; }
 
