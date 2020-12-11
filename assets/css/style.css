@@ -486,6 +486,8 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .katex-display .mtable { font-size: 125% !important; }
 
+.post-content h1, .post-content h2, .post-content h3 { margin-top: 0px !important; }
+
 .post p img { max-width: 500px !important; margin-left: 0 !important; }
 
 .post-header { margin-bottom: 0px !important; }
@@ -518,7 +520,7 @@ pre, code { border-color: #3b3e42; background-color: #262a2e; }
 
 .p-3 .post-meta { position: absolute !important; bottom: 12px !important; right: 16px !important; }
 
-.category-tags-link { color: #4bbaff !important; font-size: 16px !important; opacity: 0.6; }
+.category-tags-link { color: #4bbaff !important; font-size: 16px !important; opacity: 0.9; }
 
 .post-meta { color: rgba(255, 255, 255, 0.38) !important; font-size: 16px !important; }
 
@@ -556,7 +558,7 @@ canvas { filter: invert(100%); }
 
 .footer-col { margin-bottom: 0px !important; }
 
-.section-nav { float: left !important; border: 1px #3b3e42 solid !important; background-color: #262a2e !important; border-radius: 5px !important; list-style-position: inside !important; padding: 20px !important; opacity: 0.75 !important; margin-left: 0px !important; margin-right: 20px !important; margin-bottom: 20px !important; }
+.section-nav { float: left !important; list-style-position: inside !important; opacity: 0.9 !important; margin-left: 0px !important; font-size: 16px !important; }
 
 .annotator-toolbar { top: 56px !important; }
 
@@ -576,7 +578,7 @@ canvas { filter: invert(100%); }
 
 .face { width: 30%; padding-right: 30px; padding-bottom: 30px; }
 
-.notebook-link { padding: 8px 16px 4px 0px !important; }
+.notebook-link { padding: 16px 16px 0px 0px !important; }
 
 .notebook-link-group { padding-bottom: 0px !important; }
 
