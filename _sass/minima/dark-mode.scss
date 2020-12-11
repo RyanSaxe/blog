@@ -6,9 +6,13 @@ $dark-grey : #1b1f23;// #121212;
 $overlay: mix($dark-grey, white, 95%);
 $overlay-light: mix($dark-grey, white, 86%);
 
+.post-content h1, .post-content h2, .post-content h3 {
+    margin-top: 0px !important;
+}
+
 .post p img {
-  max-width: 500px !important;
-  margin-left: 0 !important;
+    max-width: 500px !important;
+    margin-left: 0 !important;
 }
 
 .post-header {
@@ -87,7 +91,7 @@ pre, code {
 .category-tags-link {
     color: #4bbaff !important;
     font-size: 16px !important;
-    opacity: 0.6;
+    opacity: 0.9;
 }
 
 .post-meta {
@@ -188,15 +192,10 @@ canvas {
 
 .section-nav {
     float: left !important;
-    border: 1px $overlay-light solid !important;
-    background-color: $overlay !important;
-    border-radius: 5px !important;
     list-style-position: inside !important;
-    padding: 20px !important;
-    opacity: 0.75 !important;
+    opacity: 0.9 !important;
     margin-left: 0px !important;
-    margin-right: 20px !important;
-    margin-bottom: 20px !important;
+    font-size: 16px !important;
 }
 
 .annotator-toolbar {
@@ -251,7 +250,7 @@ canvas {
 }
 
 .notebook-link {
-    padding: 8px 16px 4px 0px !important;
+    padding: 16px 16px 0px 0px !important;
 }
 
 .notebook-link-group {
