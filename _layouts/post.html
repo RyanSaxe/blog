@@ -46,11 +46,11 @@ layout: default
 
     {% if page.layout == 'notebook' %}
       {% if page.badges or page.badges == nil %}
-        <p class="pb-5 d-flex flex-wrap flex-justify-start">
+        <div class="pb-5 d-flex flex-wrap flex-justify-start">
           {% unless page.hide_github_badge or site.default_badges.github != true %}{% include notebook_github_link.html %}{% endunless %}
           {% unless page.hide_binder_badge or site.default_badges.binder != true  %}{% include notebook_binder_link.html %}{% endunless %}
           {% unless page.hide_colab_badge or site.default_badges.colab != true %}{% include notebook_colab_link.html %}{% endunless %}
-        </p>
+        </div>
       {% endif -%}
     {% endif -%}
   </header>
