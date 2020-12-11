@@ -530,7 +530,7 @@ pre, code { border-color: #3b3e42; background-color: #262a2e; }
 
 .Box { border: 1px #3b3e42 solid !important; background-color: #262a2e !important; }
 
-.box-shadow-medium { box-shadow: 0 10px 10px rgba(0, 0, 0, 0.8) !important; }
+.box-shadow-medium { box-shadow: 0 3px 6px rgba(0, 0, 0, 0.75) !important; }
 
 table th { background-color: #262a2e; border-color: #3b3e42; color: rgba(255, 255, 255, 0.87); }
 
@@ -565,5 +565,17 @@ canvas { filter: invert(100%); }
 .annotator-bucket-bar { display: none !important; }
 
 #footnote-popup { position: absolute; z-index: 99999999999; box-shadow: 0 3px 10px black; padding: 10px; max-width: 400px; border: 2px rgba(255, 255, 255, 0.38) solid !important; border-radius: 5px; background-color: black !important; }
+
+.image-txt-container { display: flex; align-items: flex-start; flex-direction: row; margin-bottom: 30px; }
+
+.image-container { width: 13.25%; margin-right: 30px; }
+
+.txt-container { width: 86.75%; }
+
+.face { width: 30%; padding-right: 30px; padding-bottom: 30px; }
+
+@media (max-width: 900px) { .image-container { display: none; } .txt-container { width: 100%; } }
+
+@media (max-width: 600px) { .footer-col p { display: none; } body { margin-top: 0px !important; margin-bottom: 0px !important; } * { scroll-margin-top: 0px !important; } .site-header, .site-footer { position: relative; } .face { width: 100%; padding-right: 0px; } .image-txt-container { display: block; } }
 
 /*# sourceMappingURL=style.css.map */
