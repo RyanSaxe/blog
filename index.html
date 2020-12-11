@@ -4,6 +4,15 @@ search_exclude: true
 image: images/logo.png
 ---
 
+<style>
+  /* overwrite box-shadow-medium directly here to
+      circumvent ajax overwriting it from dark-mode.scss
+  */
+  .box-shadow-medium {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
+  }
+</style>
+
 <div class="image-txt-container">
   <div class="image-container">
     <img src="{{ site.baseurl }}/images/headshot.jpg">

@@ -244,6 +244,15 @@ canvas {
     padding-bottom: 30px;
 }
 
+.px-2 {
+    padding-left: 0px !important;
+    padding-right: 16px !important;
+}
+
+.pb-5 {
+    padding-bottom: 0px !important;
+}
+
 // handling sizing display issues
   
 @media (max-width: 900px) {
