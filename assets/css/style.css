@@ -488,7 +488,7 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .post-content h1, .post-content h2, .post-content h3 { margin-top: 0px !important; }
 
-.post p img { max-width: 500px !important; margin-left: 0 !important; }
+.post p img { max-width: 500px !important; }
 
 .post-header { margin-bottom: 0px !important; }
 

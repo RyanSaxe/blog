@@ -160,7 +160,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      11 min read
     
 </span></p>
 
@@ -170,8 +170,6 @@ $(document).ready(function(){
 <li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#Linear-Regression">Linear Regression </a></li>
-<li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a></li>
-<li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 <li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a></li>
 <li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
 </ul>
@@ -304,61 +302,16 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </h2>
 <p>Note: MLE -&gt; crossentropy for logistic regression and MLE -&gt; MSE for linear regression</p>
 <p>Neural networks are algorithms built of components called layers. Layers are built of components called nodes. This structure is connected in such a manner that nodes pass information from one layer to the next. The output $X_j$ of node $j$ in layer $L_i$ gets passed to every node in the next layer in the network, $L_{i + 1}$.</p>
-<p>Each node contains some set of weights ($w$) and bias ($b$). When the node receives the output ($X$) of all the nodes in the preceding layer, it performed the following computation: $X^Tw + b$. Then, the output of this node gets passed to something called an activation function, which is depicted as $f$ in the image below.</p>
-<p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
-<p>If we say $w = \Big &lt; \beta_1, \beta_2, \cdots, \beta_n \Big &gt;$ and $b = \beta_0$, we are left with:</p>
-$$
-\begin{aligned}
-\hat{y} &amp; = f(X^T\beta) \\
-f^{-1}(\hat{y}) &amp; = X^T\beta \\
-$$<p>Do you see it? if $f^{-1} = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the previous layer!</p>
-<p>This means that a neural network with a single input layer, zero hidden layers, one output node, and a linear activation function is exactly equivalent to linear regression. And, if we use an activation function that is the inverse of the logit function</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generalized-Linear-Models">
-<a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
-</h2>
-<p>There are three components to any Generalized Linear Model (GLM):</p>
-<ol>
-<li>
-<strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>).</li>
-<li>
-<strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (often $X^T\beta$).</li>
-<li>
-<strong>Link Function</strong>: A function $g$ that links the systematic component and the random component.</li>
-</ol>
-<p>This yields the following general equation for GLMs:</p>
-<p>
-$$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
-</p>
-<p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the GLM is exactly linear regression! Hence the functions that GLMs can describe are simply a superset of the functions linear regression can describe. Furthermore, recognize that the random component loosens the constraint of normality, and that the link function alters the constraint of linearity. The relationship between $X$ and the mean of $y$ can be non-linear as long as the relationship between $X$ and the mean of $g(y)$ is linear. Lastly, the residuals are allowed to be heteroscedastic. The only restriction from linear regression that fully remains is the independence of the explanatory variables.</p>
-<p>The link function is the most important aspect to any GLM. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$. Link functions are selected according to the given random component.</p>
-<p>For example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means $\mu(x)$ is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and a logit function is sufficient for this:</p>
-<p>
-$$g(\mu) = log(\frac{\mu}{1 - \mu})$$
-</p>
-<p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, Ordinary Least Squares may no longer have a closed form solution in this case. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
-<p>TALK ABOUT MAXIMUM LIKELIHOOD ESTIMATION HERE</p>
-<h2 id="Relating-to-Neural-Networks">
-<a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
-</h2>
-<p>Note: MLE -&gt; crossentropy for logistic regression and MLE -&gt; MSE for linear regression</p>
-<p>Neural networks are algorithms built of components called layers. Layers are built of components called nodes. This structure is connected in such a manner that nodes pass information from one layer to the next. The output $X_j$ of node $j$ in layer $L_i$ gets passed to every node in the next layer in the network, $L_{i + 1}$.</p>
 <p>The first layer of a neural network is called the input layer, because each node passes an input feature. The last layer of a neural network is called the output layer, and it should represent the output you are trying to predict (this layer has one node in the classic regression case). Lastly, any layers between the input and output layers are called hidden layers.</p>
 <p>Each node contains some set of weights ($w$) and a bias ($b$). When the node receives the output ($X$) of all the nodes in the preceding layer, it performs the following computation: $X^Tw + b$. Then, before passing this output to the next layer, it gets passed to something called an activation function, which computes some (often non-linear) transform of $X^Tw + b$. The activation function is depicted as $f$ in the image below.</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
 <p>If we say $w = \big &lt; \beta_1, \beta_2, \cdots, \beta_n \big &gt;$ and $b = \beta_0$, we are left with:</p>
 $$
 \begin{aligned}
-\hat{y} &amp; = f(X^T\beta) \\
-f^{-1}(\hat{y}) &amp; = X^T\beta
+&amp; y &amp; = f(X^T\beta) \\
+&amp; f^{-1}(y) = X^T\beta
 \end{aligned}
-$$<p>Do you see it? if $f^{-1} = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the previous layer!</p>
+$$<p><strong>Observe that if $f^\inv = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the previous layer!</strong></p>
 <p>This means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression. And, if we change the activation function to the inverse of the logit function, this neural network becomes exactly equivalent to logistic regression!</p>
 
 </div>
