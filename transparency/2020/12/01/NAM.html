@@ -160,7 +160,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      11 min read
+      13 min read
     
 </span></p>
 
@@ -296,27 +296,21 @@ $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
 <p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, Ordinary Least Squares may no longer have a closed form solution in this case. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
-<p>TALK ABOUT MAXIMUM LIKELIHOOD ESTIMATION HERE</p>
 <h2 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h2>
-<p>Note: MLE -&gt; crossentropy for logistic regression and MLE -&gt; MSE for linear regression</p>
-<p>Neural networks are algorithms built of components called layers. Layers are built of components called nodes. This structure is connected in such a manner that nodes pass information from one layer to the next. The output $X_j$ of node $j$ in layer $L_i$ gets passed to every node in the next layer in the network, $L_{i + 1}$.</p>
-<p>The first layer of a neural network is called the input layer, because each node passes an input feature. The last layer of a neural network is called the output layer, and it should represent the output you are trying to predict (this layer has one node in the classic regression case). Lastly, any layers between the input and output layers are called hidden layers.</p>
+<p>Neural networks are algorithms built of components called layers. Layers are built of components called nodes. The first layer of a neural network is called the input layer, because each node passes an input feature. The last layer of a neural network is called the output layer, and it should represent the output you are trying to predict (this layer has one node in the classic regression case). Lastly, any layers between the input and output layers are called hidden layers.</p>
+<p>This structure of layers is ordered and connected in such a manner that each layer receives information from the previous layer, and passes it to the next. The output $X_j$ of node $j$ in layer $L_i$ gets passed to every node in the next layer in the network, $L_{i + 1}$. The image below displays a neural network with one hidden layer, and highlights the flow through a single node of that hidden layer.</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
-<p>Each node contains some set of weights ($w$) and a bias ($b$). When the node receives the output ($X$) of all the nodes in the preceding layer, it performs the following computation: $X^Tw + b$. Then, before passing this output to the next layer, it gets passed to something called an activation function, which computes some (often non-linear) transform of $X^Tw + b$. The activation function is depicted as $f$ in the image below.</p>
-<p>If we say $w = \big &lt; \beta_1, \beta_2, \cdots, \beta_n \big &gt;$ and $b = \beta_0$, we are left with:</p>
+<p>Each node contains some set of weights ($w$) and a bias ($b$). When the node receives the output ($X$) of all the nodes in the preceding layer, it performs the following computation: $X^Tw + b$. Then, before passing this output to the next layer, it gets passed to something called an activation function, which computes some (often non-linear) transform of $X^Tw + b$. The activation function is depicted as $f$ in the image above.</p>
+<p>If we substitute our definitions to $w = \big &lt; \beta_1, \beta_2, \cdots, \beta_n \big &gt;$ and $b = \beta_0$, we are left with:</p>
 $$
 \begin{aligned}
 &amp; y = f(X^T\beta) \\
 &amp; f^{-1}(y) = X^T\beta
 \end{aligned}
-$$<p></p>
-<div class="flash flash-warn">
-    <svg class="octicon octicon-zap" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10.561 1.5a.016.016 0 00-.01.004L3.286 8.571A.25.25 0 003.462 9H6.75a.75.75 0 01.694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0012.538 7H9.25a.75.75 0 01-.683-1.06l2.008-4.418.003-.006a.02.02 0 00-.004-.009.02.02 0 00-.006-.006L10.56 1.5zM9.504.43a1.516 1.516 0 012.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.25 1.25 0 01-.871.354h-.302a1.25 1.25 0 01-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429z"></path></svg>
-    <strong>Important: </strong>Observe that if $f^\inv = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the previous layer!
-</div>
-This means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression. And, if we change the activation function to the inverse of the logit function, this neural network becomes exactly equivalent to logistic regression!
+$$<p>Does this look familiar? It's almost exactly the general equation of a GLM. In fact, if $f^\inv = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the output of the previous layer!</p>
+<p>This means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
 
 </div>
 </div>
@@ -483,6 +477,25 @@ This means that a neural network with zero hidden layers and a linear activation
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>However, It isn't always as simple as the cases of linear and logistic regression. Not all activation functions are invertible (e.g. ReLU), and hence add non-linearities in ways that are not consistent with GLMs. At the same time, the principal of the link function is to transform $y$ to the proper space, and ReLU does accomplish this under the assumption that $y$ cannot be negative.</p>
+<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models. So, why are neural networks opaque and GLMs transparent? Let's look at the math for an arbitrarily defined neural network with $k$ hidden layers. We will denote :</p>
+$$
+\begin{aligned}
+L_0&amp; = \big &lt; X_1, X_2, \cdots, X_n \big &gt; \\
+L_1 &amp; = f_1 \Big ( \big &lt; L_0^Tw_{1,1} + b_{1,1}, L_0^Tw_{1,2} + b_{1,2}, \cdots \big &gt; \Big) \\
+&amp; \vdots \\
+L_k &amp; = f_k \Big( \big &lt; L_{k - 1}^Tw_{k,1} + b_{k,1}, L_{k - 1}^Tw_{k,2} + b_{k,2}, \cdots \big &gt; \Big) \\
+y &amp; = L_k^T \beta + \epsilon
+\end{aligned}
+$$<p>Where $w_{i,j}$ and $b_{i,j} are the weights and bias of the j&lt;sup&gt;th&lt;/sup&gt; node i layer $L_i$ with activation function $f_i$.</p>
+<p>While the final part of the equation is that of a linear model, observe that every element in $L_k$ is dependent on every input feature in $L_0$. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
