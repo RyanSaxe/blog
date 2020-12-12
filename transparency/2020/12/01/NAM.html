@@ -357,106 +357,6 @@ $$<p>Does this look familiar? It's almost exactly the general equation of a GLM.
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logistic regression setup</span>
-<span class="n">logistic_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'logistic'</span><span class="p">)</span>
-<span class="n">logistic_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
-    <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span>
-    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'mean_absolute_error'</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">hist</span> <span class="o">=</span> <span class="n">logistic_reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-    <span class="n">y_logistic</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>binary crossentropy loss: 0.26264412118434904 	mean absolute error: 0.21618827
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#linear regression setup</span>
-<span class="n">linear_reg</span> <span class="o">=</span> <span class="n">Regression</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'linear'</span><span class="p">)</span>
-<span class="n">linear_reg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
-    <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">,</span>
-    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'mean_absolute_error'</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">hist</span> <span class="o">=</span> <span class="n">linear_reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-    <span class="n">y_linear</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>mean squared error: 1.9702294863463975e-07 	mean absolute error: 0.00019862552
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
@@ -490,7 +390,7 @@ L_1 &amp; = f_1 \Big ( \big &lt; L_0^Tw_{1,1} + b_{1,1}, L_0^Tw_{1,2} + b_{1,2},
 L_k &amp; = f_k \Big( \big &lt; L_{k - 1}^Tw_{k,1} + b_{k,1}, L_{k - 1}^Tw_{k,2} + b_{k,2}, \cdots \big &gt; \Big) \\
 y &amp; = L_k^T \beta + \epsilon
 \end{aligned}
-$$<p>Where $w_{i,j}$ and $b_{i,j} are the weights and bias of the j&lt;sup&gt;th&lt;/sup&gt; node i layer $L_i$ with activation function $f_i$.</p>
+$$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node i layer $L_i$ with activation function $f_i$.</p>
 <p>While the final part of the equation is that of a linear model, observe that every element in $L_k$ is dependent on every input feature in $L_0$. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
 
 </div>
