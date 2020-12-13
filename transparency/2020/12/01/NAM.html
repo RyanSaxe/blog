@@ -242,7 +242,7 @@ $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta
 <p>Linear regression is arguably the simplest of the linear models, and comes with four assumptions:</p>
 <ol>
 <li>
-<strong>Linearity</strong>: The relationship between $X$ and the mean of $Y$ is linear.</li>
+<strong>Linearity</strong>: The relationship between $X$ and the mean of $y$ is linear.</li>
 <li>
 <strong>Independence</strong>: $X_i$ and $X_j$ are independent of eachother for all $i \neq j$.</li>
 <li>
@@ -381,7 +381,7 @@ $$<p>Does this look familiar? It's almost exactly the general equation of a GLM.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>However, It isn't always as simple as the cases of linear and logistic regression. Not all activation functions are invertible (e.g. ReLU), and hence add non-linearities in ways that are not consistent with GLMs. At the same time, the principal of the link function is to transform $y$ to the proper space, and ReLU does accomplish this under the assumption that $y$ cannot be negative.</p>
-<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models. So, why are neural networks opaque and GLMs transparent? Let's look at the math for an arbitrarily defined neural network with $k$ hidden layers. We will denote :</p>
+<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models. So, why are neural networks opaque and GLMs transparent? Let's look at the math for an arbitrarily defined neural network with $k$ hidden layers.</p>
 $$
 \begin{aligned}
 L_0&amp; = \big &lt; X_1, X_2, \cdots, X_n \big &gt; \\
@@ -390,7 +390,7 @@ L_1 &amp; = f_1 \Big ( \big &lt; L_0^Tw_{1,1} + b_{1,1}, L_0^Tw_{1,2} + b_{1,2},
 L_k &amp; = f_k \Big( \big &lt; L_{k - 1}^Tw_{k,1} + b_{k,1}, L_{k - 1}^Tw_{k,2} + b_{k,2}, \cdots \big &gt; \Big) \\
 y &amp; = L_k^T \beta + \epsilon
 \end{aligned}
-$$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node i layer $L_i$ with activation function $f_i$.</p>
+$$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
 <p>While the final part of the equation is that of a linear model, observe that every element in $L_k$ is dependent on every input feature in $L_0$. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
 
 </div>
