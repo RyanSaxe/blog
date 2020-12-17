@@ -244,7 +244,7 @@ $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta
 <li>
 <strong>Linearity</strong>: The relationship between $X$ and the mean of $y$ is linear.</li>
 <li>
-<strong>Independence</strong>: $X_i$ and $X_j$ are independent of eachother for all $i \neq j$.</li>
+<strong>Independence</strong>: $X_i$ and $X_j$ are linearly independent of eachother for all $i \neq j$.</li>
 <li>
 <strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</li>
 <li>
@@ -408,7 +408,7 @@ $$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup
 <p><strong>Allow non-linearity</strong>: GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth (differentiable everywhere). It also can be non-parametric.</p>
 </li>
 <li>
-<p><strong>Allow dependence</strong>: Linear models make the assumption that $X_i$ and $X_j$ are independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
+<p><strong>Allow dependence</strong>: Linear models make the assumption that $X_i$ and $X_j$ are linearly independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
 </li>
 </ol>
 <p>Hence, equations for GAMs look like this:</p>
