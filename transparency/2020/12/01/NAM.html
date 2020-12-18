@@ -160,7 +160,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      14 min read
     
 </span></p>
 
@@ -226,12 +226,19 @@ $(document).ready(function(){
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Most supervised prediction problems can be described as learning some function $f$ that minimizes the error-term ($\epsilon$) to the equation $y = f(X) + \epsilon$, where $X$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures to learn such functions, with the additional goal of making them as transparent as linear models. However, prior to jumping into such architectures, it's important to understand the foundation of classic transparent approaches, starting from the simplest linear models.</p>
-<p>The next section provides the necessary background to understand how the building blocks of neural networks are related to linear models. Then, we can drop the restriction of linearity with Generalized Additive Models (GAMs), and explore building transparent neural networks.</p>
+<p>Most systems we interact with are part of some pipeline that integrates Machine Learning (ML). Sometimes we interact with an ML model directly, like Spotify's recommender system for songs. Other times, this interaction is more detatched; we post a comment on Twitter or Facebook, and this comment is used to train some language model at the respective company. As ML models become more and more prevalent, interpreting and explaining the decisions these models make become increasingly important.</p>
+<p>A neural network is a popular type of machine learning algorithm that is notorious for being difficult to interpret. This is why they are often referred to as a "black box" or "opaque". This blog post will explore methods and theory to devise neural architectures that are inherrantly transparent. However, prior to jumping into neural architectures, it's important to understand foundational transparent algorithms, starting from the simplest linear models.</p>
+<p>The next section provides the necessary background to understand how the building blocks of neural networks are related to linear models. Then, we can drop the restriction of linearity with Generalized Additive Models, and explore building transparent neural networks.
+</p>
+<div class="flash">
+    <svg class="octicon octicon-info" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg>
+    <strong>Note: </strong>feel free to skip the following section if you have a strong understanding of Generalized Linear Models and how they relate to the underlying structure of neural networks.
+</div>
 <h1 id="Linear-Models">
 <a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
 </h1>
-<p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models can only learn to make predictions according to functions of the form:</p>
+<p>Linear models are one of the simplest approaches to supervised learning. The general goal of supervised learning is to discover some function $f$ that minimizes an error-term $\epsilon$ given a set of input features $X$ and a corresponding target $y$ such that $y = f(X) + \epsilon$. Additionally, this is often written as $\hat{y} = f(X)$ because $f(X)$ is our best approximation of $y$.</p>
+<p>Different algorithms are sufficient for learning different functions. Simple linear models can only learn to make predictions according to functions of the form:</p>
 <p>
 $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
 </p>
@@ -239,7 +246,7 @@ $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta
 <h2 id="Linear-Regression">
 <a class="anchor" href="#Linear-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a>
 </h2>
-<p>Linear regression is arguably the simplest of the linear models, and comes with four assumptions:</p>
+<p>Linear regression is arguably the simplest linear model, and comes with four assumptions:</p>
 <ol>
 <li>
 <strong>Linearity</strong>: The relationship between $X$ and the mean of $y$ is linear.</li>
@@ -248,15 +255,15 @@ $$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta
 <li>
 <strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</li>
 <li>
-<strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$.</li>
+<strong>Homoscedasticity</strong>: The variance of the error is the same for any value of $X$.</li>
 </ol>
 <p>These assumptions can be nicely described by one math equation:</p>
 $$
 \begin{aligned}
 y &amp; \in \mathcal{N}(X^T\beta, \sigma^2 I) \\
-&amp; \Rightarrow \mathbb{E}[y|X] = X^T\beta
+&amp; \Rightarrow \mathbb{E}[y|X] = \mu(X) = X^T\beta
 \end{aligned}
-$$<p>However, these assumptions are quite rigid for the real world. Many datasets and/or problem spaces do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The common answers to this question are:</p>
+$$<p>Unfortunately, these assumptions are quite rigid for the real world. Many datasets and/or problem spaces do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can perform the regression task without such rigid assumptions? The common answers to this question are:</p>
 <ol>
 <li>
 <strong>Occam's Razor</strong>: Don't add complexity without necessity.    </li>
@@ -265,7 +272,7 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 <li>
 <strong>Interpretability</strong>: $y$ can be explained with respect to how $X$ interacts with the $\beta$ coefficients.</li>
 </ol>
-<p>Today, we are going to stick with the notion that transparency is of the utmost importance, and assume we have a significant amount of data. Whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above in order to be comparably interpretable.</p>
+<p>Today, we are going to stick with the notion that transparency is of the utmost importance, and assume we have a significant amount of data. Whatever the model is, it must be able to produce feature-wise explanations that are useful. However, these models don't need to be exactly linear in order to be interpretable.</p>
 
 </div>
 </div>
@@ -281,7 +288,7 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 <li>
 <strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>).</li>
 <li>
-<strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (often $X^T\beta$).</li>
+<strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (typically $X^T\beta$).</li>
 <li>
 <strong>Link Function</strong>: A function $g$ that links the systematic component and the random component.</li>
 </ol>
@@ -289,13 +296,12 @@ $$<p>However, these assumptions are quite rigid for the real world. Many dataset
 <p>
 $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 </p>
-<p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the GLM is exactly linear regression! Hence the functions that GLMs can describe are simply a superset of the functions linear regression can describe. Furthermore, recognize that the random component loosens the constraint of normality, and that the link function alters the constraint of linearity. The relationship between $X$ and the mean of $y$ can be non-linear as long as the relationship between $X$ and the mean of $g(y)$ is linear. Lastly, the residuals are allowed to be heteroscedastic. The only restriction from linear regression that fully remains is the independence of the explanatory variables.</p>
-<p>The link function is the most important aspect to any GLM. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$. Link functions are selected according to the given random component.</p>
-<p>For example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means $\mu(x)$ is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and a logit function is sufficient for this:</p>
+<p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the corresponding GLM is exactly linear regression! Hence, the functions that GLMs can describe are a superset of the functions linear regression can describe. This is because the random component and the link function changes the constraints of linear regression. The random component loosens the constraint of normality. The link function alters the constraint of linearity such that the relationship between $X$ and the mean of $y$ can be non-linear as long as the relationship between $X$ and the mean of $g(y)$ is linear. Lastly, these changes now allow the residuals to be heteroscedastic. The only restriction from linear regression that fully remains independence.</p>
+<p>Link functions are selected according to a given random component. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$, as that is the expected range of $X^T\beta$. As an example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means that the average of the distribution, $\mu$, is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and the logit function is sufficient for this:</p>
 <p>
 $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
-<p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, Ordinary Least Squares may no longer have a closed form solution in this case. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
+<p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, without the restrictions of normality and linearity, Ordinary Least Squares may no longer have a closed form solution. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
 <h2 id="Relating-to-Neural-Networks">
 <a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
 </h2>
@@ -306,10 +312,10 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p>If we substitute our definitions to $w = \big &lt; \beta_1, \beta_2, \cdots, \beta_n \big &gt;$ and $b = \beta_0$, we are left with:</p>
 $$
 \begin{aligned}
-&amp; y = f(X^T\beta) \\
+&amp; \hat{y} = f(X^T\beta) \\
 &amp; f^{-1}(y) = X^T\beta
 \end{aligned}
-$$<p>Does this look familiar? It's almost exactly the general equation of a GLM. In fact, if $f^\inv = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the output of the previous layer!</p>
+$$<p>Does this look familiar? It's almost exactly the general equation of a GLM. In fact, if $f^\inv = g$, where $g$ is a link function for a GLM and $f^\inv$ is the inverse of the activation function, then the computation of a single node on a neural network is identical to a GLM on the output of the previous layer!</p>
 <p>This means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
 
 </div>
