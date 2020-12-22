@@ -1,7 +1,7 @@
 module Jekyll
     module AssetFilter
       def fndetail(input, id)
-        "<div class='footnotes'><p id='fn-#{id}'>#{id}. #{input}<a href='#fnref-#{id}' class='footnote footnotes'>↩</a></p></div>"
+        "<li id='fn-#{id}'>#{input}<a href='#fnref-#{id}' class='footnote footnotes'>↩</a></li></div>"
       end
     end
   end
