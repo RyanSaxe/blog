@@ -547,7 +547,7 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 <h2 id="Additive-Neural-Networks">
 <a class="anchor" href="#Additive-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additive Neural Networks<a class="anchor-link" href="#Additive-Neural-Networks"> </a>
 </h2>
-<p>One of the ground-breaking theorems about neural networks is the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal Approximation Theorem</a>, proven in 1999 by Allan Pinkus <a class="citation" href="#pinkus_1999">(Pinkus, 1999)</a>:</p>
+<p>One of the ground-breaking theorems about neural networks is the Universal Approximation Theorem <a class="citation" href="#pinkus_1999">(Pinkus, 1999)</a>, which can be summarized by</p>
 <blockquote>
 <p>A neural network with a single hidden layer of infinite width can approximate any continuous function.</p>
 </blockquote>
@@ -753,6 +753,17 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
+<div class="fake-h1">References</div>
+<ol class="bibliography"><li><span id="pinkus_1999">Pinkus, A. (1999). Approximation theory of the MLP model in neural networks. <i>Acta Numerica</i>, <i>8</i>, 143–195. https://doi.org/10.1017/S0962492900002919</span></li></ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="fake-h1">Footnotes</div>
+<p></p>
 <div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
 <div class="footnotes"><p id="fn-2">2. The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
@@ -762,23 +773,6 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">bibliography</span> <span class="o">--</span><span class="n">cited</span> <span class="o">%</span><span class="p">}</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

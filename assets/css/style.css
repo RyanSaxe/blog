@@ -488,6 +488,8 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .post-content h1, .post-content h2, .post-content h3 { margin-top: 0px !important; }
 
+.fake-h1 { font-size: 2.625rem; letter-spacing: -1px; line-height: 1.15; margin-top: 0px !important; font-weight: normal !important; margin-bottom: 0.5rem !important; margin: 0.67em 0; }
+
 .post p img { max-width: 500px !important; }
 
 .post-header { margin-bottom: 0px !important; }
