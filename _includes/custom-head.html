@@ -92,7 +92,7 @@ window.onload = wrap_img;
 
 <script>
 $(document).ready(function(){
-    $('.footnote-ref a, .citation a').hover(function(event) {
+    $('.footnote-ref a, .citation').hover(function(event) {
         // find the footnote corresponding to the link
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
