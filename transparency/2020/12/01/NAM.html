@@ -101,7 +101,7 @@ window.onload = wrap_img;
 
 <script>
 $(document).ready(function(){
-    $('.footnote-ref a').hover(function(event) {
+    $('.footnote-ref a, .citation a').hover(function(event) {
         // find the footnote corresponding to the link
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
@@ -753,7 +753,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
-<div class="fake-h1">References</div>
+<div class="fake-header h2">References</div>
 <ol class="bibliography"><li><span id="pinkus_1999">Pinkus, A. (1999). Approximation theory of the MLP model in neural networks. <i>Acta Numerica</i>, <i>8</i>, 143–195. https://doi.org/10.1017/S0962492900002919</span></li></ol>
 
 </div>
@@ -762,7 +762,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="fake-h1">Footnotes</div>
+<div class="fake-header h3">Footnotes</div>
 <p></p>
 <div class="footnotes"><p id="fn-1">1. The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
 <p></p>
