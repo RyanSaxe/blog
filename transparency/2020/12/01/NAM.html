@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-12-01T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","image":"https://ryansaxe.com/images/nnflow.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"description":"Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as interpretable!","@context":"https://schema.org"}</script>
+{"url":"https://ryansaxe.com/transparency/2020/12/01/NAM.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2020-12-01T00:00:00-06:00","datePublished":"2020-12-01T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2020/12/01/NAM.html"},"image":"https://ryansaxe.com/images/nnflow.png","description":"Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as interpretable!","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" />
 
@@ -174,12 +174,7 @@ $(document).ready(function(){
 <li class="toc-entry toc-h2"><a href="#The-Building-Blocks-of-Neural-Networks">The Building Blocks of Neural Networks </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
-<ul>
-<li class="toc-entry toc-h2"><a href="#Fitting-Smooth-Functions">Fitting Smooth Functions </a></li>
-<li class="toc-entry toc-h2"><a href="#Priors-and-Penalties">Priors and Penalties </a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a></li>
 <li class="toc-entry toc-h1"><a href="#Interpretable-Neural-Networks">Interpretable Neural Networks </a>
 <ul>
 <li class="toc-entry toc-h2"><a href="#Additive-Neural-Networks">Additive Neural Networks </a></li>
@@ -451,12 +446,7 @@ $$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup
 $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \beta_m h_m(X_n) + \epsilon$$
 </p>
 <p>Technically, this makes GLMs a special case of GAMs where all functions $h$ are the identity function.</p>
-<h2 id="Fitting-Smooth-Functions">
-<a class="anchor" href="#Fitting-Smooth-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fitting Smooth Functions<a class="anchor-link" href="#Fitting-Smooth-Functions"> </a>
-</h2>
-<h2 id="Priors-and-Penalties">
-<a class="anchor" href="#Priors-and-Penalties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Priors and Penalties<a class="anchor-link" href="#Priors-and-Penalties"> </a>
-</h2>
+
 </div>
 </div>
 </div>
@@ -557,6 +547,10 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 <h2 id="Additive-Neural-Networks">
 <a class="anchor" href="#Additive-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additive Neural Networks<a class="anchor-link" href="#Additive-Neural-Networks"> </a>
 </h2>
+<p>One of the ground-breaking theorems about neural networks is the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal Approximation Theorem</a>, proven in 1999 by Allan Pinkus <a class="citation" href="#pinkus_1999">(Pinkus, 1999)</a>:</p>
+<blockquote>
+<p>A neural network with a single hidden layer of infinite width can approximate any continuous function.</p>
+</blockquote>
 <p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
 
 </div>
@@ -768,6 +762,23 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">bibliography</span> <span class="o">--</span><span class="n">cited</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
