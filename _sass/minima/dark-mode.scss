@@ -294,13 +294,9 @@ canvas {
     padding-bottom: 0px !important;
 }
 
-.pdf-container {
-    width: 100%;
-    min-height: 1144px;
-}
-
 .pdf {
     width: 100%;
+    height: 100vh;
 }
 
 // handling sizing display issues
@@ -308,7 +304,6 @@ canvas {
 @media (max-width: 900px) {
     .image-container {display:none;}
     .txt-container {width:100%;}
-    //.resume {width: 900px;}
 }
 
 @media (max-width: 600px) {
