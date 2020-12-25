@@ -602,7 +602,7 @@ canvas { filter: invert(100%); }
 
 .notebook-link-group { padding-bottom: 0px !important; }
 
-.pdf { width: 100%; height: 100vw; }
+.pdf { width: 100%; height: 1414vw; max-height: 1144px; }
 
 @media (max-width: 900px) { .image-container { display: none; } .txt-container { width: 100%; } }
 
