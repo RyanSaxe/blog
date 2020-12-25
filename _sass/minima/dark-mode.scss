@@ -296,7 +296,8 @@ canvas {
 
 .pdf {
     width: 100%;
-    height: 100vw;
+    height: 1414vw;
+    max-height: 1144px;
 }
 
 // handling sizing display issues
