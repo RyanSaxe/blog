@@ -297,6 +297,8 @@ canvas {
 .pdf {
     width: 100%;
     height: 100vh;
+    min-width: 820px;
+    min-height: 1100px;
 }
 
 // handling sizing display issues
