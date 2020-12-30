@@ -314,7 +314,6 @@ canvas {
 
 .post-list li{
     display:none;
-    opacity:0;
 }
   
 #toggle-nav {
@@ -337,14 +336,11 @@ canvas {
 #toggle-nav .unselected:hover {
     background-color: rgba(75,186,255, 0.25);
     border-right: 1px black solid;
+    border-left: 1px black solid;
 }
 
 #toggle-nav a:first-of-type {
     border-left: none !important;
-}
-
-#toggle-nav a:first-of-type:hover {
-    border-right: none !important;
 }
 
 #toggle-nav .selected {
