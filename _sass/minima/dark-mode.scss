@@ -304,6 +304,10 @@ canvas {
     display: block;
 }
 
+.desktop-table-cell {
+    display: table-cell;
+}
+
 .mobile {
     display: none;
 }
@@ -353,6 +357,7 @@ canvas {
 //mobile and tablet
 @media (max-width: 768px) {
     .desktop {display: none;}
+    .desktop-table-cell {display: none;}
     .mobile {display: block;}
 }
 

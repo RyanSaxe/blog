@@ -29,8 +29,8 @@ image: images/logo.png
       $(this).attr('class', 'selected');
       var post_class = "." + $(this).attr('id');
       var selector = ".post-list > " + post_class;
-      $(selector).show();
-      $('.post-list li').not(post_class).hide();
+      $(selector).show(500);
+      $('.post-list li').not(post_class).hide(500);
     });
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;
