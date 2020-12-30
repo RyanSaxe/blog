@@ -168,13 +168,16 @@ $(document).ready(function(){
       var selector = ".post-list > " + post_class;
       var go_to = $(selector);
       var other = $('.post-list li').not(post_class);
-      go_to.fadeOut();
-      other.fadeOut(500, function(){
-        other.hide();
-        go_to.show(0, function(){
-          go_to.fadeIn(500);
+      go_to.fadeOut(0, function(){
+        other.fadeOut(500, function(){
+          other.hide(0, function(){
+            go_to.show(0, function(){
+              go_to.fadeIn(500);
+            });
+          });
         });
       });
+
     });
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;
