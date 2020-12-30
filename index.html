@@ -36,7 +36,12 @@ image: images/logo.png
           opacity:0.0,
           display:"block",
         });
-        go_to.delay(500).animate({opacity: 1}, 500);
+        $(".post-meta-description").dotdotdot({
+          height: null,
+          fallbackToLetter: true,
+          watch: true,
+          callback: function( isTruncated ) {go_to.animate({opacity: 1}, 500);},
+        });
       });
 
     });
