@@ -160,7 +160,7 @@ pre, code {
 }
 
 .Box {
-    border: 1px $overlay-light solid !important;
+    border: 1px black solid !important;
     background-color: $overlay !important;
 }
 
@@ -312,13 +312,12 @@ canvas {
     display:none;
   }
   
-#mobile-nav {
-    background-color: black;
+#toggle-nav {
     display:block;
     overflow:hidden;
 }
 
-#mobile-nav a{
+#toggle-nav a{
     float: left;
     display: block;
     text-align: center;
@@ -327,12 +326,14 @@ canvas {
     color: rgba(255, 255, 255, 0.87) !important;
 }
 
-#mobile-nav .unselected:hover {
-    background-color: grey;
+#toggle-nav .unselected:hover {
+    background-color: rgba(75,186,255, 0.25);
 }
 
-#mobile-nav .selected {
-    background-color: #4bbaff !important;
+#toggle-nav .selected {
+    background-color:rgba(75,186,255, 0.6) !important;
+    border-right: 1px black solid;
+    border-left: 1px black solid;
 }
 
 // handling sizing display issues
@@ -345,7 +346,7 @@ canvas {
 //mobile and tablet
 @media (max-width: 768px) {
     .desktop {display: none;}
-    .mobile {display: block}
+    .mobile {display: block;}
 }
 
 @media (max-width: 600px) {

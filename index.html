@@ -4,15 +4,6 @@ search_exclude: true
 image: images/logo.png
 ---
 
-<style>
-  /* overwrite box-shadow-medium directly here to
-      circumvent ajax overwriting it from dark-mode.scss
-  */
-  .box-shadow-medium {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
-  }
-</style>
-
 <div class="image-txt-container">
   <div class="image-container">
     <img src="{{ site.baseurl }}/images/headshot.jpg">
@@ -26,16 +17,15 @@ image: images/logo.png
       </div>
     </h3>
   </div>
-  <div id='mobile-nav' class='mobile Box box-shadow-medium'>
-    <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
-    <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
-  </div>
 </div>
-
+<div id='toggle-nav' class='Box'>
+  <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
+  <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
+</div>
 <script>
   $(document).ready(function(){
-    $('#mobile-nav a').click(function() {
-      $('#mobile-nav a').not(this).attr('class', 'unselected');
+    $('#toggle-nav a').click(function() {
+      $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
       var post_class = "." + $(this).attr('id');
       var selector = ".post-list > " + post_class;
