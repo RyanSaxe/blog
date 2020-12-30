@@ -610,7 +610,7 @@ canvas { filter: invert(100%); }
 
 .mobile { display: none; }
 
-.post-list li:not([class="blog-post"]) { display: none; }
+.post-list li { display: none; }
 
 #toggle-nav { display: block; overflow: hidden; margin-bottom: 30px; }
 
