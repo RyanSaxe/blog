@@ -163,7 +163,25 @@ $(document).ready(function(){
       </div>
     </h3>
   </div>
+  <div id="mobile-nav" class="mobile Box box-shadow-medium">
+    <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
+    <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
+  </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('#mobile-nav a').click(function() {
+      $('#mobile-nav a').not(this).attr('class', 'unselected');
+      $(this).attr('class', 'selected');
+      var post_class = "." + $(this).attr('id');
+      var selector = ".post-list > " + post_class;
+      $(selector).show();
+      $('.post-list li').not(post_class).hide();
+    });
+  });
+</script>
+
 
 
 
@@ -183,14 +201,12 @@ $(document).ready(function(){
 
    <!-- Assemble final sorted posts array -->
   
-  <ul id="blog-posts" class="post-list"><li><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-4 d-table-cell p-3 v-align-middle">
+  <ul class="post-list"><li class="blog-post"><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-4 d-table-cell p-3 v-align-middle">
         <img class="image-preview " src="/images/nnflow.png" />
-      </div><div class="col-8 d-table-cell p-3">
-        <h3>
-          <a class="post-link" href="/transparency/2020/12/01/NAM.html">
-            Designing Interpretable Neural Networks
-          </a>
-        </h3>
+    </div><div class="col-8 d-table-cell p-3">
+        <h3><a class="post-link" href="/transparency/2020/12/01/NAM.html">
+                  Designing Interpretable Neural Networks
+              </a></h3>
         <p class="post-meta-description">Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it's possible to design Neural Networks that are just as interpretable!</p>
             
               <p class="post-meta category-tags" style="left: 14px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i></i> 
@@ -203,12 +219,13 @@ $(document).ready(function(){
           <p class="post-meta">Dec 1, 2020</p>
       </div>
   </div>
-</li><li><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-8 d-table-cell p-3">
-        <h3>
-          <a class="post-link" href="/NAM/">
-            Neural Additive Models
-          </a>
-        </h3>
+</li><li class="annotated-paper"><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-8 d-table-cell p-3">
+        <h3><a class="post-link desktop" href="/NAM/">
+                  Neural Additive Models
+              </a>
+              <a class="post-link mobile" href="/images/neural_additive_models.pdf" target="_blank">
+                  Neural Additive Models
+              </a></h3>
         <p class="post-meta-description">Deep neural networks (DNNs) are powerful black-box predictors that have achieved impressive performance on a wide variety of tasks. However, their accuracy comes at the cost of intelligibility: it is usually unclear how they make their decisions. This hinders their applicability to high stakes decision-making domains such as healthcare. We propose Neural Additive Models (NAMs) which combine some of the expressivity of DNNs with the inherent intelligibility of generalized additive models. NAMs learn a linear combination of neural networks that each attend to a single input feature. These networks are trained jointly and can learn arbitrarily complex relationships between their input feature and the output. Our experiments on regression and classification datasets show that NAMs are more accurate than widely used intelligible models such as logistic regression and shallow decision trees. They perform similarly to existing state-of-the-art generalized additive models in accuracy, but can be more easily applied to real-world problems.</p>
             
               <p class="post-meta category-tags" style="left: 14px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i></i> 
