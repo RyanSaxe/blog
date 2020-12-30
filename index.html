@@ -171,8 +171,8 @@ $(document).ready(function(){
       other.fadeOut(500, function(){
         go_to.css("display","block");
         go_to.css("opacity","0");
-        go_to.fadeIn(500);
       });
+      go_to.fadeIn(500);
 
     });
     //if coming from an anchor, make sure to toggle properly
@@ -183,6 +183,16 @@ $(document).ready(function(){
     } else {
       $('#blog-post').trigger("click");
     }
+    $('.unselected').on("hover", function(){
+      var next_option = $(this).next();
+      var prev_option = $(this).prev();
+      if(next_option.hasClass('selected')){
+        $(this).css("border-right","none");
+      }
+      if (prev_option.hasClass('selected')) {
+        $(this).css("border-left","none");
+      }
+    });
   });
 </script>
 
