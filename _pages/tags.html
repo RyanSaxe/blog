@@ -7,19 +7,12 @@ show_link: true
 ---
 
 {% if site.categories.size > 0 %}
-<h2>Contents</h2>
 
   {% assign categories = "" | split:"" %}
   {% for c in site.categories %}
     {% assign categories = categories | push: c[0] %}
   {% endfor %}
   {% assign categories = categories | sort_natural %}
-
-  <ul>
-  {% for category in categories %}
-    <li><a href="#{{ category }}">{{ category }}</a></li>
-  {% endfor %}
-  </ul>
 
   {% for category in categories %}
       <h3 id ="{{ category }}"><i class="fas fa-tags category-tags-icon"></i></i> {{ category }}</h3>
@@ -28,10 +21,37 @@ show_link: true
         {% if post.hide != true %}
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <article class="archive-item">
+          {%- if post.mobile_link -%}
+          <p class="post-meta post-meta-title"><a class="page-meta desktop" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title"><a class="page-meta mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          {%- else -%}
           <p class="post-meta post-meta-title"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          {%- endif -%}
         </article>
         {% endif %}
       {% endfor %}
   {% endfor %}
+
+  {%- assign default_paths = site.pages | map: "path" -%}
+  {%- assign page_paths = site.header_pages | default: default_paths -%}
+  {%- assign category = "annotated-paper" -%}
+  <h3 id ="{{ category }}"><i class="fas fa-tags category-tags-icon"></i></i> {{ category }}</h3>
+  <a name="{{ category | slugize }}"></a>
+  {%- for path in page_paths -%}
+    {%- assign post = site.pages | where: "path", path | first -%}
+    {%- if post.categories contains "annotated paper" -%}
+      {% if post.hide != true %}
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <article class="archive-item">
+          {%- if post.mobile_link -%}
+          <p class="post-meta post-meta-title"><a class="page-meta desktop" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title"><a class="page-meta mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          {%- else -%}
+          <p class="post-meta post-meta-title"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          {%- endif -%}
+        </article>
+      {% endif %}
+    {%- endif -%}
+  {%- endfor -%}
 
 {% endif %}
