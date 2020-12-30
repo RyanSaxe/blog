@@ -361,10 +361,10 @@ canvas {
 
 //mobile and tablet
 @media (max-width: 768px) {
-    .desktop {display: none;}
-    .desktop-table-cell {display: none;}
-    .desktop-flex {display: none;}
-    .mobile {display: block;}
+    .desktop {display: none !important;}
+    .desktop-table-cell {display: none !important;}
+    .desktop-flex {display: none !important;}
+    .mobile {display: block !important;}
 }
 
 @media (max-width: 600px) {
