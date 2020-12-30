@@ -22,8 +22,8 @@ show_link: true
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <article class="archive-item">
           {%- if post.mobile_link -%}
-          <p class="post-meta post-meta-title"><a class="page-meta desktop" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
-          <p class="post-meta post-meta-title"><a class="page-meta mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title desktop"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title mobile"><a class="page-meta" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
           {%- else -%}
           <p class="post-meta post-meta-title"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
           {%- endif -%}
@@ -44,8 +44,8 @@ show_link: true
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <article class="archive-item">
           {%- if post.mobile_link -%}
-          <p class="post-meta post-meta-title"><a class="page-meta desktop" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
-          <p class="post-meta post-meta-title"><a class="page-meta mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title desktop"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
+          <p class="post-meta post-meta-title mobile"><a class="page-meta" href="{{ site.baseurl }}/{{ post.mobile_link }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
           {%- else -%}
           <p class="post-meta post-meta-title"><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>  • {{ post.date | date: date_format }}</p>
           {%- endif -%}
