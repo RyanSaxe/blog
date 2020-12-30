@@ -62,6 +62,7 @@ defaults:
       type: "pages"
     values:
       annotations: false
+      mobile_link: ""
       show_tags: true
 
 # Set this to true to display tags on each post
@@ -112,7 +113,8 @@ plugins:
 
 # See https://jekyllrb.com/docs/pagination/
 # For pagination to work, you cannot have index.md at the root of your repo, instead you must rename this file to index.html
-paginate: 15
+# set this to large number so no pagination happens
+paginate: 150
 paginate_path: /page:num/
 
 remote_theme: jekyll/minima

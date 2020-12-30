@@ -42,11 +42,14 @@ layout: default
   {% assign sticky_posts = sticky_posts | sort: "sticky_rank", "last" %}
   {% assign posts = sticky_posts | concat: non_sticky_posts %}
 
+  {%- assign default_paths = site.pages | map: "path" -%}
+  {%- assign page_paths = site.header_pages | default: default_paths -%}
+
   {%- if posts.size > 0 -%}
     {%- if page.list_title -%}
       <h2 class="post-list-heading">{{ page.list_title }}</h2>
     {%- endif -%}
-    <ul class="post-list">
+    <ul id="blog-posts" class="post-list">
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
       {%- for post in posts -%}
       <li>
@@ -56,6 +59,18 @@ layout: default
             {%- include post_list.html -%}
         {%- endif -%}
       </li>
+      {%- endfor -%}
+      {%- for post in page_paths -%}
+        {%- assign my_page = site.pages | where: "path", post | first -%}
+        {%- if my_page.categories contains "annotated paper" -%}
+        <li>
+          {%- if site.show_image -%}
+              {%- include post_list_image_card.html -%}
+          {% else %}
+              {%- include post_list.html -%}
+          {%- endif -%}
+        </li>
+        {%- endif -%}
       {%- endfor -%}
     </ul>
 
