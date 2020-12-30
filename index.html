@@ -36,7 +36,7 @@ image: images/logo.png
           opacity:0.0,
           display:"block",
         });
-        go_to.animate({opacity: 1}, 500);
+        go_to.delay(100).animate({opacity: 1}, 500);
       });
 
     });
@@ -51,6 +51,8 @@ image: images/logo.png
     $('.unselected').on("hover", function(){
       var next_option = $(this).next();
       var prev_option = $(this).prev();
+      console.log(prev_option.text());
+      console.log(next_option.text());
       if(next_option.hasClass('selected')){
         $(this).css("border-right","none");
       }
