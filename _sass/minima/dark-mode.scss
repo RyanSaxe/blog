@@ -300,11 +300,25 @@ canvas {
     max-height: 1144px;
 }
 
+.desktop {
+    display: block;
+}
+
+.mobile {
+    display: none;
+}
+
 // handling sizing display issues
   
 @media (max-width: 900px) {
     .image-container {display:none;}
     .txt-container {width:100%;}
+}
+
+//mobile and tablet
+@media (max-width: 768px) {
+    .desktop {display: none;}
+    .mobile {display: block}
 }
 
 @media (max-width: 600px) {
