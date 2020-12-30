@@ -2,13 +2,22 @@
     {%- if post.image -%}
     <div class="col-4 d-table-cell p-3 v-align-middle">
         <img class="image-preview " src="{{ post.image | relative_url }}" />
-      </div>
+    </div>
     {%- endif -%}
     <div class="col-8 d-table-cell p-3">
         <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
+          {%- if post.mobile_link -%}
+              <a class="post-link desktop" href="{{ post.url | relative_url }}">
+                  {{ post.title | escape }}
+              </a>
+              <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}" target="_blank">
+                  {{ post.title | escape }}
+              </a>
+          {%- else -%}
+              <a class="post-link" href="{{ post.url | relative_url }}">
+                  {{ post.title | escape }}
+              </a>
+          {%- endif -%}
         </h3>
         <p class="post-meta-description">{{ post.description }}</p>
             {% if post.categories.size > 0 and site.show_tags %}

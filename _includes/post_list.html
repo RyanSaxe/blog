@@ -3,7 +3,7 @@
         <a class="post-link desktop" href="{{ post.url | relative_url }}">
             {{ post.title | escape }}
         </a>
-        <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">
+        <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}" target="_blank">
             {{ post.title | escape }}
         </a>
     {%- else -%}

@@ -26,4 +26,21 @@ image: images/logo.png
       </div>
     </h3>
   </div>
+  <div id='mobile-nav' class='mobile Box box-shadow-medium'>
+    <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
+    <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
+  </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('#mobile-nav a').click(function() {
+      $('#mobile-nav a').not(this).attr('class', 'unselected');
+      $(this).attr('class', 'selected');
+      var post_class = "." + $(this).attr('id');
+      var selector = ".post-list > " + post_class;
+      $(selector).show();
+      $('.post-list li').not(post_class).hide();
+    });
+  });
+</script>

@@ -141,7 +141,7 @@ pre, code {
     color: $low-emph !important;
     padding-bottom: 30px !important;
     overflow: hidden;
-    max-height: 250px;
+    max-height: 150px;
 }
 
 .post-content p, .post-content li {
@@ -306,6 +306,33 @@ canvas {
 
 .mobile {
     display: none;
+}
+
+.post-list li:not([class="blog-post"]) {
+    display:none;
+  }
+  
+#mobile-nav {
+    background-color: black;
+    display:block;
+    overflow:hidden;
+}
+
+#mobile-nav a{
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 20px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.87) !important;
+}
+
+#mobile-nav .unselected:hover {
+    background-color: grey;
+}
+
+#mobile-nav .selected {
+    background-color: #4bbaff !important;
 }
 
 // handling sizing display issues
