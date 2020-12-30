@@ -169,10 +169,12 @@ $(document).ready(function(){
       var go_to = $(selector);
       var other = $('.post-list li').not(post_class);
       other.fadeOut(500, function(){
-        go_to.css("display","block");
-        go_to.css("opacity","0");
+        go_to.css({
+          opacity:0.0,
+          display:"block",
+        });
+        go_to.animate({opacity: 0}, 500);
       });
-      go_to.fadeIn(500);
 
     });
     //if coming from an anchor, make sure to toggle properly
