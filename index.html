@@ -24,6 +24,9 @@ image: images/logo.png
 </div>
 <script>
   $(document).ready(function(){
+    var url = window.location.href;
+    var anchor_id = url.substring(url.indexOf("#"));
+    $(anchor_id).click();
     $('#toggle-nav a').click(function() {
       $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
@@ -32,5 +35,6 @@ image: images/logo.png
       $(selector).show();
       $('.post-list li').not(post_class).hide();
     });
+    
   });
 </script>
