@@ -360,11 +360,13 @@ canvas {
 }
 
 //mobile and tablet
+//change display for better layout
 @media (max-width: 768px) {
     .desktop {display: none !important;}
     .desktop-table-cell {display: none !important;}
     .desktop-flex {display: none !important;}
     .mobile {display: block !important;}
+    .annotator-toolbar {display: none !important;}
 }
 
 @media (max-width: 600px) {
