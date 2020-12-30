@@ -312,9 +312,9 @@ canvas {
     display: none;
 }
 
-.post-list li:not([class="blog-post"]) {
+.post-list li{
     display:none;
-  }
+}
   
 #toggle-nav {
     display:block;
