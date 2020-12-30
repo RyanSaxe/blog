@@ -612,7 +612,7 @@ canvas { filter: invert(100%); }
 
 #toggle-nav { display: block; overflow: hidden; margin-bottom: 30px; }
 
-#toggle-nav a { float: left; display: block; text-align: center; padding: 20px; text-decoration: none; color: rgba(255, 255, 255, 0.87) !important; }
+#toggle-nav a { float: left; display: block; text-align: center; padding: 20px; text-decoration: none; color: rgba(255, 255, 255, 0.87) !important; font-size: 1.25rem; font-weight: normal; }
 
 #toggle-nav .unselected:hover { background-color: rgba(75, 186, 255, 0.25); }
 
