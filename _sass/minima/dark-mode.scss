@@ -300,18 +300,6 @@ canvas {
     max-height: 1144px;
 }
 
-.desktop {
-    display: block;
-}
-
-.desktop-table-cell {
-    display: table-cell;
-}
-
-.mobile {
-    display: none;
-}
-
 .post-list li{
     display:none;
 }
@@ -348,6 +336,22 @@ canvas {
     border-right: 1px black solid;
 }
 
+.desktop {
+    display: block;
+}
+
+.desktop-table-cell {
+    display: table-cell;
+}
+
+.desktop-flex {
+    display: flex;
+}
+
+.mobile {
+    display: none;
+}
+
 // handling sizing display issues
   
 @media (max-width: 900px) {
@@ -359,6 +363,7 @@ canvas {
 @media (max-width: 768px) {
     .desktop {display: none;}
     .desktop-table-cell {display: none;}
+    .desktop-flex {display: none;}
     .mobile {display: block;}
 }
 
