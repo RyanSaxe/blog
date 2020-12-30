@@ -315,6 +315,7 @@ canvas {
 #toggle-nav {
     display:block;
     overflow:hidden;
+    margin-bottom: 30px;
 }
 
 #toggle-nav a{
@@ -328,6 +329,10 @@ canvas {
 
 #toggle-nav .unselected:hover {
     background-color: rgba(75,186,255, 0.25);
+}
+
+#toggle-nav a:first-of-type {
+    border-left: none !important;
 }
 
 #toggle-nav .selected {
