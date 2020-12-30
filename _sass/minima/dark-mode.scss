@@ -335,18 +335,14 @@ canvas {
 
 #toggle-nav .unselected:hover {
     background-color: rgba(75,186,255, 0.25);
-    border-right: 1px black solid;
-    border-left: 1px black solid;
 }
 
-#toggle-nav a:first-of-type {
-    border-left: none !important;
+#toggle-nav a {
+    border-right: 1px black solid;
 }
 
 #toggle-nav .selected {
     background-color:rgba(75,186,255, 0.6) !important;
-    border-right: 1px black solid;
-    border-left: 1px black solid;
 }
 
 // handling sizing display issues
