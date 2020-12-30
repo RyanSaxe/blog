@@ -164,7 +164,9 @@ $(document).ready(function(){
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;
     var anchor_id = url.substring(url.indexOf("#")).slice(0, -1);
-    $(anchor_id).click();
+    if(anchor_id.includes("#")){
+      $(anchor_id).click();
+    }
     $('#toggle-nav a').click(function() {
       $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
