@@ -166,8 +166,13 @@ $(document).ready(function(){
       $(this).attr('class', 'selected');
       var post_class = "." + $(this).attr('id');
       var selector = ".post-list > " + post_class;
-      $(selector).show(500);
-      $('.post-list li').not(post_class).hide(500);
+      var go_to = $(selector);
+      var other = $('.post-list li').not(post_class);
+      go_to.fadeOut();
+      other.fadeOut(500)
+      other.hide();
+      go_to.show();
+      go_to.fadeIn(500);
     });
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;
