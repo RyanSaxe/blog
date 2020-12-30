@@ -1,10 +1,16 @@
 <h3>
-    <a class="post-link desktop" href="{{ post.url | relative_url }}">
-        {{ post.title | escape }}
-    </a>
-    <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">
-        {{ post.title | escape }}
-    </a>
+    {%- if post.mobile_link -%}
+        <a class="post-link desktop" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+        </a>
+        <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}">
+            {{ post.title | escape }}
+        </a>
+    {%- else -%}
+        <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+        </a>
+    {%- endif -%}
 </h3>
 {%- if site.show_description and post.description  -%}
 <p class="post-meta-description">{{ post.description }}</p>
