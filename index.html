@@ -141,16 +141,7 @@ $(document).ready(function(){
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><style>
-  /* overwrite box-shadow-medium directly here to
-      circumvent ajax overwriting it from dark-mode.scss
-  */
-  .box-shadow-medium {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.75) !important;
-  }
-</style>
-
-<div class="image-txt-container">
+        <div class="home"><div class="image-txt-container">
   <div class="image-container">
     <img src="/images/headshot.jpg" />
   </div>
@@ -163,16 +154,15 @@ $(document).ready(function(){
       </div>
     </h3>
   </div>
-  <div id="mobile-nav" class="mobile Box box-shadow-medium">
-    <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
-    <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
-  </div>
 </div>
-
+<div id="toggle-nav" class="Box">
+  <a href="#BlogPosts" id="blog-post" class="selected">Blog Posts</a>
+  <a href="#AnnotatedPapers" id="annotated-paper" class="unselected">Annotated Papers</a>
+</div>
 <script>
   $(document).ready(function(){
-    $('#mobile-nav a').click(function() {
-      $('#mobile-nav a').not(this).attr('class', 'unselected');
+    $('#toggle-nav a').click(function() {
+      $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
       var post_class = "." + $(this).attr('id');
       var selector = ".post-list > " + post_class;
@@ -201,7 +191,7 @@ $(document).ready(function(){
 
    <!-- Assemble final sorted posts array -->
   
-  <ul class="post-list"><li class="blog-post"><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-4 d-table-cell p-3 v-align-middle">
+  <ul class="post-list"><li class="blog-post"><div class="Box rounded-1 col-12"><div class="col-4 d-table-cell p-3 v-align-middle">
         <img class="image-preview " src="/images/nnflow.png" />
     </div><div class="col-8 d-table-cell p-3">
         <h3><a class="post-link" href="/transparency/2020/12/01/NAM.html">
@@ -219,7 +209,7 @@ $(document).ready(function(){
           <p class="post-meta">Dec 1, 2020</p>
       </div>
   </div>
-</li><li class="annotated-paper"><div class="Box box-shadow-medium rounded-1 col-12"><div class="col-8 d-table-cell p-3">
+</li><li class="annotated-paper"><div class="Box rounded-1 col-12"><div class="col-8 d-table-cell p-3">
         <h3><a class="post-link desktop" href="/NAM/">
                   Neural Additive Models
               </a>
