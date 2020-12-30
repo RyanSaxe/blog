@@ -60,9 +60,9 @@ layout: default
         {%- endif -%}
       </li>
       {%- endfor -%}
-      {%- for post in page_paths -%}
-        {%- assign my_page = site.pages | where: "path", post | first -%}
-        {%- if my_page.categories contains "annotated paper" -%}
+      {%- for path in page_paths -%}
+        {%- assign post = site.pages | where: "path", path | first -%}
+        {%- if post.categories contains "annotated paper" -%}
         <li>
           {%- if site.show_image -%}
               {%- include post_list_image_card.html -%}
