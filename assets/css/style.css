@@ -610,11 +610,13 @@ canvas { filter: invert(100%); }
 
 .post-list li:not([class="blog-post"]) { display: none; }
 
-#toggle-nav { display: block; overflow: hidden; }
+#toggle-nav { display: block; overflow: hidden; margin-bottom: 30px; }
 
 #toggle-nav a { float: left; display: block; text-align: center; padding: 20px; text-decoration: none; color: rgba(255, 255, 255, 0.87) !important; }
 
 #toggle-nav .unselected:hover { background-color: rgba(75, 186, 255, 0.25); }
+
+#toggle-nav a:first-of-type { border-left: none !important; }
 
 #toggle-nav .selected { background-color: rgba(75, 186, 255, 0.6) !important; border-right: 1px black solid; border-left: 1px black solid; }
 
