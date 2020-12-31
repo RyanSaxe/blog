@@ -353,6 +353,13 @@ canvas {
     display: none;
 }
 
+.tiny-mobile {
+    display: none;
+}
+.not-tiny-mobile {
+    display: block;
+}
+
 // handling sizing display issues
 
 @media (max-width: 900px) {
@@ -406,6 +413,15 @@ canvas {
     li .post-meta-description {
         font-size: 13px !important;
     }
+
+    .tiny-mobile {
+        display: block;
+    }
+
+    .not-tiny-mobile {
+        display: none;
+    }
+    
 }
 
 @media (max-height: 600px) {

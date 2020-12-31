@@ -9,14 +9,16 @@
           {%- if post.mobile_link -%}
               <a class="post-link desktop" href="{{ post.url | relative_url }}">
                 {%- if post.title_abbrev -%}
-                  {{ post.title_abbrev | escape }}
+                  <span class="tiny-mobile">{{ post.title_abbrev | escape }}</span>
+                  <span class="not-tiny-mobile">{{ post.title | escape }}</span>
                 {%- else -%}
                   {{ post.title | escape }}
                 {%- endif -%}
               </a>
               <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}" target="_blank">
                 {%- if post.title_abbrev -%}
-                  {{ post.title_abbrev | escape }}
+                  <span class="tiny-mobile">{{ post.title_abbrev | escape }}</span>
+                  <span class="not-tiny-mobile">{{ post.title | escape }}</span>
                 {%- else -%}
                   {{ post.title | escape }}
                 {%- endif -%}
@@ -24,7 +26,8 @@
           {%- else -%}
               <a class="post-link" href="{{ post.url | relative_url }}">
                 {%- if post.title_abbrev -%}
-                  {{ post.title_abbrev | escape }}
+                  <span class="tiny-mobile">{{ post.title_abbrev | escape }}</span>
+                  <span class="not-tiny-mobile">{{ post.title | escape }}</span>
                 {%- else -%}
                   {{ post.title | escape }}
                 {%- endif -%}
