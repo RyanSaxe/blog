@@ -396,7 +396,9 @@ canvas {
     .post p img {
         width: 100% !important;
     }
+}
 
+@media (max-width: 480px) {
     .post-link {
         font-size: 1.225rem !important;
     }

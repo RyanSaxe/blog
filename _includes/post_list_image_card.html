@@ -8,14 +8,26 @@
         <h3>
           {%- if post.mobile_link -%}
               <a class="post-link desktop" href="{{ post.url | relative_url }}">
+                {%- if post.title_abbrev -%}
+                  {{ post.title_abbrev | escape }}
+                {%- else -%}
                   {{ post.title | escape }}
+                {%- endif -%}
               </a>
               <a class="post-link mobile" href="{{ site.baseurl }}/{{ post.mobile_link }}" target="_blank">
+                {%- if post.title_abbrev -%}
+                  {{ post.title_abbrev | escape }}
+                {%- else -%}
                   {{ post.title | escape }}
+                {%- endif -%}
               </a>
           {%- else -%}
               <a class="post-link" href="{{ post.url | relative_url }}">
+                {%- if post.title_abbrev -%}
+                  {{ post.title_abbrev | escape }}
+                {%- else -%}
                   {{ post.title | escape }}
+                {%- endif -%}
               </a>
           {%- endif -%}
         </h3>
