@@ -313,7 +313,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Regression</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">class</span> <span class="nc">Regression</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -394,7 +394,7 @@ $$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#    everything above it is nearing a final draft</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#    everything above it is nearing a final draft</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"DO NOT READ BELOW THIS POINT"</span><span class="p">)</span>
 </pre></div>
 
@@ -473,7 +473,7 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">LinearGAM</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">LinearGAM</span>
 <span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">s</span> <span class="k">as</span> <span class="n">spline</span>
 <span class="c1">#fit to 20 splines of degree 3, with a low smoothing penalty </span>
 <span class="c1"># and no further constraints to each of the three features</span>
@@ -556,7 +556,7 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">regularizers</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">regularizers</span>
 
 <span class="c1">#define a simple multi-layer perceptron</span>
 <span class="k">class</span> <span class="nc">MLP</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -623,7 +623,7 @@ $$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \bet
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">NAM</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">NAM</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
     <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">,</span>
@@ -803,7 +803,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
   <div class="wrapper">
 
     <div class="footer-col-wrapper">
-      <div class="footer-col"><ul class="social-media-list"><li><a rel="me" href="https://www.facebook.com/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a rel="me" href="https://github.com/ryansaxe" title="ryansaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rcsaxe" title="rcsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a rel="me" href="https://twitch.com/ryancsaxe" title=""><svg class="svg-icon grey"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></a></li></ul>
+      <div class="footer-col"><ul class="social-media-list"><li><a rel="me" href="https://www.facebook.com/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a rel="me" href="https://github.com/ryansaxe" title="ryansaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rcsaxe" title="rcsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a rel="me" href="https://twitch.tv/ryancsaxe" title=""><svg class="svg-icon grey" viewBox="0 0 25 23"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></a></li></ul>
       </div>
       <div class="footer-col">
         <p style="float:right">explaining and exploring how machines learn</p>
