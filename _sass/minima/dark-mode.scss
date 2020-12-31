@@ -353,15 +353,10 @@ canvas {
 }
 
 // handling sizing display issues
-  
+
 @media (max-width: 900px) {
     .image-container {display:none;}
     .txt-container {width:100%;}
-}
-
-//mobile and tablet
-//change display for better layout
-@media (max-width: 768px) {
     .desktop {display: none !important;}
     .desktop-table-cell {display: none !important;}
     .desktop-flex {display: none !important;}
@@ -385,6 +380,7 @@ canvas {
     .site-header, .site-footer {
         position: relative !important;
         box-shadow: none !important;
+        border-color: black !important;
     }
 
     .face {
@@ -398,6 +394,10 @@ canvas {
 
     .post p img {
         width: 100% !important;
+    }
+
+    .post-link {
+        font-size: 1.125rem;
     }
 }
 
