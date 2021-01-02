@@ -173,11 +173,13 @@ $(document).ready(function(){
           opacity:0.0,
           display:"block",
         });
-        $(".post-meta-description").dotdotdot({
-          height: null,
-          fallbackToLetter: true,
-          watch: false,
-          callback: function( isTruncated ) {go_to.animate({opacity: 1}, 500);},
+        go_to.each(function(){
+            $(this).dotdotdot({
+              height: null,
+              fallbackToLetter: true,
+              watch: false,
+              callback: function( isTruncated ) {$(this).animate({opacity: 1}, 500);},
+          });
         });
       });
 
