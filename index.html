@@ -31,7 +31,7 @@ image: images/logo.png
       var go_to = $(selector);
       var other = $('.post-list').not(selector);
       other.animate({
-        opacity:1,
+        opacity:0,
       }, 500, function(){
         other.css('z-index', -999);
         go_to.css('z-index', 1);
