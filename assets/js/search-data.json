@@ -24,15 +24,8 @@
   
 
   
-  
 
   
-
-  
-  
-
-  
-
   
 
   
@@ -41,10 +34,19 @@
   
 
   
+
   
 
   
-      ,"page13": {
+
+  
+  
+
+  
+  
+
+  
+      ,"page14": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://ryansaxe.com/robots.txt",
