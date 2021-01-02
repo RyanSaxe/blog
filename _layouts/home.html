@@ -63,9 +63,15 @@ layout: default
       {%- endfor -%}
     </ul>
     <ul class="post-list annotated-paper">
+      {% assign annotated_papers = ''|split:'' %}
       {%- for path in page_paths -%}
         {%- assign post = site.pages | where: "path", path | first -%}
         {%- if post.categories contains "annotated paper" -%}
+          {% assign annotated_papers = annotated_papers|push:post%}
+        {%- endif -%}
+      {%- endfor -%}
+      {% assign sorted_papers = annotated_papers | sort: 'date' | reverse %}
+      {%- for post in sorted_papers -%}
         <li>
           {%- if site.show_image -%}
               {%- include post_list_image_card.html -%}
