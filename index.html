@@ -36,14 +36,7 @@ image: images/logo.png
           opacity:0.0,
           display:"block",
         });
-        go_to.each(function(){
-            $(this).dotdotdot({
-              height: null,
-              fallbackToLetter: true,
-              watch: true,
-              callback: function( isTruncated ) {$(this).animate({opacity: 1}, 500); console.log($(this));},
-          });
-        });
+        go_to.animate({opacity: 1}, 500);
       });
 
     });

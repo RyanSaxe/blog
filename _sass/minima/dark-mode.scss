@@ -142,6 +142,8 @@ pre, code {
     color: $low-emph !important;
     padding-bottom: 30px !important;
     overflow: hidden;
+    text-overflow:ellipsis; 
+    white-space: nowrap;
     max-height: 150px;
 }
 
