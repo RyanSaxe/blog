@@ -39,12 +39,12 @@ image: images/logo.png
       });
     });
     //if coming from an anchor, make sure to toggle properly
-    var url = window.location.href;
-    var anchor_id = url.substring(url.indexOf("#")).slice(0, -1);
-    if(anchor_id.includes("#")){
-      $(anchor_id).trigger("click");
-    } else {
-      $('#blog-post').trigger("click");
-    }
+    // var url = window.location.href;
+    // var anchor_id = url.substring(url.indexOf("#")).slice(0, -1);
+    // if(anchor_id.includes("#")){
+    //   $(anchor_id).trigger("click");
+    // } else {
+    //   $('#blog-post').trigger("click");
+    // }
   });
 </script>
