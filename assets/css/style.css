@@ -604,6 +604,8 @@ canvas { filter: invert(100%); }
 
 .pdf { width: 100%; height: 129vw; max-height: 1144px; }
 
+.post-container { position: relative; }
+
 .post-list { opacity: 0; position: absolute; }
 
 #toggle-nav { display: block; overflow: hidden; margin-bottom: 30px; }
