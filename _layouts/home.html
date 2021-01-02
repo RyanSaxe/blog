@@ -49,6 +49,7 @@ layout: default
     {%- if page.list_title -%}
       <h2 class="post-list-heading">{{ page.list_title }}</h2>
     {%- endif -%}
+    <div class="post-container">
     <ul class="post-list blog-post">
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
       {%- for post in posts -%}
@@ -76,7 +77,7 @@ layout: default
         {%- endif -%}
       {%- endfor -%}
     </ul>
-
+  </div>
     {% if site.paginate and site.posts.size > site.paginate %}
       <div class="pager">
         <ul class="pagination">

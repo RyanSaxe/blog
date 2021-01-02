@@ -300,7 +300,9 @@ canvas {
     height: 129vw;
     max-height: 1144px;
 }
-
+.post-container {
+    position: relative;
+}
 .post-list{
     opacity:0;
     position: absolute;
