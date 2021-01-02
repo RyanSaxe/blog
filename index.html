@@ -177,8 +177,8 @@ $(document).ready(function(){
             $(this).dotdotdot({
               height: null,
               fallbackToLetter: true,
-              watch: false,
-              callback: function( isTruncated ) {$(this).animate({opacity: 1}, 500);},
+              watch: true,
+              callback: function( isTruncated ) {$(this).animate({opacity: 1}, 500); console.log($(this));},
           });
         });
       });
