@@ -27,18 +27,16 @@ image: images/logo.png
     $('#toggle-nav a').on("click", function() {
       $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
-      var post_class = "." + $(this).attr('id');
-      var selector = ".post-list > " + post_class;
+      var selector = "." + $(this).attr('id');
       var go_to = $(selector);
-      var other = $('.post-list li').not(post_class);
-      other.fadeOut(500, function(){
-        go_to.css({
-          opacity:0.0,
-          display:"block",
-        });
+      var other = $('.post-list').not(selector);
+      other.animate({
+        opacity:1,
+      }, 500, function(){
+        other.css('z-index', -999);
+        go_to.css('z-index', 1);
         go_to.animate({opacity: 1}, 500);
       });
-
     });
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;

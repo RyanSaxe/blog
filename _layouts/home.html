@@ -49,10 +49,10 @@ layout: default
     {%- if page.list_title -%}
       <h2 class="post-list-heading">{{ page.list_title }}</h2>
     {%- endif -%}
-    <ul class="post-list">
+    <ul class="post-list blog-post">
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
       {%- for post in posts -%}
-      <li class="blog-post">
+      <li>
         {%- if site.show_image -%}
             {%- include post_list_image_card.html -%}
         {% else %}
@@ -60,10 +60,12 @@ layout: default
         {%- endif -%}
       </li>
       {%- endfor -%}
+    </ul>
+    <ul class="post-list annotated-paper">
       {%- for path in page_paths -%}
         {%- assign post = site.pages | where: "path", path | first -%}
         {%- if post.categories contains "annotated paper" -%}
-        <li class="annotated-paper">
+        <li>
           {%- if site.show_image -%}
               {%- include post_list_image_card.html -%}
           {% else %}

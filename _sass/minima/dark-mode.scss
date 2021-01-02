@@ -301,10 +301,10 @@ canvas {
     max-height: 1144px;
 }
 
-.post-list li{
-    display:none;
+.post-list ul{
+    opacity:0;
 }
-  
+
 #toggle-nav {
     display:block;
     overflow:hidden;
