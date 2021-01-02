@@ -62,6 +62,7 @@ layout: default
       {%- endfor -%}
     </ul>
     <ul class="post-list annotated-paper">
+      {% assign sorted_page_paths = page_paths | sort:"date" %}
       {%- for path in page_paths -%}
         {%- assign post = site.pages | where: "path", path | first -%}
         {%- if post.categories contains "annotated paper" -%}
