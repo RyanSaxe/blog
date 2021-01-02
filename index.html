@@ -164,18 +164,16 @@ $(document).ready(function(){
     $('#toggle-nav a').on("click", function() {
       $('#toggle-nav a').not(this).attr('class', 'unselected');
       $(this).attr('class', 'selected');
-      var post_class = "." + $(this).attr('id');
-      var selector = ".post-list > " + post_class;
+      var selector = "." + $(this).attr('id');
       var go_to = $(selector);
-      var other = $('.post-list li').not(post_class);
-      other.fadeOut(500, function(){
-        go_to.css({
-          opacity:0.0,
-          display:"block",
-        });
+      var other = $('.post-list').not(selector);
+      other.animate({
+        opacity:1,
+      }, 500, function(){
+        other.css('z-index', -999);
+        go_to.css('z-index', 1);
         go_to.animate({opacity: 1}, 500);
       });
-
     });
     //if coming from an anchor, make sure to toggle properly
     var url = window.location.href;
@@ -207,7 +205,7 @@ $(document).ready(function(){
 
    <!-- Assemble final sorted posts array -->
   
-  <ul class="post-list"><li class="blog-post"><div class="Box rounded-1 col-12"><div class="col-4 desktop-table-cell p-3 v-align-middle">
+  <ul class="post-list blog-post"><li><div class="Box rounded-1 col-12"><div class="col-4 desktop-table-cell p-3 v-align-middle">
         <img class="image-preview " src="/images/nnflow.png" />
     </div><div class="col-8 d-table-cell p-3">
         <h3><a class="post-link" href="/transparency/2020/12/01/NAM.html"><span class="tiny-mobile">Designing Transparent Neural Nets</span>
@@ -224,7 +222,8 @@ $(document).ready(function(){
           <p class="post-meta">Dec 1, 2020</p>
       </div>
   </div>
-</li><li class="annotated-paper"><div class="Box rounded-1 col-12"><div class="col-8 d-table-cell p-3">
+</li></ul>
+    <ul class="post-list annotated-paper"><li><div class="Box rounded-1 col-12"><div class="col-8 d-table-cell p-3">
         <h3><a class="post-link desktop" href="/NAM/">Neural Additive Models</a>
               <a class="post-link mobile" href="/pdfs/neural_additive_models.pdf" target="_blank">Neural Additive Models</a></h3>
         <p class="post-meta-description">Deep neural networks (DNNs) are powerful black-box predictors that have achieved impressive performance on a wide variety of tasks. However, their accuracy comes at the cost of intelligibility: it is usually unclear how they make their decisions. This hinders their applicability to high stakes decision-making domains such as healthcare. We propose Neural Additive Models (NAMs) which combine some of the expressivity of DNNs with the inherent intelligibility of generalized additive models. NAMs learn a linear combination of neural networks that each attend to a single input feature. These networks are trained jointly and can learn arbitrarily complex relationships between their input feature and the output. Our experiments on regression and classification datasets show that NAMs are more accurate than widely used intelligible models such as logistic regression and shallow decision trees. They perform similarly to existing state-of-the-art generalized additive models in accuracy, but can be more easily applied to real-world problems.</p>
@@ -239,7 +238,7 @@ $(document).ready(function(){
           <p class="post-meta">Jan 1, 2021</p>
       </div>
   </div>
-</li><li class="annotated-paper"><div class="Box rounded-1 col-12"><div class="col-8 d-table-cell p-3">
+</li><li><div class="Box rounded-1 col-12"><div class="col-8 d-table-cell p-3">
         <h3><a class="post-link desktop" href="/simclrv2/"><span class="tiny-mobile">SimCLRv2</span>
                   <span class="not-tiny-mobile">Big Self-Supervised Models are Strong Semi-Supervised Learners</span></a>
               <a class="post-link mobile" href="/pdfs/SimCLRv2.pdf" target="_blank"><span class="tiny-mobile">SimCLRv2</span>
