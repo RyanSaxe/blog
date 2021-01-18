@@ -106,7 +106,7 @@ $(document).ready(function(){
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
             // get location of mousehover
-            var x = event.pageX + 20;
+            var x = event.pageX + 50;
             var y = event.pageY - 20;
             var fndiv = $(fnid).clone()
             // remove the "return to line" part of footnote
@@ -115,6 +115,7 @@ $(document).ready(function(){
             fndiv.css({
                 top: y,
                 left: x,
+                "list-style-type":"none",
             });
             // change id to control look of popup
             fndiv.attr({
@@ -123,11 +124,11 @@ $(document).ready(function(){
             // set up fadein transition
             fndiv.hide();
             $('body').append(fndiv);
-            fndiv.fadeIn(1000);
+            fndiv.fadeIn(500);
         }
     }, function() {
         // remove footnote when no longer hovering
-        $('#footnote-popup').fadeOut(1000, function(){
+        $('#footnote-popup').fadeOut(500, function(){
             $(this).remove();
         });
     });
@@ -716,8 +717,8 @@ y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
 &amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
 &amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
 \end{aligned}
-$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
-<p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
+$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for the individual components of any additive model.</p>
+<p>Luckily, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
 
 </div>
 </div>
@@ -793,19 +794,19 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="fake-header h2">Footnotes</div>
 <ol class="footnotes">
 <li id="fn-1">The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a>
-</li>&lt;/div&gt;
+</li>
 
 <li id="fn-2">The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-2" class="footnote footnotes">↩</a>
-</li>&lt;/div&gt;
+</li>
 
 <li id="fn-3">This explains why we could create a model identical to linear and logistic regression by designing a neural network with zero hidden layers.<a href="#fnref-3" class="footnote footnotes">↩</a>
-</li>&lt;/div&gt;
+</li>
 
 <li id="fn-4">The "smoothness" of a function is described by the continuity of the derivatives. The set of functions with a smoothness of 0 is equivalent to the set of continuous functions. The set of functions with a smoothness of 1 is the set of continuous functions such that their first derivative is continuous. So on, and so forth. Generally, a function is considered "smooth" if it has "smoothness" of $\infty$. In other words, it is infinitely differentiable.<a href="#fnref-4" class="footnote footnotes">↩</a>
-</li>&lt;/div&gt;
+</li>
 
 <li id="fn-5">Technically, this could be fit where the sub-networks take more than a single feature as input, but this comes at a cost of interpretability. It is still possible to explore the relationship between both features and the output, however it becomes high-dimensional, entangled, and hence more difficult to interpret.<a href="#fnref-5" class="footnote footnotes">↩</a>
-</li>&lt;/div&gt;
+</li>
 </ol>
 </div>
 </div>
@@ -826,7 +827,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
         repo="RyanSaxe/blog"
         issue-term="title"
         label="blogpost-comment"
-        theme="github-light"
+        theme="icy-dark"
         crossorigin="anonymous"
         async>
 </script><a class="u-url" href="/transparency/2020/12/01/NAM.html" hidden></a>

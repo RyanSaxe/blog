@@ -95,7 +95,7 @@ $(document).ready(function(){
         var fnid = $(this).attr('href');
         if (!$('#footnote-popup').length){
             // get location of mousehover
-            var x = event.pageX + 20;
+            var x = event.pageX + 50;
             var y = event.pageY - 20;
             var fndiv = $(fnid).clone()
             // remove the "return to line" part of footnote
@@ -104,6 +104,7 @@ $(document).ready(function(){
             fndiv.css({
                 top: y,
                 left: x,
+                "list-style-type":"none",
             });
             // change id to control look of popup
             fndiv.attr({
@@ -112,11 +113,11 @@ $(document).ready(function(){
             // set up fadein transition
             fndiv.hide();
             $('body').append(fndiv);
-            fndiv.fadeIn(1000);
+            fndiv.fadeIn(500);
         }
     }, function() {
         // remove footnote when no longer hovering
-        $('#footnote-popup').fadeOut(1000, function(){
+        $('#footnote-popup').fadeOut(500, function(){
             $(this).remove();
         });
     });
