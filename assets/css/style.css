@@ -486,6 +486,8 @@ code, pre { overflow-x: scroll; overflow-y: scroll !important; }
 
 .katex-display .mtable { font-size: 125% !important; }
 
+strong, b { color: white; }
+
 .post-content h1, .post-content h2, .post-content h3 { margin-top: 0px !important; }
 
 .fake-header { margin-top: 0px !important; font-weight: normal !important; margin-bottom: 0.5rem !important; margin: 0.67em 0; }
