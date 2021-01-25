@@ -32,6 +32,25 @@ window.hypothesisConfig = function () {
   };
 };
 </script> -->
+<style>
+    .annotator-frame .annotator-toolbar {
+        top: 56px !important;
+    }
+
+    .annotator-frame .annotator-toolbar__sidebar-toggle {
+        border-left: 1px rgba(0,0,0,0.5) solid !important;
+        border-bottom: 1px rgba(0,0,0,0.5) solid !important;
+        background-color: $overlay !important;
+    }
+
+    .annotator-frame .annotator-toolbar-buttonbar {
+        display:none !important;
+    }
+
+    .annotator-frame .annotator-bucket-bar {
+        display: none !important;
+    }
+</style>
 {%- endif -%}
 
 {%- include favicons.html -%}
