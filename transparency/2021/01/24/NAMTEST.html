@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Designing Interpretable Neural Networks | Opening the Black Box</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Designing Interpretable Neural Networks" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as interpretable!" />
+<meta property="og:description" content="Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as interpretable!" />
+<link rel="canonical" href="https://ryansaxe.com/transparency/2021/01/24/NAMTEST.html" />
+<meta property="og:url" content="https://ryansaxe.com/transparency/2021/01/24/NAMTEST.html" />
+<meta property="og:site_name" content="Opening the Black Box" />
+<meta property="og:image" content="https://ryansaxe.com/images/nnflow.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-24T00:00:00-06:00" />
+<script type="application/ld+json">
+{"url":"https://ryansaxe.com/transparency/2021/01/24/NAMTEST.html","@type":"BlogPosting","headline":"Designing Interpretable Neural Networks","dateModified":"2021-01-24T00:00:00-06:00","datePublished":"2021-01-24T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/transparency/2021/01/24/NAMTEST.html"},"image":"https://ryansaxe.com/images/nnflow.png","description":"Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as interpretable!","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" />
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/4.1.0/dotdotdot.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".post-meta-description").dotdotdot({
+      height: null,
+      fallbackToLetter: true,
+      watch: true,
+    });
+  });
+</script>
+<!-- 
+    hypothesis off for now<script async src="https://hypothes.is/embed.js"></script>
+<style>
+    .annotator-frame .annotator-toolbar {
+        top: 56px !important;
+    }
+
+    .annotator-frame .annotator-toolbar__sidebar-toggle {
+        border-left: 1px rgba(0,0,0,0.5) solid !important;
+        border-bottom: 1px rgba(0,0,0,0.5) solid !important;
+        background-color: $overlay !important;
+    }
+
+    .annotator-frame .annotator-toolbar-buttonbar {
+        display:none !important;
+    }
+
+    .annotator-frame .annotator-bucket-bar {
+        display: none !important;
+    }
+</style>--><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "[%", right: "%]", display: true},
+                {left: "$", right: "$", display: false}
+            ],
+            macros: {
+            // wrapping -1 with curly braces here to enable footnote usage
+            "\\inv": "{-1}",
+            }
+        });
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+
+<script>
+$(document).ready(function(){
+    $('.footnote-ref a, .citation').hover(function(event) {
+        // find the footnote corresponding to the link
+        var fnid = $(this).attr('href');
+        if (!$('#footnote-popup').length){
+            // get location of mousehover
+            var x = event.pageX + 50;
+            var y = event.pageY - 20;
+            var fndiv = $(fnid).clone()
+            // remove the "return to line" part of footnote
+            fndiv.children("a:last").remove();
+            // set new footnote to where the hover happened
+            fndiv.css({
+                top: y,
+                left: x,
+                "list-style-type":"none",
+            });
+            // change id to control look of popup
+            fndiv.attr({
+                id: 'footnote-popup',
+            });
+            // set up fadein transition
+            fndiv.hide();
+            $('body').append(fndiv);
+            fndiv.fadeIn(500);
+        }
+    }, function() {
+        // remove footnote when no longer hovering
+        $('#footnote-popup').fadeOut(500, function(){
+            $(this).remove();
+        });
+    });
+});
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Opening the Black Box</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Designing Interpretable Neural Networks</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-01-24T00:00:00-06:00" itemprop="datePublished">
+        Jan 24, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      13 min read
+    
+</span></p>
+
+    
+
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Linear-Models">Linear Models </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Linear-Regression">Linear Regression </a></li>
+<li class="toc-entry toc-h2"><a href="#Generalized-Linear-Models">Generalized Linear Models </a></li>
+<li class="toc-entry toc-h2"><a href="#Relating-to-Neural-Networks">Relating to Neural Networks </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Generalized-Additive-Models">Generalized Additive Models </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Fitting-Smooth-Functions">Fitting Smooth Functions </a></li>
+<li class="toc-entry toc-h2"><a href="#Priors-and-Penalties">Priors and Penalties </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Interpretable-Neural-Networks">Interpretable Neural Networks </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Additive-Neural-Networks">Additive Neural Networks </a></li>
+<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
+<li class="toc-entry toc-h2"><a href="#Generalizations">Generalizations </a></li>
+</ul>
+</li>
+</ul>
+
+    
+      
+        <div class="notebook-link-group d-flex flex-wrap flex-justify-start">
+          <div class="notebook-link">
+
+    <a href="https://github.com/RyanSaxe/blog/tree/master/_notebooks/NAMTEST.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="notebook-link">
+    <a href="https://mybinder.org/v2/gh/RyanSaxe/blog/master?filepath=_notebooks%2FNAMTEST.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="notebook-link">
+    <a href="https://colab.research.google.com/github/RyanSaxe/blog/blob/master/_notebooks/NAMTEST.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/NAMTEST.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Most supervised prediction problems can be described as learning some function $f$ that minimizes the error-term ($\epsilon$) to the equation $y = f(X) + \epsilon$, where $X$ is the input features and $y$ is the target prediction. This blog post will explore methods to devise neural architectures to learn such functions, with the additional goal of making them as transparent as linear models. However, prior to jumping into such architectures, it's important to understand the foundation of classic transparent approaches, starting from the simplest linear models.</p>
+<p>The next section provides the necessary background to understand how the building blocks of neural networks are related to linear models. Then, we can drop the restriction of linearity with Generalized Additive Models (GAMs), and explore building transparent neural networks.</p>
+<h1 id="Linear-Models">
+<a class="anchor" href="#Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Models<a class="anchor-link" href="#Linear-Models"> </a>
+</h1>
+<p>Different algorithms are sufficient for learning different families of functions. For example, simple linear models can only learn to make predictions according to functions of the form:</p>
+<p>
+$$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
+</p>
+<p>Where $\beta_i$ represents learned coefficients with respect to $X_i$.</p>
+<h2 id="Linear-Regression">
+<a class="anchor" href="#Linear-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a>
+</h2>
+<p>Linear regression is arguably the simplest of the linear models, and comes with four assumptions:</p>
+<ol>
+<li>
+<strong>Linearity</strong>: The relationship between $X$ and the mean of $y$ is linear.</li>
+<li>
+<strong>Independence</strong>: $X_i$ and $X_j$ are linearly independent of eachother for all $i \neq j$.</li>
+<li>
+<strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</li>
+<li>
+<strong>Homoscedasticity</strong>: The variance of residual is the same for any value of $X$.</li>
+</ol>
+<p>These assumptions can be nicely described by one math equation:</p>
+$$
+\begin{aligned}
+y &amp; \in \mathcal{N}(X^T\beta, \sigma^2 I) \\
+&amp; \Rightarrow \mathbb{E}[y|X] = X^T\beta
+\end{aligned}
+$$<p>However, these assumptions are quite rigid for the real world. Many datasets and/or problem spaces do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can comparably perform the regression task without such rigid assumptions? The common answers to this question are:</p>
+<ol>
+<li>
+<strong>Occam's Razor</strong>: Don't add complexity without necessity.    </li>
+<li>
+<strong>Little Data</strong>: Ordinary Least Squares (OLS) is a closed form solution to linear regression<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</li>
+<li>
+<strong>Interpretability</strong>: $y$ can be explained with respect to how $X$ interacts with the $\beta$ coefficients.</li>
+</ol>
+<p>Today, we are going to stick with the notion that transparency is of the utmost importance, and assume we have a significant amount of data. Whatever the model is, it must be able to produce feature-wise explanations that are useful. However, contrary to what you may have heard, these models don't need to be exactly linear as described above in order to be comparably interpretable.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Generalized-Linear-Models">
+<a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
+</h2>
+<p>There are three components to any Generalized Linear Model (GLM):</p>
+<ol>
+<li>
+<strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>).</li>
+<li>
+<strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (often $X^T\beta$).</li>
+<li>
+<strong>Link Function</strong>: A function $g$ that links the systematic component and the random component.</li>
+</ol>
+<p>This yields the following general equation for GLMs:</p>
+<p>
+$$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
+</p>
+<p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the GLM is exactly linear regression! Hence the functions that GLMs can describe are simply a superset of the functions linear regression can describe. Furthermore, recognize that the random component loosens the constraint of normality, and that the link function alters the constraint of linearity. The relationship between $X$ and the mean of $y$ can be non-linear as long as the relationship between $X$ and the mean of $g(y)$ is linear. Lastly, the residuals are allowed to be heteroscedastic. The only restriction from linear regression that fully remains is the independence of the explanatory variables.</p>
+<p>The link function is the most important aspect to any GLM. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$. Link functions are selected according to the given random component.</p>
+<p>For example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means $\mu(x)$ is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and a logit function is sufficient for this:</p>
+<p>
+$$g(\mu) = log(\frac{\mu}{1 - \mu})$$
+</p>
+<p>Given the expected distribution of your problem, you determine a link function that will properly transform your data to the right space. And then you can fit a simple linear model: $g(y) = X^T\beta + \epsilon$. However, Ordinary Least Squares may no longer have a closed form solution in this case. Hence, learning $\beta$ requires a different optimization method: Maximum Likelihood Estimation (MLE).</p>
+<h2 id="Relating-to-Neural-Networks">
+<a class="anchor" href="#Relating-to-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relating to Neural Networks<a class="anchor-link" href="#Relating-to-Neural-Networks"> </a>
+</h2>
+<p>Neural networks are algorithms built of components called layers. Layers are built of components called nodes. The first layer of a neural network is called the input layer, because each node passes an input feature. The last layer of a neural network is called the output layer, and it should represent the output you are trying to predict (this layer has one node in the classic regression case). Lastly, any layers between the input and output layers are called hidden layers.</p>
+<p>This structure of layers is ordered and connected in such a manner that each layer receives information from the previous layer, and passes it to the next. The output $X_j$ of node $j$ in layer $L_i$ gets passed to every node in the next layer in the network, $L_{i + 1}$. The image below displays a neural network with one hidden layer, and highlights the flow through a single node of that hidden layer.</p>
+<p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
+<p>Each node contains some set of weights ($w$) and a bias ($b$). When the node receives the output ($X$) of all the nodes in the preceding layer, it performs the following computation: $X^Tw + b$. Then, before passing this output to the next layer, it gets passed to something called an activation function, which computes some (often non-linear) transform of $X^Tw + b$. The activation function is depicted as $f$ in the image above.</p>
+<p>If we substitute our definitions to $w = \big &lt; \beta_1, \beta_2, \cdots, \beta_n \big &gt;$ and $b = \beta_0$, we are left with:</p>
+$$
+\begin{aligned}
+&amp; y = f(X^T\beta) \\
+&amp; f^{-1}(y) = X^T\beta
+\end{aligned}
+$$<p>Does this look familiar? It's almost exactly the general equation of a GLM. In fact, if $f^\inv = g$, where $g$ is a link function for a GLM, then the computation of a single node on a neural network is identical to a GLM on the output of the previous layer!</p>
+<p>This means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">betaX</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cutoff</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>14.996218003352118
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Regression</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="s1">'linear'</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># linear regression uses the identity as the link function</span>
+        <span class="c1">#    and the inverse of the identity is a linear activation</span>
+        <span class="k">if</span> <span class="n">style</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'linear'</span><span class="p">:</span>
+            <span class="n">activation</span> <span class="o">=</span> <span class="s1">'linear'</span>
+        <span class="c1"># logistic regression uses the logit link function, and the</span>
+        <span class="c1">#    inverse of logit is a sigmoid activation function</span>
+        <span class="k">elif</span> <span class="n">style</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'logistic'</span><span class="p">:</span>
+            <span class="n">activation</span> <span class="o">=</span> <span class="s1">'sigmoid'</span>
+        <span class="c1"># no other options are supported</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'input style only supports two options: linear or logistic'</span><span class="p">)</span>
+        <span class="c1"># pass input directly to the output layer --- no hidden layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>$f(x) = \begin{cases} 1, &amp; \sum_{i=1}^3 X_i &lt; 15.0\\ 0, &amp; otherwise \end{cases}$
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>However, It isn't always as simple as the cases of linear and logistic regression. Not all activation functions are invertible (e.g. ReLU), and hence add non-linearities in ways that are not consistent with GLMs. At the same time, the principal of the link function is to transform $y$ to the proper space, and ReLU does accomplish this under the assumption that $y$ cannot be negative.</p>
+<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models. So, why are neural networks opaque and GLMs transparent? Let's look at the math for an arbitrarily defined neural network with $k$ hidden layers.</p>
+$$
+\begin{aligned}
+L_0&amp; = \big &lt; X_1, X_2, \cdots, X_n \big &gt; \\
+L_1 &amp; = f_1 \Big ( \big &lt; L_0^Tw_{1,1} + b_{1,1}, L_0^Tw_{1,2} + b_{1,2}, \cdots \big &gt; \Big) \\
+&amp; \vdots \\
+L_k &amp; = f_k \Big( \big &lt; L_{k - 1}^Tw_{k,1} + b_{k,1}, L_{k - 1}^Tw_{k,2} + b_{k,2}, \cdots \big &gt; \Big) \\
+y &amp; = L_k^T \beta + \epsilon
+\end{aligned}
+$$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
+<p>While the final part of the equation is that of a linear model, observe that every element in $L_k$ is dependent on every input feature in $L_0$. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Generalized-Additive-Models">
+<a class="anchor" href="#Generalized-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Models<a class="anchor-link" href="#Generalized-Additive-Models"> </a>
+</h1>
+<p>Generalized Additive Models (GAMs) take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:</p>
+<ol>
+<li>
+<p><strong>Allow non-linearity</strong>: GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth (differentiable everywhere). It also can be non-parametric.</p>
+</li>
+<li>
+<p><strong>Allow dependence</strong>: Linear models make the assumption that $X_i$ and $X_j$ are linearly independent forall $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
+</li>
+</ol>
+<p>Hence, equations for GAMs look like this:</p>
+<p>
+$$g(\mu(X)) = \beta_0 + \beta_1 h_1(X_1) + \beta_2 h_2(X_2, X_3) + \cdots + \beta_m h_m(X_n) + \epsilon$$
+</p>
+<p>Technically, this makes GLMs a special case of GAMs where all functions $h$ are the identity function.</p>
+<h2 id="Fitting-Smooth-Functions">
+<a class="anchor" href="#Fitting-Smooth-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fitting Smooth Functions<a class="anchor-link" href="#Fitting-Smooth-Functions"> </a>
+</h2>
+<h2 id="Priors-and-Penalties">
+<a class="anchor" href="#Priors-and-Penalties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Priors and Penalties<a class="anchor-link" href="#Priors-and-Penalties"> </a>
+</h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">LinearGAM</span>
+<span class="kn">from</span> <span class="nn">pygam</span> <span class="kn">import</span> <span class="n">s</span> <span class="k">as</span> <span class="n">spline</span>
+<span class="c1">#fit to 20 splines of degree 3, with a low smoothing penalty </span>
+<span class="c1"># and no further constraints to each of the three features</span>
+<span class="n">gam</span> <span class="o">=</span> <span class="n">LinearGAM</span><span class="p">(</span><span class="n">spline</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">spline</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Interpretable-Neural-Networks">
+<a class="anchor" href="#Interpretable-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Interpretable Neural Networks<a class="anchor-link" href="#Interpretable-Neural-Networks"> </a>
+</h1>
+<h2 id="Additive-Neural-Networks">
+<a class="anchor" href="#Additive-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additive Neural Networks<a class="anchor-link" href="#Additive-Neural-Networks"> </a>
+</h2>
+<p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">regularizers</span>
+
+<span class="c1">#define a simple multi-layer perceptron</span>
+<span class="k">class</span> <span class="nc">MLP</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># relu helps learn more jagged functions if necessary.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">)</span>
+        <span class="c1"># softplus helps smooth between the jagged areas from above</span>
+        <span class="c1">#     as softplus is referred to as "SmoothRELU"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softplus'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l3</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softplus'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l4</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'softplus'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l4</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+<span class="c1">#define a Neural Additive Model for n features</span>
+<span class="k">class</span> <span class="nc">NAM</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_features</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span> <span class="o">=</span> <span class="n">n_features</span>
+        <span class="c1"># initialize MLP for each input feature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">MLP</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_features</span><span class="p">)]</span>
+        <span class="c1"># create final layer for a linear combination of learned components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear_combination</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#split up by individual features</span>
+        <span class="n">individual_features</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#apply the proper MLP to each individual feature</span>
+        <span class="k">for</span> <span class="n">f_idx</span><span class="p">,</span><span class="n">individual_feature</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual_features</span><span class="p">):</span>
+            <span class="n">component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="n">f_idx</span><span class="p">](</span><span class="n">individual_feature</span><span class="p">)</span>
+            <span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+        <span class="c1">#concatenate learned components and return linear combination of them</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_combination</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">NAM</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">'mean_squared_error'</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'mean_absolute_error'</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At first glance, these results look good, but not perfect. While the Neural Additive Model was capable of learning the general shapes of the functions, it looks like it's off on the intercepts for all of them. This should not discount the validity of the model. The corresponding math demonstrates perfectly fitting intercepts of an additive model cannot be guaranteed.</p>
+<p>Let $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ that dependent on $X_i$, and $\alpha_i$ represents the intercept.</p>
+$$
+\begin{aligned}
+y &amp; = \beta_0 + \sum_{i=1}^n \beta_i h_i(X_i) \\
+&amp; = \beta_0 + \sum_{i=1}^n \beta_i (\alpha_i + f_i(X_i)) \\
+&amp; = \beta_0 + \sum_{i=1}^n \beta_i \alpha_i + \sum_{i=1}^n \beta_i f_i(X_i)
+\end{aligned}
+$$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the proper fit of this equation, for every $i$, had $\beta_i = 1$ and $\alpha_i = 2$. In this case, if half of the learned $\alpha_i$s are zero, and the other half are four, that would yield the exact same result for $\sum_{i=1}^n \beta_i \alpha_i$ as the proper fit. Hence, by way of contradictory example, it is impossible to guarantee learning correct intercepts for any additive model.</p>
+<p>However, the "goodness of fit" of this model to the true functions can be shown by comparing the partial derivatives. This is because, when taking a derivative with respect to $X$, any aspects of the equation that don't depend on $X$ (e.g. the intercepts) become zero.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Neural-Additive-Models">
+<a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
+</h2>
+<h2 id="Generalizations">
+<a class="anchor" href="#Generalizations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalizations<a class="anchor-link" href="#Generalizations"> </a>
+</h2>
+<p>This is the fun part. This is where all your creativity for problem solving given domain knowledge yields an extremely flexible, powerful, and interpretable model!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<li id="fn-1">The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a>
+</li>
+<p></p>
+<li id="fn-2">The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-2" class="footnote footnotes">↩</a>
+</li>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="RyanSaxe/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="dark-blue"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/transparency/2021/01/24/NAMTEST.html" hidden></a>
+</article>
+
+      </div>
+    </main>  <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col"><ul class="social-media-list"><li><a rel="me" href="https://www.facebook.com/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a rel="me" href="https://github.com/ryansaxe" title="ryansaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rcsaxe" title="rcsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a rel="me" href="https://twitch.tv/ryancsaxe" title=""><svg class="svg-icon grey" viewBox="0 0 25 23"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></a></li></ul>
+      </div>
+      <div class="footer-col">
+        <p style="float:right">explaining and exploring how machines learn</p>
+      </div>
+    </div>
+  </div>
+
+</footer>
+</body>
+
+</html>

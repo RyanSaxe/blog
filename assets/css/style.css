@@ -478,11 +478,11 @@ pre code { font-size: 15px !important; }
 
 p code { font-size: 19px; }
 
-code, pre { overflow-x: scroll; overflow-y: scroll !important; }
+code, pre { overflow-x: scroll; overflow-y: scroll !important; -webkit-overflow-scrolling: touch !important; }
 
 .katex { font-size: 110% !important; }
 
-.katex-display { font-size: 125% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; overflow-y: scroll !important; }
+.katex-display { font-size: 125% !important; background-color: black !important; -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; border-radius: 5px !important; border: 1px solid #3b3e42 !important; padding: 10px !important; color: white !important; overflow-y: scroll !important; -webkit-overflow-scrolling: touch !important; }
 
 .katex-display .mtable { font-size: 125% !important; }
 
