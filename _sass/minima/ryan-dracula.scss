@@ -224,6 +224,7 @@ p code{
 code, pre {
  overflow-x: scroll;
  overflow-y: scroll !important;
+ -webkit-overflow-scrolling: touch !important;
 }
 
 .katex {
@@ -239,6 +240,7 @@ code, pre {
    padding: 10px !important;
    color: white !important;
    overflow-y: scroll !important;
+   -webkit-overflow-scrolling: touch !important;
 }
 
 .katex-display .mtable {
