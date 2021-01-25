@@ -222,7 +222,7 @@ p code{
 }
 
 code, pre {
- overflow-x: scroll;
+ overflow-x: scroll !important;
  overflow-y: scroll !important;
  -webkit-overflow-scrolling: touch !important;
 }
