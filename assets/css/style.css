@@ -580,13 +580,13 @@ canvas { filter: invert(100%); }
 
 .section-nav { list-style-position: inside !important; opacity: 0.9 !important; margin-left: 0px !important; font-size: 16px !important; }
 
-.annotator-toolbar { top: 56px !important; }
+.annotator-frame .annotator-toolbar { top: 56px !important; }
 
-.annotator-toolbar__sidebar-toggle { border-left: 1px rgba(0, 0, 0, 0.5) solid !important; border-bottom: 1px rgba(0, 0, 0, 0.5) solid !important; background-color: #262a2e !important; }
+.annotator-frame .annotator-toolbar__sidebar-toggle { border-left: 1px rgba(0, 0, 0, 0.5) solid !important; border-bottom: 1px rgba(0, 0, 0, 0.5) solid !important; background-color: #262a2e !important; }
 
-.annotator-toolbar-buttonbar { display: none !important; }
+.annotator-frame .annotator-toolbar-buttonbar { display: none !important; }
 
-.annotator-bucket-bar { display: none !important; }
+.annotator-frame .annotator-bucket-bar { display: none !important; }
 
 #footnote-popup { position: absolute; z-index: 99999999999; box-shadow: 0 3px 10px black; padding: 10px; max-width: 400px; border: 2px rgba(255, 255, 255, 0.38) solid !important; border-radius: 5px; background-color: black !important; }
 
