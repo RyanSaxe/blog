@@ -236,21 +236,21 @@ canvas {
     font-size: 16px !important;
 }
 
-.annotator-toolbar {
+.annotator-frame .annotator-toolbar {
     top: 56px !important;
 }
 
-.annotator-toolbar__sidebar-toggle {
+.annotator-frame .annotator-toolbar__sidebar-toggle {
     border-left: 1px rgba(0,0,0,0.5) solid !important;
     border-bottom: 1px rgba(0,0,0,0.5) solid !important;
     background-color: $overlay !important;
 }
 
-.annotator-toolbar-buttonbar {
+.annotator-frame .annotator-toolbar-buttonbar {
     display:none !important;
 }
 
-.annotator-bucket-bar {
+.annotator-frame .annotator-bucket-bar {
     display: none !important;
 }
 
