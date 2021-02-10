@@ -6,10 +6,6 @@ $dark-grey : #1b1f23;// #121212;
 $overlay: mix($dark-grey, white, 95%);
 $overlay-light: mix($dark-grey, white, 86%);
 
-strong, b {
-    color: white !important;
-}
-
 .post-content h1, .post-content h2, .post-content h3 {
     margin-top: 0px !important;
 }
