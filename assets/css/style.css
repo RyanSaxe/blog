@@ -508,7 +508,7 @@ code, pre { overflow-x: scroll !important; overflow-y: scroll !important; -webki
 
 .fake-header.h6 { font-size: 1.0625rem; }
 
-.post p img { max-width: 500px !important; }
+.post p img { max-height: 450px !important; max-width: 100%; }
 
 .post-header { margin-bottom: 0px !important; }
 
