@@ -50,7 +50,8 @@ $overlay-light: mix($dark-grey, white, 86%);
 }
 
 .post p img {
-    max-width: 500px !important;
+    max-height: 450px !important;
+    max-width: 100%;
 }
 
 .post-header {
