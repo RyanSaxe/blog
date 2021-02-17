@@ -50,7 +50,7 @@
     left:-30px
 }
 
-.timeline_box ul li > span:before,.timeline_box ul li > span:after{
+.timeline_box ul li > span:after{
     content: "";
     display: block;
     width: 10px;
@@ -62,8 +62,8 @@
     left:-7.5px
 }
 
-.timeline_box ul li > span:before{top:-10px}
-.timeline_box ul li > span:after{top:95%}
+// .timeline_box ul li > span:before{top:-10px}
+.timeline_box ul li > span:after{bottom:-30px}
 
 .timeline_box .title{
     text-transform: uppercase;
@@ -88,5 +88,5 @@
     font-size:80%;
     font-weight: bold;
 }
-.timeline_box .time span:first-child{top:-16px}
-.timeline_box .time span:last-child{top:94%}
+.timeline_box .time span:first-child{bottom:-30px}
+#.timeline_box .time span:last-child{top:94%}
