@@ -638,23 +638,21 @@ canvas { filter: invert(100%); }
 
 @media (max-height: 600px) { body { margin-top: 0px !important; margin-bottom: 0px !important; } * { scroll-margin-top: 0px !important; } .site-header, .site-footer { position: relative !important; box-shadow: none !important; border-color: black !important; } }
 
-.timeline_box { margin: 0 10%; height: 630px; overflow: hidden; padding: 10px 0 40px 60px; color: rgba(255, 255, 255, 0.38); }
+.timeline_box { min-height: 630px; color: rgba(255, 255, 255, 0.38); }
 
 .timeline_box .title { color: #4bbaff; }
 
 .timeline_box ul { list-style-type: none; margin: 0; padding: 0; position: relative; transition: all 0.5s linear; top: 0; }
 
-.timeline_box ul:before { content: ""; display: block; width: 0; height: 100%; border: 1px dashed #4bbaff; position: absolute; top: 0; left: 30px; }
+.timeline_box ul:before { content: ""; display: block; width: 0; height: 100%; border: 1px dashed #000; position: absolute; top: 0; left: 30px; }
 
-.timeline_box ul li { margin: 20px 60px 60px; position: relative; padding: 10px 20px; background: #262a2e; color: #fff; border-radius: 10px; line-height: 20px; width: 100%; border: 1px black solid; }
+.timeline_box ul li { margin: 20px 60px 60px; position: relative; padding: 10px 20px; background: #262a2e; border-radius: 10px; line-height: 20px; width: 100%; border: 1px black solid; }
 
-.timeline_box ul li > span { content: ""; display: block; width: 0; height: 100%; border: 1px solid #4bbaff; position: absolute; top: 0; left: -30px; }
+.timeline_box ul li > span { content: ""; display: block; width: 0; height: 100%; position: absolute; top: 0; left: -30px; }
 
-.timeline_box ul li > span:before, .timeline_box ul li > span:after { content: ""; display: block; width: 10px; height: 10px; border-radius: 50%; background: #4bbaff; border: 2px solid #fff; position: absolute; left: -7.5px; }
+.timeline_box ul li > span:before { content: ""; display: block; width: 10px; height: 10px; border-radius: 50%; background: #4bbaff; border: 2px solid #000; position: absolute; left: -7.5px; margin-bottom: 50px; }
 
 .timeline_box ul li > span:before { top: -10px; }
-
-.timeline_box ul li > span:after { top: 95%; }
 
 .timeline_box .title { text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
 
@@ -662,7 +660,7 @@ canvas { filter: invert(100%); }
 
 .timeline_box .name { margin-top: 10px; text-transform: capitalize; font-style: italic; text-align: right; margin-right: 20px; }
 
-.timeline_box .time span { position: absolute; left: -100px; color: #fff; font-size: 80%; font-weight: bold; }
+.timeline_box .time span { position: absolute; left: -100px; font-size: 80%; font-weight: bold; }
 
 .timeline_box .time span:first-child { top: -16px; }
 
