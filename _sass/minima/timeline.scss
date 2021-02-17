@@ -1,5 +1,5 @@
 .timeline_box{
-    margin:0% 5%;
+    margin:0% 10%;
     color:rgba(white, 0.38);
 }
 
@@ -20,7 +20,7 @@
     content: "";
     display: block;
     width: 0;
-    height: calc(100% + 27.5px);;
+    height: 100%;
     border:1px dashed #4bbaff;
     position: absolute;
     top:0;
@@ -34,7 +34,7 @@
     background:#262a2e;
     border-radius: 10px;
     line-height: 20px;
-    width: 98%;
+    width: 90%;
     border: 1px black solid;
 }
 
@@ -93,7 +93,7 @@
 
 .timeline_box .time span{
     position: absolute;
-    left: -107px;
+    left: -100px;
     font-size:80%;
     font-weight: bold;
 }
