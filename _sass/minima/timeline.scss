@@ -1,5 +1,5 @@
 .timeline_box{
-    margin:10% 10%;
+    margin:0% 10%;
     color:rgba(white, 0.38);
 }
 
@@ -20,7 +20,7 @@
     content: "";
     display: block;
     width: 0;
-    height: calc(100% + 37.5px);;
+    height: calc(100% + 27.5px);;
     border:1px dashed #4bbaff;
     position: absolute;
     top:0;
@@ -37,7 +37,6 @@
     width: 100%;
     border: 1px black solid;
 }
-
 
 .timeline_box ul li > span{
     content: "";
@@ -98,5 +97,6 @@
     font-size:80%;
     font-weight: bold;
 }
-.timeline_box .time span:first-child{bottom:-37.5px}
-.timeline_box .time span:last-child{top:-10px;}
+
+.timeline_box .time span:first-child{top:-10px;}
+.timeline_box .time span:last-child{bottom:-37.5px}
