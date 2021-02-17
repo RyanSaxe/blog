@@ -32,7 +32,6 @@
     position: relative;
     padding: 10px 20px;
     background:#262a2e;
-    color:#fff;
     border-radius: 10px;
     line-height: 20px;
     width: 100%;
@@ -59,7 +58,7 @@
     background:#4bbaff;
     border:2px solid #000;
     position: absolute;
-    left:-7.5px
+    left:-7.5px;
     margin-bottom:50px;
 }
 
@@ -85,7 +84,6 @@
 .timeline_box .time span{
     position: absolute;
     left: -100px;
-    color:#fff;
     font-size:80%;
     font-weight: bold;
 }
