@@ -34,7 +34,7 @@
     background:#262a2e;
     border-radius: 10px;
     line-height: 20px;
-    width: 100%;
+    width: 98%;
     border: 1px black solid;
 }
 
@@ -75,16 +75,6 @@
 .timeline_box ul li > span:before{top:-10px}
 .timeline_box ul li > span:after{bottom:-37.5px}
 
-.timeline_box ul .start_timeline{
-    margin-bottom:0px;
-}
-
-.timeline_box ul .start_timeline > span:after{
-    top:95%;
-}
-
-.timeline_box .start_timeline .time span:last-child{top:94%;}
-
 .timeline_box .title{
     text-transform: uppercase;
     font-weight: 700;
@@ -103,10 +93,20 @@
 
 .timeline_box .time span{
     position: absolute;
-    left: -100px;
+    left: -107px;
     font-size:80%;
     font-weight: bold;
 }
 
-.timeline_box .time span:first-child{top:-16px;}
-.timeline_box .time span:last-child{bottom:-43px}
+.timeline_box .time span:first-child{top:-14px;}
+.timeline_box .time span:last-child{bottom:-40px;}
+
+.timeline_box ul .start_timeline{
+    margin-bottom:0px;
+}
+
+.timeline_box ul .start_timeline > span:after{
+    top:95%;
+}
+
+.timeline_box .start_timeline .time span:last-child{top:94%;}
