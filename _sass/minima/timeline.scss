@@ -1,8 +1,5 @@
 .timeline_box{
-    margin:0 10%;
-    height: 630px;
-    overflow: hidden;
-    padding: 10px 0 40px 60px;
+    min-height: 630px;
     color:rgba(white, 0.38);
 }
 
@@ -24,7 +21,7 @@
     display: block;
     width: 0;
     height: 100%;
-    border:1px dashed #4bbaff;
+    border:1px dashed #000;
     position: absolute;
     top:0;
     left:30px
@@ -48,26 +45,25 @@
     display: block;
     width: 0;
     height: 100%;
-    border:1px solid #4bbaff;
     position: absolute;
     top:0;
     left:-30px
 }
 
-.timeline_box ul li > span:before,.timeline_box ul li > span:after{
+.timeline_box ul li > span:before{
     content: "";
     display: block;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background:#4bbaff;
-    border:2px solid #fff;
+    border:2px solid #000;
     position: absolute;
     left:-7.5px
+    margin-bottom:50px;
 }
 
 .timeline_box ul li > span:before{top:-10px}
-.timeline_box ul li > span:after{top:95%}
 
 .timeline_box .title{
     text-transform: uppercase;
