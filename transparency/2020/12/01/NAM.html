@@ -528,7 +528,7 @@ $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Above are images of three functions. The first function is a linear combination of the second and third function. Observe that all three functions are continuous. We would like to build a model that can fit the first function, while maintaining feature-wise interpretability such that we can see that it properly learns the second and third functions. Unfortunately, it is not reasonable to expect a GAM to achieve this because, while the functions are continuous, they are not smooth. Below is a GAM with very very low regularization and smoothness penalties in order to let it try and fit non-smooth functions. Furthermore, it is trained and tested on the same dataset. This is a strong demonstration that GAMs cannot approach these problems, because they can't even overfit to the solution.</p>
+<p>Above are images of three functions. The first function is a linear combination of the second and third function<sup id="fnref-6" class="footnote-ref"><a href="#fn-6">6</a></sup>. Observe that all three functions are continuous. We would like to build a model that can fit the first function, while maintaining feature-wise interpretability such that we can see that it properly learns the second and third functions. Unfortunately, it is not reasonable to expect a GAM to achieve this because, while the functions are continuous, they are not smooth. Below is a GAM with very very low regularization and smoothness penalties in order to let it try and fit non-smooth functions. Furthermore, it is trained and tested on the same dataset. This is a strong demonstration that GAMs cannot approach these problems, because they can't even overfit to the solution.</p>
 
 </div>
 </div>
@@ -598,7 +598,7 @@ $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 </h2>
 <p>The trick is to use a different neural network for each individual feature, and add them together just like how GAMs work! By replacing the non-linear, non-parametric, functions in GAMs by neural networks, we get get Generalized Additive Neural Networks (GANNs), introduced in <a class="citation" href="#GANN">(Potts, 1999)</a>. Unfortunately, this contribution did not take off because we didn't have the technical capacity to train large networks as we do today. Luckily, now it is quite easy to fit such a model.</p>
 <p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
-<p>GANNs are simply a linear combination of neural networks, where each network only observes a single input feature<sup id="fnref-6" class="footnote-ref"><a href="#fn-6">6</a></sup>. Because each of these networks take a single input feature, and provide a single output feature, it becomes possible to plot a two-dimensional graph where the x-axis is the input feature and the y-axis is the output feature for each network. This graph is hence a fully transparent function describing how the neural network learned to transform the input feature as it contributes, additively, to the prediction. Hence this type of neural architecture is sufficient for creating a model as transparent as the linear models described in this blog postso far.</p>
+<p>GANNs are simply a linear combination of neural networks, where each network only observes a single input feature<sup id="fnref-7" class="footnote-ref"><a href="#fn-7">7</a></sup>. Because each of these networks take a single input feature, and provide a single output feature, it becomes possible to plot a two-dimensional graph where the x-axis is the input feature and the y-axis is the output feature for each network. This graph is hence a fully transparent function describing how the neural network learned to transform the input feature as it contributes, additively, to the prediction. Hence this type of neural architecture is sufficient for creating a model as transparent as the linear models described in this blog postso far.</p>
 <p>Below is code for creating a GANN using <a href="https://www.keras.io">Keras</a>. As you can see, this model is capable of solving the regression problem while maintaining feature-wise transparency on piecewise continous functions!</p>
 
 </div>
@@ -789,7 +789,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This is a clear deomonstration that Generalized Additive Neural Networks are capable of overfitting to piecewise continuous functions while maintaining transparency!</p>
-<p>The next section delves into Neural Additive Models (NAMs), which are a special variant of GANNs that are designed to be able to fit "jumpy functions", as this is more reminiscient of real-world data.</p>
+<p>The next section provides a brief overview of Neural Additive Models (NAMs), which are a special variant of GANNs that are designed to be able to fit "jumpy functions", as this is more reminiscient of real-world data.</p>
 
 </div>
 </div>
@@ -801,7 +801,8 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <a class="anchor" href="#Neural-Additive-Models-(NAMs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models (NAMs)<a class="anchor-link" href="#Neural-Additive-Models-(NAMs)"> </a>
 </h2>
 <p>Real world data doesn't look like beautifully continuous functions. It's often messy, and there will be multiple data points with extremely similar features that have noticeably different results. Many machine learning models have existing structure that prevents learning functions that look crazy and jump all over the place. Linear regression has to learn the best fitting line because $X^T\Beta$ can't describe a "jumpy" function. GAMs are regularized to enforce smoothness to prevent this as well. <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> explores a particular modification to the mathematic computations made on nodes in GANNs in order to let them fit "jumpy" functions. They call these modified nodes "exp-centered hidden units" or "ExU units", and they work as follows:</p>
-<p>Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope.</p>
+<p>Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The exerpt below is taken directly from <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation versus ExU unit computation.</p>
+<p><img src="https://ryansaxe.com/images/nam_exerpt.png" alt=""></p>
 
 </div>
 </div>
@@ -881,7 +882,10 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <li id="fn-5">The "smoothness" of a function is described by the continuity of the derivatives. The set of functions with a smoothness of 0 is equivalent to the set of continuous functions. The set of functions with a smoothness of 1 is the set of continuous functions such that their first derivative is continuous. So on, and so forth. Generally, a function is considered "smooth" if it has "smoothness" of $\infty$. In other words, it is infinitely differentiable.<a href="#fnref-5" class="footnote footnotes">↩</a>
 </li>
 
-<li id="fn-6">Technically, this could be fit where the sub-networks take more than a single feature as input, but this comes at a cost of interpretability. It is still possible to explore the relationship between both features and the output, however it becomes high-dimensional, entangled, and hence more difficult to interpret.<a href="#fnref-6" class="footnote footnotes">↩</a>
+<li id="fn-6">The actual function being fit here is $f(x_1,x_2) = a(x_1) + b(x_2)$, however I plot the function $f(x_1 + x_2) = a(x_1) + b(x_2)$ in order to project it as two-dimensional, as that is easier for readers to look at.<a href="#fnref-6" class="footnote footnotes">↩</a>
+</li>
+
+<li id="fn-7">Technically, this could be fit where the sub-networks take more than a single feature as input, but this comes at a cost of interpretability. It is still possible to explore the relationship between both features and the output, however it becomes high-dimensional, entangled, and hence more difficult to interpret.<a href="#fnref-7" class="footnote footnotes">↩</a>
 </li>
 </ol>
 </div>
