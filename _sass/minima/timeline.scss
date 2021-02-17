@@ -75,6 +75,16 @@
 .timeline_box ul li > span:before{top:-10px}
 .timeline_box ul li > span:after{bottom:-37.5px}
 
+.timeline_box ul .start_timeline{
+    margin-bottom:0px;
+}
+
+.timeline_box ul .start_timeline > span:after{
+    top:95%;
+}
+
+.timeline_box .start_timeline .time span:last-child{top:94%;}
+
 .timeline_box .title{
     text-transform: uppercase;
     font-weight: 700;
@@ -98,5 +108,5 @@
     font-weight: bold;
 }
 
-.timeline_box .time span:first-child{top:-10px;}
-.timeline_box .time span:last-child{bottom:-37.5px}
+.timeline_box .time span:first-child{top:-16px;}
+.timeline_box .time span:last-child{bottom:-43px}
