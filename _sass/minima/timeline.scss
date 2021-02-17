@@ -1,5 +1,5 @@
 .timeline_box{
-    min-height: 630px;
+    margin:10% 10%;
     color:rgba(white, 0.38);
 }
 
@@ -21,7 +21,7 @@
     display: block;
     width: 0;
     height: 100%;
-    border:1px dashed #000;
+    border:1px dashed #4bbaff;
     position: absolute;
     top:0;
     left:30px
@@ -32,6 +32,7 @@
     position: relative;
     padding: 10px 20px;
     background:#262a2e;
+    color:#fff;
     border-radius: 10px;
     line-height: 20px;
     width: 100%;
@@ -49,7 +50,7 @@
     left:-30px
 }
 
-.timeline_box ul li > span:before{
+.timeline_box ul li > span:before,.timeline_box ul li > span:after{
     content: "";
     display: block;
     width: 10px;
@@ -58,11 +59,11 @@
     background:#4bbaff;
     border:2px solid #000;
     position: absolute;
-    left:-7.5px;
-    margin-bottom:50px;
+    left:-7.5px
 }
 
 .timeline_box ul li > span:before{top:-10px}
+.timeline_box ul li > span:after{top:95%}
 
 .timeline_box .title{
     text-transform: uppercase;
