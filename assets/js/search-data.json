@@ -38,15 +38,13 @@
   
 
   
-
-  
   
 
   
   
 
   
-      ,"page14": {
+      ,"page13": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://ryansaxe.com/robots.txt",
