@@ -1,5 +1,5 @@
 .timeline_box{
-    margin:0% 10%;
+    margin:0% 0%;
     color:rgba(white, 0.38);
 }
 
@@ -13,7 +13,8 @@
     padding: 0;
     position: relative;
     transition: all 0.5s linear;
-    top:0
+    top:0;
+    left:40px;
 }
 
 .timeline_box ul:before{
@@ -34,7 +35,7 @@
     background:#262a2e;
     border-radius: 10px;
     line-height: 20px;
-    width: 90%;
+    width: calc(100% - 100px);
     border: 1px black solid;
 }
 

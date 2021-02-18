@@ -355,7 +355,7 @@ canvas {
 
 .about-meta-description {
     color: $low-emph !important;
-    font-size: 2vw;
+    font-size: 18px;
 }
 
 .desktop-flex {
@@ -388,7 +388,6 @@ canvas {
 @media (max-width: 700px) {
     .about-table-cell {
         display:block !important;
-        font-size:3vw;
     }
 }
 
@@ -431,6 +430,9 @@ canvas {
     }
 
     li .post-meta-description {
+        font-size: 13px !important;
+    }
+    li .about-meta-description {
         font-size: 13px !important;
     }
 
