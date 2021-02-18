@@ -356,6 +356,8 @@ canvas {
 .about-meta-description {
     color: $low-emph !important;
     font-size: max(min(20px,2vw),14px);
+    padding:0px !important;
+    margin:0px !important;
 }
 
 .desktop-flex {
