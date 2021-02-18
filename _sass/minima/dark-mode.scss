@@ -351,6 +351,7 @@ canvas {
 
 .about-table-cell {
     display: table-cell !important;
+    padding: 16px 16px 16px 0px;
 }
 
 .about-meta-description {
@@ -390,6 +391,7 @@ canvas {
 @media (max-width: 620px) {
     .about-table-cell {
         display:block !important;
+        padding: 0px 16px 16px 16px;
     }
     .footer-col p {
         display:none;
