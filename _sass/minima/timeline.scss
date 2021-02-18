@@ -86,8 +86,8 @@
 .timeline_box .name{
     margin-top: 10px;
     text-transform: capitalize;
-    font-style: italic;
     text-align: right;
+    color:rgba(white, 0.69);
 }
 
 
@@ -96,6 +96,7 @@
     left: -100px;
     font-size:80%;
     font-weight: bold;
+    color: rgba(white, 0.69);
 }
 
 .timeline_box .time span:first-child{top:-14px;}
