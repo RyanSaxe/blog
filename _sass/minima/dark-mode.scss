@@ -349,6 +349,15 @@ canvas {
     display: table-cell;
 }
 
+.about-table-cell {
+    display: table-cell;
+}
+
+.about-meta-description {
+    color: $low-emph !important;
+    font-size: 2vw;
+}
+
 .desktop-flex {
     display: flex;
 }
@@ -374,6 +383,13 @@ canvas {
     .desktop-flex {display: none !important;}
     .mobile {display: block !important;}
     .annotator-toolbar {display: none !important;}
+}
+
+@media (max-width: 700px) {
+    .about-table-cell {
+        display:block;
+        font-size:3vw;
+    }
 }
 
 @media (max-width: 620px) {
