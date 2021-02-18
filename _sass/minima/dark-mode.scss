@@ -355,7 +355,7 @@ canvas {
 
 .about-meta-description {
     color: $low-emph !important;
-    font-size: 18px;
+    font-size: max(min(20px,2vw),14px);
 }
 
 .desktop-flex {
@@ -385,13 +385,10 @@ canvas {
     .annotator-toolbar {display: none !important;}
 }
 
-@media (max-width: 700px) {
+@media (max-width: 620px) {
     .about-table-cell {
         display:block !important;
     }
-}
-
-@media (max-width: 620px) {
     .footer-col p {
         display:none;
     }
