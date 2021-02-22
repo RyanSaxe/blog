@@ -692,9 +692,11 @@ $$<p>Specifically, the purpose of $f_1$ is to learn some binary feature to deter
 <span class="sd">            to be 0 if less than self.threshold, 1</span>
 <span class="sd">            if greater than self.threshold.</span>
 <span class="sd">            </span>
-<span class="sd">        this is not a differentiable operation, so we</span>
-<span class="sd">            wrap it in tf.stop_gradient so that it is</span>
-<span class="sd">            treated as a constant when differentiating.</span>
+<span class="sd">        Computing the factor to add to x in order to</span>
+<span class="sd">            round accordingly is not a differentiable </span>
+<span class="sd">            operation, so we wrap it in tf.stop_gradient </span>
+<span class="sd">            so that it is treated as a constant when </span>
+<span class="sd">            differentiating.</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">stop_gradient</span><span class="p">(</span>
             <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span>
