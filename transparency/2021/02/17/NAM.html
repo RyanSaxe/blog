@@ -314,7 +314,7 @@ $$<p>Unfortunately, these assumptions are quite rigid for the real world. Many d
 <h2 id="Generalized-Linear-Models-(GLMs)">
 <a class="anchor" href="#Generalized-Linear-Models-(GLMs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models (GLMs)<a class="anchor-link" href="#Generalized-Linear-Models-(GLMs)"> </a>
 </h2>
-<p>Generalized Linear Model (GLM), introduced in <a class="citation" href="#GLM">(Nelder &amp; Wedderburn, 1972)</a>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section via the following specifications:</p>
+<p>Generalized Linear Model (GLM), introduced in <a class="citation" href="#GLM">(Nelder &amp; Wedderburn, 1972)</a>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:</p>
 <ol>
 <li>
 <strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-3" class="footnote-ref"><a href="#fn-3">3</a></sup>).</li>
@@ -345,7 +345,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p>This should look familiar! It is quite literally $X^T\beta$: the classic computation from linear models on the ouputs of the preceding layer!</p>
 <p>However, before this node passes $X^T\beta$ to the next layer in the network, it is passed through an activation function $f$. Activation functions often introduce non-linearity to the neural network, similar to link functions in GLMs. The image below isolates a single neuron from the image above, taking input from the previous layer, and making a prediction by transforming the output of the neuron with an activation function $\hat{y} = f(X^T\beta)$.</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
-<p>In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that <strong>the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!</strong></p>
+<p>In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that <u>the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!</u></p>
 <p>Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
 
 </div>
@@ -411,7 +411,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>However, It isn't always as simple as the cases of linear and logistic regression. Not all activation functions are invertible (e.g. ReLU), and hence add non-linearities in ways that are not consistent with GLMs. At the same time, the principal of the link function is to transform $y$ to the proper space, and ReLU does accomplish this under the assumption that $y$ cannot be negative.</p>
-<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models just like GLMs. So, why are neural networks opaque and GLMs transparent? Let's look at the math for regression using an arbitrarily defined neural network with $k$ hidden layers.</p>
+<p>There is clearly an intimate connection between neural networks and linear models, as the computational components of neural networks are quite literally non-linear transforms on linear models just like GLMs. So, why are neural networks opaque and GLMs transparent? Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
 $$
 \begin{aligned}
 L_0&amp; = \big [ X_1, X_2, \cdots, X_n \big ] \\
@@ -420,8 +420,7 @@ L_1 &amp; = \big [\hspace{0.5em}f_1(L_0^Tw_{1,1} + b_{1,1}), \hspace{0.5em}f_1(L
 L_k &amp; = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em}f_k(L_{k - 1}^Tw_{k,2} + b_{k,2}), \cdots \big ] \\
 \hat{y} &amp; = L_k^T \beta
 \end{aligned}
-$$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
-<p>Observe that for every layer after $L_1$, the information passed to nodes in that layer from the preceding layer are dependent on every input feature from the input layer. Hence, the inputs to the node are not linearly independent. This means that the restriction of independence breaks once a single hidden layer is introduced to the network<sup id="fnref-4" class="footnote-ref"><a href="#fn-4">4</a></sup>. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features, while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
+$$<p>Observe that for every layer after $L_1$, the information passed to nodes in that layer from the preceding layer are dependent on every input feature from the input layer. Hence, the inputs to the node are not linearly independent. This means that the restriction of independence breaks once a single hidden layer is introduced to the network<sup id="fnref-4" class="footnote-ref"><a href="#fn-4">4</a></sup>. This dependency is what creates the opacity of neural networks, not the non-linearity. This can be seen in the next section on Generalized Additive Models, a transparent approach with highly non-linear transforms to the input features, while maintaining some notion of independence. This will shed light on how to design neural networks with control over feature dependence!</p>
 
 </div>
 </div>
@@ -438,7 +437,7 @@ $$<p>Where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup
 <p><strong>Allow non-linearity</strong>: GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth<sup id="fnref-5" class="footnote-ref"><a href="#fn-5">5</a></sup>. It also can be non-parametric.</p>
 </li>
 <li>
-<p><strong>Allow dependence</strong>: Linear models make the assumption that $X_i$ and $X_j$ are linearly independent for all $i \neq j$. Additive models don't have this property, however we assume that which features interact are known apriori. This means that the systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
+<p><strong>Feature interaction</strong>: The systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
 </li>
 </ol>
 <p>Hence, equations for GAMs look like this:</p>
@@ -449,7 +448,7 @@ $$g(\mu(X)) = \beta_0 + h_1(X_1) + h_2(X_2, X_3) + \cdots + h_m(X_n) + \epsilon$
 <p>
 $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 </p>
-<p>Where $b_j$ is a basis-spline, $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of basis-splines to use to fit the GAM. A linear combination of basis-splines uniquely describes any spline function sharing the same properties (e.g. knots, degrees) as the basis-splines <a class="citation" href="#bspline">(Prautzsch et al., 2002)</a>, which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of cubic basis-splines.</p>
+<p>Where $b_j$ is a basis-spline (often called a b-spline), $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of b-splines to use to fit the GAM. A linear combination of b-splines uniquely describes any spline function sharing the same properties (e.g. knots, degrees) as the b-splines <a class="citation" href="#bspline">(Prautzsch et al., 2002)</a>, which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of cubic b-splines.</p>
 
 </div>
 </div>
@@ -481,7 +480,7 @@ $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>As you can see, a linear combination of many cubic b-splines was sufficient to fit this smooth function. GAMs try and fit spline functions to transform each individual dependent variable, and model the independent variable as a linear combination of these spline functions. This maintains transparency because, once fit, we can inspect the learned functions to understand exactly how our model makes predictions according to individual features.</p>
-<p>There is so much more to learn about GAMs, such as how these splines are learned, methods of interpreting them, and important regularization penalties to ensure higher degrees of smoothness. If you would like a more extensive review on GAMs, please refer to <a href="https://m-clark.github.io/generalized-additive-models/preface.html">this wonderful mini-website-textbook</a>, however that's out of the scope of this blog post.</p>
+<p>There is so much more to learn about GAMs, such as how these splines are learned, methods of interpreting them, and important regularization penalties to ensure higher degrees of smoothness. There are even some newer methods of fitting GAMs using decision trees instead of splines. If you would like a more extensive review on GAMs, please refer to <a href="https://m-clark.github.io/generalized-additive-models/preface.html">this wonderful mini-website-textbook</a>, however that's out of the scope of this blog post.</p>
 <p>Now you should finally have the requisite knowledge and background on transparent models that we can get into building transparent neural networks!</p>
 
 </div>
