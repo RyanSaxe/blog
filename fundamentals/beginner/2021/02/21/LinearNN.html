@@ -234,10 +234,12 @@ $(document).ready(function(){
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Linear models are one of the simplest approaches to supervised learning. The general goal of supervised learning is to discover some function $f$ that minimizes an error-term $\epsilon$ given a set of input features $X$ and a corresponding target $y$ such that $y = f(X) + \epsilon$. Additionally, the output of a supervised model is often written as $\hat{y} = f(X)$ because $f(X)$ is our best approximation of $y$.</p>
 <p>Different algorithms are sufficient for learning different functions. Simple linear models can only learn to make predictions according to functions of the form:</p>
-<p>
-$$y = X^T\beta + \epsilon = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$$
-</p>
-<p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $T$ is the transpose operation, which in this case is basically identical to computing the dot product of two n-dimensional vectors.</p>
+$$
+\begin{aligned}
+y &amp;= X^T\beta + \epsilon \\
+&amp;= \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon
+\end{aligned}
+$$<p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $T$ is the transpose operation, which in this case is basically identical to computing the dot product of two n-dimensional vectors.</p>
 <h1 id="Linear-Regression">
 <a class="anchor" href="#Linear-Regression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a>
 </h1>
