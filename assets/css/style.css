@@ -478,7 +478,7 @@ pre code { font-size: 15px !important; }
 
 p code { font-size: 19px; }
 
-code, pre { overflow-x: scroll !important; overflow-y: scroll !important; -webkit-overflow-scrolling: touch !important; }
+code, pre { overflow-x: scroll !important; overflow-y: scroll !important; white-space: pre !important; -webkit-overflow-scrolling: touch !important; }
 
 .katex { font-size: 110% !important; }
 
