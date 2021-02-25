@@ -341,6 +341,10 @@ canvas {
     border-right: 1px black solid;
 }
 
+.octicon {
+    display: none !important;
+}
+
 .desktop {
     display: block;
 }
@@ -431,9 +435,6 @@ canvas {
     }
 
     li .post-meta-description {
-        font-size: 13px !important;
-    }
-    li .about-meta-description {
         font-size: 13px !important;
     }
 
