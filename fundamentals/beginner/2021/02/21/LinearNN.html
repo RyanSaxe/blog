@@ -8,8 +8,8 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Neural Networks Aren’t So Scary" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Neural Networks (NNs) are a popular machine learning algorithm. They may seem daunting, but once you understand the fundamentals, they aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models." />
-<meta property="og:description" content="Neural Networks (NNs) are a popular machine learning algorithm. They may seem daunting, but once you understand the fundamentals, they aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models." />
+<meta name="description" content="Neural Networks (NNs) are a popular machine learning algorithm. They initially seem daunting, but they really aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models." />
+<meta property="og:description" content="Neural Networks (NNs) are a popular machine learning algorithm. They initially seem daunting, but they really aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models." />
 <link rel="canonical" href="https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html" />
 <meta property="og:url" content="https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html" />
 <meta property="og:site_name" content="Opening the Black Box" />
@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-02-21T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html","@type":"BlogPosting","headline":"Neural Networks Aren’t So Scary","dateModified":"2021-02-21T00:00:00-06:00","datePublished":"2021-02-21T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html"},"image":"https://ryansaxe.com/images/nnflow.png","description":"Neural Networks (NNs) are a popular machine learning algorithm. They may seem daunting, but once you understand the fundamentals, they aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models.","@context":"https://schema.org"}</script>
+{"url":"https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html","@type":"BlogPosting","headline":"Neural Networks Aren’t So Scary","dateModified":"2021-02-21T00:00:00-06:00","datePublished":"2021-02-21T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html"},"image":"https://ryansaxe.com/images/nnflow.png","description":"Neural Networks (NNs) are a popular machine learning algorithm. They initially seem daunting, but they really aren’t so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" />
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      12 min read
     
 </span></p>
 
@@ -184,7 +184,8 @@ $(document).ready(function(){
 <li class="toc-entry toc-h1"><a href="#Linear-Regression">Linear Regression </a></li>
 <li class="toc-entry toc-h1"><a href="#Generalized-Linear-Models-(GLMs)">Generalized Linear Models (GLMs) </a></li>
 <li class="toc-entry toc-h1"><a href="#The-Building-Blocks-of-Neural-Networks">The Building Blocks of Neural Networks </a></li>
-<li class="toc-entry toc-h1"><a href="#Understanding-Hidden-Layers">Understanding Hidden Layers </a></li>
+<li class="toc-entry toc-h1"><a href="#Hidden-Layers-and-Opacity">Hidden Layers and Opacity </a></li>
+<li class="toc-entry toc-h1"><a href="#Further-Reading">Further Reading </a></li>
 </ul>
 
     
@@ -248,7 +249,7 @@ $$<p>Where $\beta_i$ represents learned coefficients with respect to $X_i$, and 
 <li>
 <strong>Linearity</strong>: The relationship between $X$ and the mean of $y$ is linear.</li>
 <li>
-<strong>Independence</strong>: $X_i$ and $X_j$ are linearly independent of eachother for all $i \neq j$.</li>
+<strong>Independence</strong>: The set of feature vectors $[X_1,X_2,\cdots,X_n]$ is linearly independent<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</li>
 <li>
 <strong>Normality</strong>: $y$ given any $X$ comes from a normal distribution.</li>
 <li>
@@ -265,7 +266,7 @@ $$<p>Unfortunately, these assumptions are quite rigid for the real world. Many d
 <li>
 <strong>Occam's Razor</strong>: Don't add complexity without necessity.    </li>
 <li>
-<strong>Little Data</strong>: Ordinary Least Squares (OLS) is a closed form solution to linear regression<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</li>
+<strong>Little Data</strong>: Ordinary Least Squares (OLS) is a closed form solution to linear regression<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>.</li>
 <li>
 <strong>Interpretability</strong>: $y$ can be explained with respect to how $X$ interacts with the $\beta$ coefficients.</li>
 </ol>
@@ -282,7 +283,7 @@ $$<p>Unfortunately, these assumptions are quite rigid for the real world. Many d
 <p>Generalized Linear Model (GLM), introduced in <a class="citation" href="#GLM">(Nelder &amp; Wedderburn, 1972)</a>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:</p>
 <ol>
 <li>
-<strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>).</li>
+<strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-3" class="footnote-ref"><a href="#fn-3">3</a></sup>).</li>
 <li>
 <strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (typically $X^T\beta$).</li>
 <li>
@@ -384,9 +385,44 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Understanding-Hidden-Layers">
-<a class="anchor" href="#Understanding-Hidden-Layers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Understanding Hidden Layers<a class="anchor-link" href="#Understanding-Hidden-Layers"> </a>
+<h1 id="Hidden-Layers-and-Opacity">
+<a class="anchor" href="#Hidden-Layers-and-Opacity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hidden Layers and Opacity<a class="anchor-link" href="#Hidden-Layers-and-Opacity"> </a>
 </h1>
+<p>As described in the previous section, hidden layers describe layers between the input and the output layer. They often have an activation function, which introduces non-linearity to the function we fit. Furthermore, introducing hidden layers are what is responsible for the opacity of neural networks. It's why they are referred to as "black boxes", meaning they are difficult to interpret.</p>
+<p>This opacity doesn't actually come from the non-linearity, but rather feature interactions. Because the nodes in a neural network compute the sum of the output of the nodes in the previous layer, once a single hidden layer is introduced, every node after the first hidden layer is computing a function that is dependent on every single input feature. This makes it difficult to see the individual contribution of a single input feature on the output of the network. The image below isolates the computation of single a node in a hidden layer between other hidden layers.</p>
+<p><img src="https://ryansaxe.com/images/hiddenlayers.png" alt=""></p>
+<p>Remember that, in the previous section, we demonstrated that this single node is conceptually computing a GLM on the previous layer with a link function equal to the inverse of the activation function. With multiple hidden layers, this output is now passed to every single node in the next layer.</p>
+<p>Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
+$$
+\begin{aligned}
+L_0&amp; = \big [ X_1, X_2, \cdots, X_n \big ] \\
+L_1 &amp; = \big [\hspace{0.5em}f_1(L_0^Tw_{1,1} + b_{1,1}), \hspace{0.5em}f_1(L_0^Tw_{1,2} + b_{1,2}), \cdots \big ] \\
+&amp; \vdots \\
+L_k &amp; = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em}f_k(L_{k - 1}^Tw_{k,2} + b_{k,2}), \cdots \big ] \\
+\hat{y} &amp; = L_k^T \beta
+\end{aligned}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Further-Reading">
+<a class="anchor" href="#Further-Reading" aria-hidden="true"><span class="octicon octicon-link"></span></a>Further Reading<a class="anchor-link" href="#Further-Reading"> </a>
+</h1>
+<p>Hopefully this blog post helped you understand how neural networks work! However, there is quite a lot that I didn't cover. Below is a list of introductory resources on concepts related to neural networks that I didn't cover:</p>
+<ol>
+<li>
+<strong>Architecture</strong>: I only covered what classic fully connected feed forward neural networks look like in this blog post. There are a huge number of distinct types of neural networks, and which is best is quite dependent on application needs. <a href="https://pub.towardsai.net/main-types-of-neural-networks-and-its-applications-tutorial-734480d7ec8e">This post</a> provides diagrams and descriptions for almost 30 different neural architectures.</li>
+<li>
+<strong>Activation Functions</strong>: Selecting the activation functions for introducing non-linearity into your neural network requires building up some intuition on how they work and how they impact learning. <a href="https://towardsdatascience.com/a-quick-guide-to-activation-functions-in-deep-learning-4042e7addd5b">This post</a> provides a nice overview of many activation functions as well as an introduction to the intuition and math behind when to use which activation function.</li>
+<li>
+<strong>Optimization</strong>: These algorithms determine how a neural network learns the weights and biases. Most variants of optimization algorithms you will come across are some form of gradient descent. <a href="https://www.kdnuggets.com/2020/12/optimization-algorithms-neural-networks.html">This post</a> covers different variations of gradient descent optimization algorithms, <a href="https://www.neuraldesigner.com/blog/5_algorithms_to_train_a_neural_network">this post</a> covers some additional optimization methods. Finally, <a href="http://neuralnetworksanddeeplearning.com/chap2.html">this post</a> covers backpropogation, which is the algorithm that computes the gradients necessary for all of the optimization algorithms in the other linked blog posts.</li>
+<li>
+<strong>Regularization</strong>: Regularization is a technique that adds a penalty to the loss function in order to prevent overfitting and help machine learning algorithms generalize. <a href="http://neuralnetworksanddeeplearning.com/chap3.html#regularization">This post</a> provides a variety of example problems for regularization and introduces a variety of different regularization techniques.</li>
+</ol>
+
 </div>
 </div>
 </div>
@@ -409,10 +445,13 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p></p>
 <div class="fake-header h2">Footnotes</div>
 <ol class="footnotes">
-<li id="fn-1">The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-1" class="footnote footnotes">↩</a>
+<li id="fn-1">This means that there does not exist a set of scalars $[\alpha_1,\alpha_2,\cdots,\alpha_n]$, where at least one such $\alpha$ is non-zero, such that $\alpha_1 X_1 + \alpha_2 X_2 + \cdots + \alpha_n X_n = 0$. In other words, there is no multi-colinearity in $X$ and that the rows of $X$ must span the columns.<a href="#fnref-1" class="footnote footnotes">↩</a>
 </li>
 
-<li id="fn-2">The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-2" class="footnote footnotes">↩</a>
+<li id="fn-2">The closed form solution for OLS is $\beta = (X^TX)^\inv X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.<a href="#fnref-2" class="footnote footnotes">↩</a>
+</li>
+
+<li id="fn-3">The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \centerdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \Reals$ is the only parameter to the PDF.<a href="#fnref-3" class="footnote footnotes">↩</a>
 </li>
 </ol>
 </div>
