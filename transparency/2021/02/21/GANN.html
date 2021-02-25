@@ -181,6 +181,8 @@ $(document).ready(function(){
     
 
     <ul class="section-nav">
+<li class="toc-entry toc-h3"><a href="#from-linear-models-to-neural-nets------------------from-linear-models-to-neural-networks">From Linear Models to Neural Nets
+                  From Linear Models to Neural Networks</a></li>
 <li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models-(GAMs)">Generalized Additive Models (GAMs) </a></li>
 <li class="toc-entry toc-h1"><a href="#Transparent-Neural-Networks">Transparent Neural Networks </a>
 <ul>
@@ -231,8 +233,38 @@ $(document).ready(function(){
 <p>Most systems we interact with are part of some pipeline that integrates Machine Learning (ML). Sometimes we interact with an ML model directly, like Spotify's recommender system for songs. Other times, this interaction is more detatched; we post a comment on Twitter or Facebook, and this comment is used to train some language model at the respective company. As ML models become more and more prevalent, interpreting and explaining the decisions these models make become increasingly important.</p>
 <p>Neural networks (NNs) are a popular class of machine learning algorithms, which are notorious for being difficult to interpret. They are often referred to as "black boxes" or "opaque". Linear Models, Generalized Linear Models (GLMs), and Generalized Additive Models (GAMs) are examples of popular machine learning algorithms that are not "opaque", but instead "transparent". This transparency often leads linear and additive models to be favorable choices over classic neural networks even though the functions neural networks can learn are a superset of the functions these other models can learn. The goal of this blog post is to demonstrate that, with a particular asterix over the architecture of neural networks, they can be just as transparent.</p>
 <p><img src="https://ryansaxe.com/images/transparent_summary.png" alt=""></p>
-<p>Prior to jumping into such a neural architecture, it's important to understand the fundamental transparent algorithms. The following section will provide a quick background on the math and fundamentals for Generalized Additive Models, which is what will inspire our neural architecture design. GAMs are a special kind of GLM, and if you are not familiar with GLMs and how they are connected to Neural Networks, I would recommend reading <a href="https://ryansaxe.com/fundamentals/beginner/2021/02/21/LinearNN.html">this prior blog post</a> before continuing on this one.</p>
+<p>Prior to jumping into such a neural architecture, it's important to understand the fundamental transparent algorithms. The following section will provide a quick background on the math and fundamentals for Generalized Additive Models, which is what will inspire our neural architecture design. GAMs are a special kind of GLM, and if you are not familiar with GLMs and how they are connected to Neural Networks, I would recommend reading the blog post below before reading this one:</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="Box rounded-1 col-12">
+<div class="col-4 desktop-table-cell p-3 v-align-middle">
+        <img class="image-preview " src="/images/nnflow.png">
+    </div>
+<div class="col-8 d-table-cell p-3">
+        <h3>
+<a class="anchor" href="#from-linear-models-to-neural-nets------------------from-linear-models-to-neural-networks" aria-hidden="true"><span class="octicon octicon-link"></span></a><a class="post-link" href="/fundamentals/beginner/2021/02/21/LinearNN.html"><span class="tiny-mobile">From Linear Models to Neural Nets</span>
+                  <span class="not-tiny-mobile">From Linear Models to Neural Networks</span></a>
+</h3>
+        <p class="post-meta-description">Neural Networks (NNs) are a popular machine learning algorithm. They initially seem daunting, but they really aren't so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models.</p>
+
+              <p class="post-meta category-tags" style="left: 12px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i> 
+
+                <a class="category-tags-link" href="/categories/#fundamentals">fundamentals</a>
+                , 
+
+                <a class="category-tags-link" href="/categories/#beginner">beginner</a>
+
+
+              </p>
+
+          <p class="post-meta">Feb 21, 2021</p>
+      </div>
+  </div>
 </div>
 </div>
 </div>
