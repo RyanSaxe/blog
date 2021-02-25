@@ -56,6 +56,7 @@ show_image: true
 
 # Set this to true to turn on annotations on all pages hypothes.is (https://web.hypothes.is/)
 # otherwise, it is a flag to turn on for specific blog posts
+# remove words lets you input a number of words to not consider for reading time (e.g. word count the footnotes)
 defaults:
   -
     scope:
@@ -64,6 +65,7 @@ defaults:
     values:
       annotations: false
       show_tags: true
+      remove_words: 0
 
 # Set this to true to display tags on each post
 show_tags: true
