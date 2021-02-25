@@ -174,7 +174,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      10 min read
+      12 min read
     
 </span></p>
 
@@ -391,8 +391,14 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p>As described in the previous section, hidden layers describe layers between the input and the output layer. They often have an activation function, which introduces non-linearity to the function we fit. Furthermore, introducing hidden layers are what is responsible for the opacity of neural networks. It's why they are referred to as "black boxes", meaning they are difficult to interpret.</p>
 <p>This opacity doesn't actually come from the non-linearity, but rather feature interactions. Because the nodes in a neural network compute the sum of the output of the nodes in the previous layer, once a single hidden layer is introduced, every node after the first hidden layer is computing a function that is dependent on every single input feature. This makes it difficult to see the individual contribution of a single input feature on the output of the network. The image below isolates the computation of single a node in a hidden layer between other hidden layers.</p>
 <p><img src="https://ryansaxe.com/images/hiddenlayers.png" alt=""></p>
-<p>Remember that, in the previous section, we demonstrated that this single node is conceptually computing a GLM on the previous layer with a link function equal to the inverse of the activation function. With multiple hidden layers, this output is now passed to every single node in the next layer.</p>
-<p>Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$.</p>
+<p>Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$. As additional context, with the notation below, $f_i(L_{i - 1}^Tw_{i,3} + b_{i,3})$ corresponds to the computation of the highlighted node in the image above: the third node in the i<sup>th</sup> layer.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 $$
 \begin{aligned}
 L_0&amp; = \big [ X_1, X_2, \cdots, X_n \big ] \\
@@ -401,7 +407,11 @@ L_1 &amp; = \big [\hspace{0.5em}f_1(L_0^Tw_{1,1} + b_{1,1}), \hspace{0.5em}f_1(L
 L_k &amp; = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em}f_k(L_{k - 1}^Tw_{k,2} + b_{k,2}), \cdots \big ] \\
 \hat{y} &amp; = L_k^T \beta
 \end{aligned}
-$$
+$$<p>When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$. Now, it's not a perfect analogy. The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And activation function $f_k$ isn't always invertible (e.g. ReLU). But the point I am trying to make is that the math is familiar, as it's intimitely related to that of GLMs.</p>
+<p>So why does this work so well? What is the intuition behind it?</p>
+<p>Look at the last line in the equation above. The ouput prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. <u>The purpose of hidden layers is basically automated feature engineering</u>. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target.</p>
+<p>So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features!</p>
+
 </div>
 </div>
 </div>
