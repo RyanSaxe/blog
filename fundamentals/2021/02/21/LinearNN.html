@@ -174,7 +174,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      13 min read
     
 </span></p>
 
@@ -183,8 +183,13 @@ $(document).ready(function(){
     <ul class="section-nav">
 <li class="toc-entry toc-h1"><a href="#Linear-Regression">Linear Regression </a></li>
 <li class="toc-entry toc-h1"><a href="#Generalized-Linear-Models-(GLMs)">Generalized Linear Models (GLMs) </a></li>
-<li class="toc-entry toc-h1"><a href="#The-Building-Blocks-of-Neural-Networks">The Building Blocks of Neural Networks </a></li>
-<li class="toc-entry toc-h1"><a href="#Hidden-Layers-and-Opacity">Hidden Layers and Opacity </a></li>
+<li class="toc-entry toc-h1"><a href="#The-Building-Blocks-of-Neural-Networks-(NNs)">The Building Blocks of Neural Networks (NNs) </a></li>
+<li class="toc-entry toc-h1"><a href="#Hidden-Layers-and-Opacity">Hidden Layers and Opacity </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#designing-transparent-neural-nets------------------designing-transparent-neural-networks">Designing Transparent Neural Nets
+                  Designing Transparent Neural Networks</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h1"><a href="#Further-Reading">Further Reading </a></li>
 </ul>
 
@@ -287,20 +292,20 @@ $$<p>Unfortunately, these assumptions are quite rigid for the real world. Many d
 <li>
 <strong>Systematic Component</strong>: the right side of the equation for predicting $y$ (typically $X^T\beta$).</li>
 <li>
-<strong>Link Function</strong>: A function $g$ that links the systematic component and the random component.</li>
+<strong>Link Function</strong>: A function $g$ that defines the relationship between the systematic component and the mean of the random component.</li>
 </ol>
 <p>This yields the following general equation for GLMs:</p>
 <p>
 $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 </p>
 <p>Observe that if the random component is a normal distribution with a constant variance, and the link function is the identity function ($g(y) = y$), then the corresponding GLM is exactly linear regression! Hence, the functions that GLMs can describe are a superset of the functions linear regression can describe.</p>
-<p>Selecting a link function according to the random component is what differentiates GLMs. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$, as that is the expected range of $X^T\beta$. As an example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means that the average of the distribution, $\mu$, is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and the logit function is sufficient for this:</p>
+<p>Selecting a link function according to the random component is what differentiates GLMs. The intuition behind a link function is that it transforms the distribution of $y$ to the range $(-\infty,+\infty)$, as that is the expected range of $X^T\beta$. There are a variety of <a href="https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function">types of link functions</a> depending on the random component. As an example, binary logistic regression assumes the probability distribution of $y$ is a bernoulli distribution. This means that the average of the distribution, $\mu$, is between 0 and 1. We need some function $g: [0,1] \rightarrow \Reals$, and the logit function is sufficient for this:</p>
 <p>
 $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
 <p>Now, we can fit a simple linear model to $g(y) = X^T\beta + \epsilon$. Unfortunately, introducing a non-linear transformation to this equation means that Ordinary Least Squares is no longer a reasonable estimation method. Hence, learning $\beta$ requires a different estimation method. Maximum Likelihood Estimation (MLE) estimates the parameters of a probability distribution by maximizing the likelihood that a sample of observed data belongs to that probability distribution. In fact, under the assumptions of simple linear regression, MLE is equivalent to OLS as demonstrated on page 2 of <a href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/06/lecture-06.pdf">these CMU lecture notes</a>. The specifics of MLE are not necessary for the rest of this blog post, however if you would like to learn more about it, please refer to <a href="http://web.stanford.edu/class/archive/cs/cs109/cs109.1202/lectureNotes/LN21_parameters_mle.pdf">these Stanford lecture notes</a>.</p>
-<h1 id="The-Building-Blocks-of-Neural-Networks">
-<a class="anchor" href="#The-Building-Blocks-of-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Building Blocks of Neural Networks<a class="anchor-link" href="#The-Building-Blocks-of-Neural-Networks"> </a>
+<h1 id="The-Building-Blocks-of-Neural-Networks-(NNs)">
+<a class="anchor" href="#The-Building-Blocks-of-Neural-Networks-(NNs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Building Blocks of Neural Networks (NNs)<a class="anchor-link" href="#The-Building-Blocks-of-Neural-Networks-(NNs)"> </a>
 </h1>
 <p>But where do neural networks come in? Aren't they incredibly non-linear and opaque, unlike GLMs? Sort of. On the macro-level, NNs and GLMs look very different, but the micro-level tells a different story. Let's zoom into the inner workings of neural networks and see how they relate to GLMs!</p>
 <p>Neural networks are built of components called layers. Layers are built of components called nodes. At their heart, these nodes are computational-message-passing-machines. They receive a set of inputs, perform a computation, and pass the result of that computation to other nodes in the network. These are the building blocks of neural networks.</p>
@@ -309,7 +314,8 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p>In the classic fully-connected feed-forwad neural network, this structure of layers is ordered and connected such that every node $n_j$ in layer $L_i$ receives the output of every node in the predecing layer $L_{i-1}$, does some computation with those outputs, and passes the corresponding output to each node in the succeeding layer $L_{i + 1}$. The image above displays a neural network with $N$ input features, a single hidden layer, and a single output prediction $\hat{y}$.</p>
 <p>Each node in layer $L_i$ contains some set of weights ($w$) and a bias ($b$), where the dimension of the weight vector is equal to the number of nodes in layer $L_{i - 1}$. When the node receives the output of all the nodes in the preceding layer, it performs the following computation: $L_{i - 1}^Tw + b$.</p>
 <p>This should look familiar! It is quite literally $X^T\beta$: the classic computation from linear models on the ouputs of the preceding layer!</p>
-<p>However, before this node passes $X^T\beta$ to the next layer in the network, it is passed through an activation function $f$. Activation functions often introduce non-linearity to the neural network, similar to link functions in GLMs. The image below isolates a single neuron from the image above, taking input from the previous layer, and making a prediction by transforming the output of the neuron with an activation function $\hat{y} = f(X^T\beta)$.</p>
+<p>However, before this node passes $X^T\beta$ to the next layer in the network, it is passed through an activation function $f$. Activation functions often introduce non-linearity to the NN, similar to link functions in GLMs. This non-linearity is important to increase the expressive power of the network. The composition of two linear functions is also linear. Because the computation on the node in a NN is the same as linear models, passing that to a non-linear activation function is necessary to expand the space of functions we can learn to span all continous functions.</p>
+<p>The image below isolates a single neuron from the image above, taking input from the previous layer, and making a prediction by transforming the output of the neuron with an activation function $\hat{y} = f(X^T\beta)$.</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
 <p>In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that <u>the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!</u></p>
 <p>Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
@@ -413,8 +419,30 @@ L_k &amp; = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em
 $$<p>When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$. Now, it's not a perfect analogy. The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And activation function $f_k$ isn't always invertible (e.g. ReLU). But the point I am trying to make is that the math is familiar, as it's intimitely related to that of GLMs.</p>
 <p>So why does this work so well? What is the intuition behind it?</p>
 <p>Look at the last line in the equation above. The ouput prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. <u>The purpose of hidden layers is basically automated feature engineering</u>. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target.</p>
-<p>So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features!</p>
+<p>So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features! Furthermore, while I did just describe how the inclusion if hidden layers are why neural networks are opaque, there are ways to design neural architectures that are transparent. Check out my blog below to learn how to design transparent neural networks:</p>
+<li style="list-style: none;">
+<div class="Box rounded-1 col-12" style="margin-bottom:16px;">
+<div class="col-4 desktop-table-cell p-3 v-align-middle">
+        <img class="image-preview " src="/images/nam.png">
+    </div>
+<div class="col-8 d-table-cell p-3">
+        <h3>
+<a class="anchor" href="#designing-transparent-neural-nets------------------designing-transparent-neural-networks" aria-hidden="true"><span class="octicon octicon-link"></span></a><a class="post-link" href="/transparency/2021/02/21/GANN.html"><span class="tiny-mobile">Designing Transparent Neural Nets</span>
+                  <span class="not-tiny-mobile">Designing Transparent Neural Networks</span></a>
+</h3>
+        <p class="post-meta-description">Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it's possible to design Neural Networks that are just as transparent!</p>
 
+              <p class="post-meta category-tags" style="left: 12px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i> 
+
+                <a class="category-tags-link" href="/categories/#transparency">transparency</a>
+
+
+              </p>
+
+          <p class="post-meta">Feb 21, 2021</p>
+      </div>
+  </div>
+</li>
 </div>
 </div>
 </div>

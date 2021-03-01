@@ -174,7 +174,7 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      18 min read
+      19 min read
     
 </span></p>
 
@@ -691,6 +691,7 @@ $$
 \hat{y} = (f_1(x_1, x_2)) * f_2(x_3, x_4, x_5) + (1 - f_1(x_1, x_2)) * f_3(x_3, x_4, x_5)
 $$<p>Specifically, the purpose of $f_1$ is to learn some binary feature to determine how the model handles the other features. if $f_1(x_1, x_2) = 0$, then the model will use $f_3$, otherwise it will use $f_2$. You can solve this problem with three neural networks, one for each function. Then, rather than having the prediction be a normal linear combination of those three functions like a GANN, you set the prediction to correspond to the equation above.</p>
 <p>I have simulated a dataset that defines $f_1$ as whether $x_1,x_2$ are inside the unit circle, and defines $f_2$ and $f_3$ as basic linear models<sup id="fnref-4" class="footnote-ref"><a href="#fn-4">4</a></sup>. The code below defines a a neural network that learns these three functions to make a prediction. And below I show the results to demonstrate that we learn the correct circle boundaries and linear models, which maintains full transparency!</p>
+<p>Additional Note: this specific example requires learning a conditional function $f_1$, which is not continuous and hence requires some tricks to learn via neural networks. You can see my code below for the BinaryNN, which learns a continuous function, modifies it to be binary, but applies backpropigation as if that modification was the identity function. This is called the Straight-Through estimator, and was introduced by Hinton in his 2012 Coursera lectures. Refer to <a class="citation" href="#conditional_nn">(Bengio et al., 2013)</a> If you'd like further reading on conditional computation.</p>
 
 </div>
 </div>
@@ -782,7 +783,10 @@ $$<p>Specifically, the purpose of $f_1$ is to learn some binary feature to deter
         <span class="c1">#compute binary flag</span>
         <span class="n">binary_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_layer</span><span class="p">(</span><span class="n">binary_slice</span><span class="p">)</span>
         <span class="c1">#return the function we are trying to model</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">binary_flag</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_1</span><span class="p">(</span><span class="n">linear_slice</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">binary_flag</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_2</span><span class="p">(</span><span class="n">linear_slice</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">binary_flag</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_1</span><span class="p">(</span><span class="n">linear_slice</span><span class="p">)</span> <span class="o">+</span> 
+            <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">binary_flag</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_2</span><span class="p">(</span><span class="n">linear_slice</span><span class="p">)</span>
+        <span class="p">)</span>
 </pre></div>
 
     </div>
@@ -867,6 +871,8 @@ $$<p>Specifically, the purpose of $f_1$ is to learn some binary feature to deter
 <li><span id="univ_approx_thm">Balázs, C. (2001). <i>Approximation with Artificial Neural Networks</i>. https://doi.org/10.1.1.101.2647</span></li>
 <li><span id="GANN">Potts, W. J. E. (1999). Generalized Additive Neural Networks. <i>Proceedings of the Fifth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</i>, 194–200. https://doi.org/10.1145/312129.312228</span></li>
 <li><span id="nam_2020">Agarwal, R., Frosst, N., Zhang, X., Caruana, R., &amp; Hinton, G. E. (2020). <i>Neural Additive Models: Interpretable Machine Learning with Neural Nets</i>.</span></li>
+<li><span id="conditional_nn">Bengio, Y., Léonard, N., &amp; Courville, A. C. (2013). Estimating or Propagating Gradients Through Stochastic Neurons for
+               Conditional Computation. <i>CoRR</i>, <i>abs/1308.3432</i>. http://arxiv.org/abs/1308.3432</span></li>
 </ol>
 
 </div>
