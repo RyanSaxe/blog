@@ -160,7 +160,9 @@ $(document).ready(function(){
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a><a class="page-link tiny-mobile" href="www.twitter.com/rcsaxe">Twitter</a>
+          <a class="page-link tiny-mobile" href="www.github.com/RyanSaxe">Github</a>
+        </div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -283,7 +285,8 @@ $(document).ready(function(){
 <p>
 $$g(\mu(X)) = \beta_0 + h_1(X_1) + h_2(X_2, X_3) + \cdots + h_m(X_n) + \epsilon$$
 </p>
-<p>Technically, this makes GLMs a special case of GAMs where all functions $h_i$ simply multiply their corresponding input feature(s) by a single parameter $\beta_i$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <a class="citation" href="#backfitting_orig">(Friedman &amp; Stuetzle, 1981)</a>, <a class="citation" href="#backfitting_two">(Breiman &amp; Friedman, 1985)</a>. What follows is a simplification to provide intuition on what these $h_i$ functions are. Don't worry if you are not familiar with some of the terms (e.g. spline), as they won't be relevant to the main body of this blog post about transparent neural networks.</p>
+<p>Technically, this makes GLMs a special case of GAMs where all functions $h_i$ simply multiply their corresponding input feature(s) by a single parameter $\beta_i$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <a class="citation" href="#backfitting_orig">(Friedman &amp; Stuetzle, 1981)</a>, <a class="citation" href="#backfitting_two">(Breiman &amp; Friedman, 1985)</a>.</p>
+<p>Don't worry if you are not familiar with some of the terms (e.g. spline), as they won't be relevant to the main body of this blog post about transparent neural networks. What follows is a simplification to provide intuition on what these $h_i$ functions are.</p>
 <p>
 $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 </p>
