@@ -160,8 +160,8 @@ $(document).ready(function(){
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a><a class="page-link tiny-mobile" href="www.twitter.com/rcsaxe">Twitter</a>
-          <a class="page-link tiny-mobile" href="www.github.com/RyanSaxe">Github</a>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a><a class="page-link footer_gone" href="www.twitter.com/rcsaxe">Twitter</a>
+          <a class="page-link footer_gone" href="www.github.com/RyanSaxe">Github</a>
         </div>
       </nav></div>
 </header>
@@ -316,7 +316,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <p>However, before this node passes $X^T\beta$ to the next layer in the network, it is passed through an activation function $f$. Activation functions often introduce non-linearity to the NN, similar to link functions in GLMs. This non-linearity is important to increase the expressive power of the network. The composition of two linear functions is also linear. Because the computation on the node in a NN is the same as linear models, passing that to a non-linear activation function is necessary to expand the space of functions we can learn to span all continous functions.</p>
 <p>The image below isolates a single neuron from the image above, taking input from the previous layer, and making a prediction by transforming the output of the neuron with an activation function $\hat{y} = f(X^T\beta)$.</p>
 <p><img src="https://ryansaxe.com/images/nnflow.png" alt=""></p>
-<p>In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that <u>the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!</u></p>
+<p>In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!</p>
 <p>Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with <a href="https://www.keras.io">Keras</a>, and tests it on a simulated dataset.</p>
 
 </div>
@@ -396,7 +396,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 <h1 id="Hidden-Layers-and-Opacity">
 <a class="anchor" href="#Hidden-Layers-and-Opacity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hidden Layers and Opacity<a class="anchor-link" href="#Hidden-Layers-and-Opacity"> </a>
 </h1>
-<p>As described in the previous section, hidden layers describe layers between the input and the output layer. They often have an activation function, which introduces non-linearity to the function we fit. Furthermore, introducing hidden layers are what is responsible for the opacity of neural networks. It's why they are referred to as "black boxes", meaning they are difficult to interpret.</p>
+<p>As described in the previous section, hidden layers are the layers between the input and the output layer. They often have an activation function, which introduces non-linearity to the function we fit. Furthermore, introducing hidden layers are what is responsible for the opacity of neural networks. It's why they are referred to as "black boxes", meaning they are difficult to interpret.</p>
 <p>This opacity doesn't actually come from the non-linearity, but rather feature interactions. Because the nodes in a neural network compute the sum of the output of the nodes in the previous layer, once a single hidden layer is introduced, every node after the first hidden layer is computing a function that is dependent on every single input feature. This makes it difficult to see the individual contribution of a single input feature on the output of the network. The image below isolates the computation of single a node in a hidden layer between other hidden layers.</p>
 <p><img src="https://ryansaxe.com/images/hiddenlayers.png" alt=""></p>
 <p>Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$. As additional context, with the notation below, $f_i(L_{i - 1}^Tw_{i,3} + b_{i,3})$ corresponds to the computation of the highlighted node in the image above: the third node in the i<sup>th</sup> layer.</p>
@@ -415,31 +415,11 @@ L_1 &amp; = \big [\hspace{0.5em}f_1(L_0^Tw_{1,1} + b_{1,1}), \hspace{0.5em}f_1(L
 L_k &amp; = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em}f_k(L_{k - 1}^Tw_{k,2} + b_{k,2}), \cdots \big ] \\
 \hat{y} &amp; = L_k^T \beta
 \end{aligned}
-$$<p>When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$. Now, it's not a perfect analogy. The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And activation function $f_k$ isn't always invertible (e.g. ReLU). But the point I am trying to make is that the math is familiar, as it's intimitely related to that of GLMs.</p>
+$$<p>When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$, the outputs of the nodes in the preceding layer. Now, it's not a perfect analogy. The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And activation function $f_k$ isn't always invertible (e.g. ReLU). But the point I am trying to make is that the math is familiar, as it's intimitely related to that of GLMs.</p>
 <p>So why does this work so well? What is the intuition behind it?</p>
-<p>Look at the last line in the equation above. The ouput prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. <u>The purpose of hidden layers is basically automated feature engineering</u>. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target.</p>
-<p>So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features! Furthermore, while I did just describe how the inclusion if hidden layers are why neural networks are opaque, there are ways to design neural architectures that are transparent. Check out my blog below to learn how to design transparent neural networks:</p>
-<li style="list-style: none;">
-<div class="Box rounded-1 col-12" style="margin-bottom:16px;">
-<div class="col-4 desktop-table-cell p-3 v-align-middle">
-        <img class="image-preview " src="/images/nam.png">
-    </div>
-<div class="col-8 d-table-cell p-3">
-        <a class="fake-header h3 post-link" style="font-size: 1.5rem;font-weight:normal;" href="/transparency/2021/02/21/GANN.html"><span class="tiny-mobile">Designing Transparent Neural Nets</span>
-                  <span class="not-tiny-mobile">Designing Transparent Neural Networks</span></a>
-        <p class="post-meta-description">Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it's possible to design Neural Networks that are just as transparent!</p>
+<p>Look at the last line in the equation above. The ouput prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. The purpose of hidden layers is basically automated feature engineering. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target.</p>
+<p>So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features!</p>
 
-              <p class="post-meta category-tags" style="left: 12px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i> 
-
-                <a class="category-tags-link" href="/categories/#transparency">transparency</a>
-
-
-              </p>
-
-          <p class="post-meta">Feb 21, 2021</p>
-      </div>
-  </div>
-</li>
 </div>
 </div>
 </div>
