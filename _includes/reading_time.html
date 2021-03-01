@@ -3,6 +3,8 @@
     {% if words < 360 %}
       1 min read
     {% else %}
-      {{ words | minus:post.remove_words | divided_by:200 }} min read
+      <!-- Quick research shows average adult words per minute is 200-300.
+        I think it's reasonable to set to the average. -->
+      {{ words | minus:post.remove_words | divided_by:250 }} min read
     {% endif %}
 </span>
