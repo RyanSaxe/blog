@@ -50,7 +50,7 @@ $overlay-light: mix($dark-grey, white, 86%);
 }
 
 .post p img {
-    max-height: 450px !important;
+    max-height: 400px !important;
     max-width: 100%;
 }
 
@@ -74,6 +74,10 @@ body {
 html, body, input, textarea, select, button, .Box {   
   color: $high-emph !important;
   background-color: $dark-grey !important;
+}
+
+html {
+    padding-bottom: 85px !important;
 }
 
 a {
@@ -409,10 +413,18 @@ canvas {
     * {
         scroll-margin-top: 0px !important;
     }
-    .site-header, .site-footer {
+    .site-header {
         position: relative !important;
         box-shadow: none !important;
         border-color: black !important;
+    }
+
+    .site-footer {
+        display: none;
+    }
+
+    html {
+        padding-bottom: 0 !important;
     }
 
     .face {
@@ -457,9 +469,17 @@ canvas {
     * {
         scroll-margin-top: 0px !important;
     }
-    .site-header, .site-footer {
+    .site-header {
         position: relative !important;
         box-shadow: none !important;
         border-color: black !important;
+    }
+
+    .site-footer {
+        display: none;
+    }
+
+    html {
+        padding-bottom: 0 !important;
     }
 }
