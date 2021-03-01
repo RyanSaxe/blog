@@ -374,14 +374,18 @@ canvas {
 }
 
 .mobile {
-    display: none;
+    display: none !important;
 }
 
 .tiny-mobile {
-    display: none;
+    display: none !important;
 }
 .not-tiny-mobile {
-    display: block;
+    display: block !important;
+}
+
+.footer_gone {
+    display: none !important;
 }
 
 // handling sizing display issues
@@ -423,6 +427,10 @@ canvas {
         display: none;
     }
 
+    .footer_gone {
+        display: inline !important;
+    }
+
     html {
         padding-bottom: 0 !important;
     }
@@ -451,11 +459,11 @@ canvas {
     }
 
     .tiny-mobile {
-        display: block;
+        display: block !important;
     }
 
     .not-tiny-mobile {
-        display: none;
+        display: none !important;
     }
     
 }
@@ -477,6 +485,10 @@ canvas {
 
     .site-footer {
         display: none;
+    }
+
+    .footer_gone {
+        display: inline !important;
     }
 
     html {
