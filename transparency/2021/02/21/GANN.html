@@ -174,15 +174,15 @@ $(document).ready(function(){
        • <span class="read-time" title="Estimated read time">
     
     
-      19 min read
+      <!-- Quick research shows average adult words per minute is 200-300.
+        I think it's reasonable to set to the average. -->
+      15 min read
     
 </span></p>
 
     
 
     <ul class="section-nav">
-<li class="toc-entry toc-h3"><a href="#from-linear-models-to-neural-nets------------------from-linear-models-to-neural-networks">From Linear Models to Neural Nets
-                  From Linear Models to Neural Networks</a></li>
 <li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models-(GAMs)">Generalized Additive Models (GAMs) </a></li>
 <li class="toc-entry toc-h1"><a href="#Transparent-Neural-Networks">Transparent Neural Networks </a>
 <ul>
@@ -247,10 +247,8 @@ $(document).ready(function(){
         <img class="image-preview " src="/images/nnflow.png">
     </div>
 <div class="col-8 d-table-cell p-3">
-        <h3>
-<a class="anchor" href="#from-linear-models-to-neural-nets------------------from-linear-models-to-neural-networks" aria-hidden="true"><span class="octicon octicon-link"></span></a><a class="post-link" href="/fundamentals/beginner/2021/02/21/LinearNN.html"><span class="tiny-mobile">From Linear Models to Neural Nets</span>
+        <a class="fake-header h3 post-link" href="/fundamentals/beginner/2021/02/21/LinearNN.html"><span class="tiny-mobile">From Linear Models to Neural Nets</span>
                   <span class="not-tiny-mobile">From Linear Models to Neural Networks</span></a>
-</h3>
         <p class="post-meta-description">Neural Networks (NNs) are a popular machine learning algorithm. They initially seem daunting, but they really aren't so scary. This post provides an overview of linear models, explains the building blocks of NNs, and demonstrates that you can understand NNs with only the math background of linear models.</p>
 
               <p class="post-meta category-tags" style="left: 12px;"><i class="fas fa-tags category-tags-icon" style="opacity: 1; padding: 2px;"></i> 
@@ -289,11 +287,11 @@ $(document).ready(function(){
 <p>
 $$g(\mu(X)) = \beta_0 + h_1(X_1) + h_2(X_2, X_3) + \cdots + h_m(X_n) + \epsilon$$
 </p>
-<p>Technically, this makes GLMs a special case of GAMs where all functions $h_i$ simply multiply their corresponding input feature(s) by a single parameter $\beta_i$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <a class="citation" href="#backfitting_orig">(Friedman &amp; Stuetzle, 1981)</a>, <a class="citation" href="#backfitting_two">(Breiman &amp; Friedman, 1985)</a>. What follows is a simplification to provide intuition on what these $h_i$ functions are.</p>
+<p>Technically, this makes GLMs a special case of GAMs where all functions $h_i$ simply multiply their corresponding input feature(s) by a single parameter $\beta_i$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <a class="citation" href="#backfitting_orig">(Friedman &amp; Stuetzle, 1981)</a>, <a class="citation" href="#backfitting_two">(Breiman &amp; Friedman, 1985)</a>. What follows is a simplification to provide intuition on what these $h_i$ functions are. Don't worry if you are not familiar with some of the terms (e.g. spline), as they won't be relevant to the main body of this blog post about transparent neural networks.</p>
 <p>
 $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 </p>
-<p>Where $b_j$ is a basis-spline (often called a b-spline), $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of b-splines to use to fit the GAM. A linear combination of b-splines uniquely describes any spline function sharing the same properties (e.g. knots, degrees) as the b-splines <a class="citation" href="#bspline">(Prautzsch et al., 2002)</a>, which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of cubic b-splines.</p>
+<p>Where $b_j$ is a <a href="https://en.wikipedia.org/wiki/B-spline">basis-spline</a> (often called a b-spline), $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of b-splines to use to fit the GAM. A linear combination of b-splines uniquely describes any spline function sharing the same properties (e.g. knots, degrees) as the b-splines <a class="citation" href="#bspline">(Prautzsch et al., 2002)</a>, which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of cubic b-splines.</p>
 
 </div>
 </div>
