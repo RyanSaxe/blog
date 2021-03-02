@@ -193,8 +193,8 @@ $(document).ready(function(){
 
     <ul class="section-nav">
 <li class="toc-entry toc-h1"><a href="#Linear-Regression">Linear Regression </a></li>
-<li class="toc-entry toc-h1"><a href="#Generalized-Linear-Models-(GLMs)">Generalized Linear Models (GLMs) </a></li>
-<li class="toc-entry toc-h1"><a href="#The-Building-Blocks-of-Neural-Networks-(NNs)">The Building Blocks of Neural Networks (NNs) </a></li>
+<li class="toc-entry toc-h1"><a href="#Generalized-Linear-Models">Generalized Linear Models </a></li>
+<li class="toc-entry toc-h1"><a href="#The-Building-Blocks-of-Neural-Networks">The Building Blocks of Neural Networks </a></li>
 <li class="toc-entry toc-h1"><a href="#Hidden-Layers-and-Opacity">Hidden Layers and Opacity </a></li>
 <li class="toc-entry toc-h1"><a href="#Further-Reading">Further Reading </a></li>
 </ul>
@@ -288,10 +288,10 @@ $$<p>Unfortunately, these assumptions are quite rigid for the real world. Many d
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Generalized-Linear-Models-(GLMs)">
-<a class="anchor" href="#Generalized-Linear-Models-(GLMs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models (GLMs)<a class="anchor-link" href="#Generalized-Linear-Models-(GLMs)"> </a>
+<h1 id="Generalized-Linear-Models">
+<a class="anchor" href="#Generalized-Linear-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Linear Models<a class="anchor-link" href="#Generalized-Linear-Models"> </a>
 </h1>
-<p>Generalized Linear Model (GLM), introduced in <a class="citation" href="#GLM">(Nelder &amp; Wedderburn, 1972)</a>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:</p>
+<p>Generalized Linear Models (GLMs), introduced in <a class="citation" href="#GLM">(Nelder &amp; Wedderburn, 1972)</a>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:</p>
 <ol>
 <li>
 <strong>Random Component</strong>: The probability distribution of $y$ (typically belonging to the exponential family<sup id="fnref-3" class="footnote-ref"><a href="#fn-3">3</a></sup>).</li>
@@ -309,9 +309,9 @@ $$g(\mathbb{E}[y|X]) = X^T\beta + \epsilon$$
 <p>
 $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 </p>
-<p>Now, we can fit a simple linear model to $g(y) = X^T\beta + \epsilon$. Unfortunately, introducing a non-linear transformation to this equation means that Ordinary Least Squares is no longer a reasonable estimation method. Hence, learning $\beta$ requires a different estimation method. Maximum Likelihood Estimation (MLE) estimates the parameters of a probability distribution by maximizing the likelihood that a sample of observed data belongs to that probability distribution. In fact, under the assumptions of simple linear regression, MLE is equivalent to OLS as demonstrated on page 2 of <a href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/06/lecture-06.pdf">these CMU lecture notes</a>. The specifics of MLE are not necessary for the rest of this blog post, however if you would like to learn more about it, please refer to <a href="http://web.stanford.edu/class/archive/cs/cs109/cs109.1202/lectureNotes/LN21_parameters_mle.pdf">these Stanford lecture notes</a>.</p>
-<h1 id="The-Building-Blocks-of-Neural-Networks-(NNs)">
-<a class="anchor" href="#The-Building-Blocks-of-Neural-Networks-(NNs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Building Blocks of Neural Networks (NNs)<a class="anchor-link" href="#The-Building-Blocks-of-Neural-Networks-(NNs)"> </a>
+<p>Now, we can fit a simple linear model to $g(y) = X^T\beta + \epsilon$. Unfortunately, introducing a non-linear transformation to this equation means that Ordinary Least Squares is no longer a reasonable estimation method. Hence, learning $\beta$ requires a different estimation method. Maximum Likelihood Estimation (MLE) estimates the parameters of a probability distribution by maximizing the likelihood that a sample of observed data belongs to that probability distribution. In fact, under the assumptions of simple linear regression, MLE is equivalent to Ordinary Least Squares as demonstrated on page 2 of <a href="https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/06/lecture-06.pdf">these CMU lecture notes</a>. The specifics of MLE are not necessary for the rest of this blog post, however if you would like to learn more about it, please refer to <a href="http://web.stanford.edu/class/archive/cs/cs109/cs109.1202/lectureNotes/LN21_parameters_mle.pdf">these Stanford lecture notes</a>.</p>
+<h1 id="The-Building-Blocks-of-Neural-Networks">
+<a class="anchor" href="#The-Building-Blocks-of-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Building Blocks of Neural Networks<a class="anchor-link" href="#The-Building-Blocks-of-Neural-Networks"> </a>
 </h1>
 <p>But where do neural networks come in? Aren't they incredibly non-linear and opaque, unlike GLMs? Sort of. On the macro-level, NNs and GLMs look very different, but the micro-level tells a different story. Let's zoom into the inner workings of neural networks and see how they relate to GLMs!</p>
 <p>Neural networks are built of components called layers. Layers are built of components called nodes. At their heart, these nodes are computational-message-passing-machines. They receive a set of inputs, perform a computation, and pass the result of that computation to other nodes in the network. These are the building blocks of neural networks.</p>
