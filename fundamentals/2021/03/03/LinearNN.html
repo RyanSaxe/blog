@@ -159,14 +159,19 @@ $(document).ready(function(){
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a><a class="page-link footer_gone" href="www.twitter.com/rcsaxe">Twitter</a>
-          <a class="page-link footer_gone" href="www.github.com/RyanSaxe">Github</a>
-        </div>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a><a class="page-link" href="www.twitter.com/rcsaxe">Twitter</a>
+          <a class="page-link" href="www.github.com/RyanSaxe">Github</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <style>
+  .site-footer {
+    display: none !important;
+  }
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
     <h1 class="post-title p-name" itemprop="name headline">From Linear Models to Neural Networks</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-03-03T00:00:00-06:00" itemprop="datePublished">
@@ -208,12 +213,12 @@ $(document).ready(function(){
     </a>
 </div>
 
-          <div class="notebook-link">
+          <!-- <div class="notebook-link">
     <a href="https://mybinder.org/v2/gh/RyanSaxe/blog/master?filepath=_notebooks%2F2021-03-03-LinearNN.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
-
+ -->
           <div class="notebook-link">
     <a href="https://colab.research.google.com/github/RyanSaxe/blog/blob/master/_notebooks/2021-03-03-LinearNN.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
