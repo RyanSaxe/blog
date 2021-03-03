@@ -9,10 +9,9 @@ show_link: true
 {% if site.categories.size > 0 %}
 
   {% assign categories = "" | split:"" %}
-  <style>console.log({{site.categories | jsonify }})</style>
   {% for c in site.categories %}
     {% assign postcounter = 0 %}
-    <style>console.log({{site.categories[c] | jsonify }})</style>
+    <style>console.log({{c | jsonify }})</style>
     {% for post in site.categories[c] %}
       {% if post.hide != true %}
         <style>console.log({{post.title}})</style>
