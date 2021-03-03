@@ -293,12 +293,12 @@ $(document).ready(function(){
 <p><strong>Feature interaction</strong>: The systematic component can be an equation that contains non-linear feature interaction like $h_k(X_i,X_j, \cdots)$.</p>
 </li>
 </ol>
-<p>Hence, equations for GAMs look like this:</p>
+<p>Hence, equations for GAMs could look like this:</p>
 <p>
 $$g(\mu(X)) = \beta_0 + h_1(X_1) + h_2(X_2, X_3) + \cdots + h_m(X_n) + \epsilon$$
 </p>
 <p>Technically, this makes GLMs a special case of GAMs where all functions $h_k$ simply multiply their corresponding input feature(s) by a single parameter $\beta_k$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <a class="citation" href="#backfitting_orig">(Friedman &amp; Stuetzle, 1981)</a>, <a class="citation" href="#backfitting_two">(Breiman &amp; Friedman, 1985)</a>.</p>
-<p>Don't worry if you are not familiar with some of the terms (e.g. <a href="https://en.wikipedia.org/wiki/B-spline">b-spline</a>)), as they won't be relevant to the main body of this blog post about transparent neural networks. What follows is a simplification to provide intuition on what these $h_k$ functions are.</p>
+<p>Don't worry if you are not familiar with some of the terms (e.g. <a href="https://en.wikipedia.org/wiki/B-spline">b-spline</a>), as they won't be relevant to the main body of this blog post about transparent neural networks. What follows is a simplification to provide intuition on what these $h_k$ functions are.</p>
 <p>
 $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 </p>
@@ -654,7 +654,7 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
 </h2>
 <p>Real world data doesn't look like beautifully continuous functions. It's often messy, and there will be multiple data points with extremely similar features that have noticeably different results. Many machine learning models have existing structure that prevents learning functions that look crazy and jump all over the place. Linear regression has to learn the best fitting line because $X^T\beta$ can't describe a "jumpy" function. GAMs are regularized to enforce smoothness to prevent this as well. <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> explores a particular modification to the mathematic computations made on nodes in GANNs in order to let them fit "jumpy" functions. They call these modified nodes "exp-centered hidden units" or "ExU units", and they work as follows:</p>
-<p>Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The exerpt below is taken directly from <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).</p>
+<p>Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The excerpt below is taken directly from <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).</p>
 <p><img src="https://ryansaxe.com/images/nam_exerpt.png" alt=""></p>
 <p>While this clearly demonstrates ExU's ability to overfit to jumpy functions, this isn't ideal. Overfitting isn't a good thing. Hence, the rest of this paper demonstrates ExU can be regularized to learn functions that are relatively smooth, yet "jumpy" at very specific junctions. This is more reminiscient of real-world solutions, and the paper shows that this can outperform current state-of-the-art GAMs while maintaining feature transparency. Their regularization strategies are:</p>
 <ol>
@@ -902,7 +902,7 @@ $$<p>Specifically, the purpose of $f_1$ is to learn some binary feature to deter
 <li id="fn-3">Technically, this could be fit where the sub-networks take more than a single feature as input, but this comes at a cost of interpretability. It is still possible to explore the relationship between both features and the output, however it becomes high-dimensional, entangled, and hence more difficult to interpret.<a href="#fnref-3" class="footnote footnotes">↩</a>
 </li>
 
-<li id="fn-4">I am setting $f_1$ and $f_2$ as linear models for simplicity in demonstrating a transparent model. This methodology ports over to any function you would want to define as $f_1$ and $f_2$.<a href="#fnref-4" class="footnote footnotes">↩</a>
+<li id="fn-4">I am setting $f_2$ and $f_3$ as linear models for simplicity in demonstrating a transparent model. This methodology ports over to any function you would want to define as $f_2$ and $f_3$.<a href="#fnref-4" class="footnote footnotes">↩</a>
 </li>
 </ol>
 </div>
