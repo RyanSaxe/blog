@@ -24,8 +24,13 @@
             <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
             {%- endif -%}
           {%- endfor -%}
+          {%- if page.share_this -%}
+          <a class="page-link" href="www.twitter.com/rcsaxe">Twitter</a>
+          <a class="page-link" href="www.github.com/RyanSaxe">Github</a>
+          {%- else -%}
           <a class="page-link footer_gone" href="www.twitter.com/rcsaxe">Twitter</a>
           <a class="page-link footer_gone" href="www.github.com/RyanSaxe">Github</a>
+          {%- endif -%}
         </div>
       </nav>
     {%- endif -%}
