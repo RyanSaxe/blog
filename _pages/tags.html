@@ -27,6 +27,13 @@ show_link: true
     {% endif %}
   {% endfor %}
 
+<pre id="jekyll-debug"></pre>
+<script>
+var obj = JSON.parse(decodeURIComponent("{{ site | jsonify | uri_escape }}"));
+var pretty_json = JSON.stringify(obj, null, 4);  // Pretty-printed JSON (indented 4 spaces).
+document.getElementById("jekyll-debug").textContent = pretty_json;
+</script>
+
   {% for category in categories %}
       <h3 id ="{{ category }}"><i class="fas fa-tags category-tags-icon"></i></i> {{ category }}</h3>
       <a name="{{ category | slugize }}"></a>
