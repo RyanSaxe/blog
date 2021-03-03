@@ -185,18 +185,18 @@ $(document).ready(function(){
         further reading sections, there is a remove_words parameter to set for a blog
         post such that those words aren't counted for the reading time computation.
       -->
-      17 min read
+      16 min read
     
 </span></p>
 
     
 
     <ul class="section-nav">
-<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models-(GAMs)">Generalized Additive Models (GAMs) </a></li>
+<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Models">Generalized Additive Models </a></li>
 <li class="toc-entry toc-h1"><a href="#Transparent-Neural-Networks">Transparent Neural Networks </a>
 <ul>
-<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Neural-Networks-(GANNs)">Generalized Additive Neural Networks (GANNs) </a></li>
-<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models-(NAMs)">Neural Additive Models (NAMs) </a></li>
+<li class="toc-entry toc-h2"><a href="#Generalized-Additive-Neural-Networks">Generalized Additive Neural Networks </a></li>
+<li class="toc-entry toc-h2"><a href="#Neural-Additive-Models">Neural Additive Models </a></li>
 <li class="toc-entry toc-h2"><a href="#Designing-Your-Computational-Graph">Designing Your Computational Graph </a></li>
 </ul>
 </li>
@@ -276,8 +276,8 @@ $(document).ready(function(){
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generalized-Additive-Models-(GAMs)">
-<a class="anchor" href="#Generalized-Additive-Models-(GAMs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Models (GAMs)<a class="anchor-link" href="#Generalized-Additive-Models-(GAMs)"> </a>
+<h2 id="Generalized-Additive-Models">
+<a class="anchor" href="#Generalized-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Models<a class="anchor-link" href="#Generalized-Additive-Models"> </a>
 </h2>
 <p>Generalized Additive Models (GAMs), introduced in <a class="citation" href="#GAM">(Hastie &amp; Tibshirani, 1986)</a>, take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:</p>
 <ol>
@@ -440,8 +440,8 @@ $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generalized-Additive-Neural-Networks-(GANNs)">
-<a class="anchor" href="#Generalized-Additive-Neural-Networks-(GANNs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Neural Networks (GANNs)<a class="anchor-link" href="#Generalized-Additive-Neural-Networks-(GANNs)"> </a>
+<h2 id="Generalized-Additive-Neural-Networks">
+<a class="anchor" href="#Generalized-Additive-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized Additive Neural Networks<a class="anchor-link" href="#Generalized-Additive-Neural-Networks"> </a>
 </h2>
 <p>The trick is to use a different neural network for each individual feature, and add them together just like how GAMs work! By replacing the non-linear, non-parametric, functions in GAMs by neural networks, we get Generalized Additive Neural Networks (GANNs), introduced in <a class="citation" href="#GANN">(Potts, 1999)</a>. Unfortunately, this contribution did not take off because we didn't have the technical capacity to train large networks as we do today. Luckily, now it is quite easy to fit such a model.</p>
 <p><img src="https://ryansaxe.com/images/nam.png" alt=""></p>
@@ -645,8 +645,8 @@ $$<p>The only way to tease apart these intercepts is via $\beta$. Imagine the pr
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Neural-Additive-Models-(NAMs)">
-<a class="anchor" href="#Neural-Additive-Models-(NAMs)" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models (NAMs)<a class="anchor-link" href="#Neural-Additive-Models-(NAMs)"> </a>
+<h2 id="Neural-Additive-Models">
+<a class="anchor" href="#Neural-Additive-Models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Additive Models<a class="anchor-link" href="#Neural-Additive-Models"> </a>
 </h2>
 <p>Real world data doesn't look like beautifully continuous functions. It's often messy, and there will be multiple data points with extremely similar features that have noticeably different results. Many machine learning models have existing structure that prevents learning functions that look crazy and jump all over the place. Linear regression has to learn the best fitting line because $X^T\beta$ can't describe a "jumpy" function. GAMs are regularized to enforce smoothness to prevent this as well. <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> explores a particular modification to the mathematic computations made on nodes in GANNs in order to let them fit "jumpy" functions. They call these modified nodes "exp-centered hidden units" or "ExU units", and they work as follows:</p>
 <p>Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The exerpt below is taken directly from <a class="citation" href="#nam_2020">(Agarwal et al., 2020)</a> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).</p>
