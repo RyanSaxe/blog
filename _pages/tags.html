@@ -8,23 +8,23 @@ show_link: true
 
 {% if site.categories.size > 0 %}
 
-  {% assign categories = "" | split:"" %}
+  {% assign categories_temp = "" | split:"" %}
   {% for c in site.categories %}
+    {% assign categories_temp = categories_temp | push: c[0] %}
+  {% endfor %}
+  {% assign categories_temp = categories_temp | sort_natural %}
+  {% assign categories = "" | split:"" %} 
+  {% for category in categories_temp %}
     {% assign postcounter = 0 %}
-    <style>console.log({{c | jsonify }})</style>
-    {% for post in site.categories[c] %}
+    {% for post in site.categories[category] %}
       {% if post.hide != true %}
-        <style>console.log({{post.title}})</style>
         {% assign postcounter = postcounter | plus: 1 %}
       {% endif %}
     {% endfor %}
-    <style>console.log({{postcounter}})</style>
     {% if postcounter > 0 %}
-      {% assign categories = categories | push: c[0] %}
+      {% assign categories = categories | push: category %}
     {% endif %}
   {% endfor %}
-  {% assign categories = categories | sort_natural %}
-  <style>console.log({{categories | jsonify }})</style>
   {% for category in categories %}
       <h3 id ="{{ category }}"><i class="fas fa-tags category-tags-icon"></i></i> {{ category }}</h3>
       <a name="{{ category | slugize }}"></a>
