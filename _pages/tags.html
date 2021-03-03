@@ -8,16 +8,10 @@ show_link: true
 
 {% if site.categories.size > 0 %}
 
-  {% assign categories_temp = "" | split:"" %}
-  {% for c in site.categories %}
-    {% assign categories_temp = categories_temp | push: c[0] %}
-  {% endfor %}
-  {% assign categories_temp = categories_temp | sort_natural %}
-
   {% assign categories = "" | split:"" %}
-  {% for c in categories_temp %}
+  {% for c in site.categories %}
     {% assign postcounter = 0 %}
-    {% for post in site.categories[c] %}
+    {% for post in site.categories[c[0]] %}
       {% if post.hide != true %}
         {% assign postcounter = postcounter | plus: 1 %}
       {% endif %}
@@ -26,12 +20,7 @@ show_link: true
       {% assign categories = categories | push: c[0] %}
     {% endif %}
   {% endfor %}
-
-  <script>
-    console.log({{categories}});
-    console.log({{postcounter}});
-    console.log({{categories_temp}});
-  </script>
+  {% assign categories = categories | sort_natural %}
 
   {% for category in categories %}
       <h3 id ="{{ category }}"><i class="fas fa-tags category-tags-icon"></i></i> {{ category }}</h3>
