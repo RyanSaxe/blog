@@ -10,7 +10,12 @@ show_link: true
 
   {% assign categories = "" | split:"" %}
   {% for c in site.categories %}
-    {% assign categories = categories | push: c[0] %}
+    {% for post in site.categories[c] %}
+      {% if post.hide != true %}
+        {% assign categories = categories | push: c[0] %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
   {% endfor %}
   {% assign categories = categories | sort_natural %}
 
