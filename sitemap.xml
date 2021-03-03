@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://ryansaxe.com/transparency/2021/02/17/NAM.html</loc>
-<lastmod>2021-02-17T00:00:00-06:00</lastmod>
-</url>
-<url>
-<loc>https://ryansaxe.com/transparency/2021/02/21/GANN.html</loc>
-<lastmod>2021-02-21T00:00:00-06:00</lastmod>
-</url>
-<url>
 <loc>https://ryansaxe.com/fundamentals/2021/03/03/LinearNN.html</loc>
 <lastmod>2021-03-03T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://ryansaxe.com/transparency/2021/03/04/GANN.html</loc>
+<lastmod>2021-03-04T00:00:00-06:00</lastmod>
 </url>
 <url>
 <loc>https://ryansaxe.com/about/</loc>
@@ -38,14 +34,14 @@
 </url>
 <url>
 <loc>https://ryansaxe.com/pdfs/SimCLRv2.pdf</loc>
-<lastmod>2021-03-02T22:18:15-06:00</lastmod>
+<lastmod>2021-03-02T22:28:04-06:00</lastmod>
 </url>
 <url>
 <loc>https://ryansaxe.com/pdfs/neural_additive_models.pdf</loc>
-<lastmod>2021-03-02T22:18:15-06:00</lastmod>
+<lastmod>2021-03-02T22:28:04-06:00</lastmod>
 </url>
 <url>
 <loc>https://ryansaxe.com/pdfs/resume.pdf</loc>
-<lastmod>2021-03-02T22:18:15-06:00</lastmod>
+<lastmod>2021-03-02T22:28:04-06:00</lastmod>
 </url>
 </urlset>
