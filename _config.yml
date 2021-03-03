@@ -66,6 +66,7 @@ defaults:
       annotations: false
       show_tags: true
       remove_words: 0
+      share_this: false
 
 # Set this to true to display tags on each post
 show_tags: true
