@@ -10,12 +10,15 @@ show_link: true
 
   {% assign categories = "" | split:"" %}
   {% for c in site.categories %}
+    {% assign postcounter = 0 %}
     {% for post in site.categories[c] %}
       {% if post.hide != true %}
-        {% assign categories = categories | push: c[0] %}
-        {% break %}
+        {% assign postcounter = postcounter | plus: 1 %}
       {% endif %}
     {% endfor %}
+    {% if postcounter > 0 %}
+      {% assign categories = categories | push: c[0] %}
+    {% endif %}
   {% endfor %}
   {% assign categories = categories | sort_natural %}
 
