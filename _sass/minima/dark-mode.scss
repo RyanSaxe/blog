@@ -313,6 +313,10 @@ canvas {
     position: absolute;
 }
 
+.post-list > li:last-child {
+    margin-bottom: 85px !important;
+}
+
 #toggle-nav {
     display:block;
     overflow:hidden;
