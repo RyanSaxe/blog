@@ -610,6 +610,8 @@ canvas { filter: invert(100%); }
 
 .post-list { opacity: 0; position: absolute; }
 
+.post-list > li:last-child { margin-bottom: 85px !important; }
+
 #toggle-nav { display: block; overflow: hidden; margin-bottom: 30px; }
 
 #toggle-nav a { float: left; display: block; text-align: center; padding: 20px; text-decoration: none; color: rgba(255, 255, 255, 0.87) !important; font-size: 1.125rem; font-weight: normal; }
