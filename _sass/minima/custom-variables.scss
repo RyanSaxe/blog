@@ -6,8 +6,6 @@ $content-width:    1000px;
 $on-palm:          800px;
 $on-laptop:        1000px;
 $on-medium:        1000px;
-// normally wrapper is set to $content-width - spacing (which is 30)
-// but for some reason when the screen is $on-large, we multiply
-// spacing by 2. So changing on-large to $content-width + 30 to keep
-// the size of the wrapper identical on this type of screen
-$on-large:         1030px;
+// I don't like how the on-large makes the wrapper smaller by
+// 30px, so I'm making the value huge so it never happens
+$on-large:         10000px;
