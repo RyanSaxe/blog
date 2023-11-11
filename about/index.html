@@ -1,167 +1,197 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>About | Opening the Black Box</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="About" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="explaining and exploring how machines learn" />
-<meta property="og:description" content="explaining and exploring how machines learn" />
-<link rel="canonical" href="https://ryansaxe.com/about/" />
-<meta property="og:url" content="https://ryansaxe.com/about/" />
-<meta property="og:site_name" content="Opening the Black Box" />
-<script type="application/ld+json">
+  <title>About | Opening the Black Box</title>
+  <meta name="generator" content="Jekyll v4.1.1" />
+  <meta property="og:title" content="About" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="explaining and exploring how machines learn" />
+  <meta property="og:description" content="explaining and exploring how machines learn" />
+  <link rel="canonical" href="https://ryansaxe.com/about/" />
+  <meta property="og:url" content="https://ryansaxe.com/about/" />
+  <meta property="og:site_name" content="Opening the Black Box" />
+  <script type="application/ld+json">
 {"url":"https://ryansaxe.com/about/","@type":"WebSite","headline":"About","name":"Opening the Black Box","description":"explaining and exploring how machines learn","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml" title="Opening the Black Box" />
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link type="application/atom+xml" rel="alternate" href="https://ryansaxe.com/feed.xml"
+    title="Opening the Black Box" />
 
-<script
-  src="https://code.jquery.com/jquery-3.5.1.min.js"
-  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-  crossorigin="anonymous">
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/4.1.0/dotdotdot.js"></script>
-<script>
-  $(document).ready(function() {
-    $(".post-meta-description").dotdotdot({
-      height: null,
-      fallbackToLetter: true,
-      watch: true,
-    });
-  });
-</script>
-
-<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=603f0250406a11001102d3d8&product=sticky-share-buttons" async="async"></script>
-<!-- 
-    hypothesis off for now--><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement( document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "[%", right: "%]", display: true},
-                {left: "$", right: "$", display: false}
-            ],
-            macros: {
-            // wrapping -1 with curly braces here to enable footnote usage
-            "\\inv": "{-1}",
-            }
-        });
-    });
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
     </script>
 
-
-<script>
-function wrap_img(fn) {
-    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
-        var elements = document.querySelectorAll(".post img");
-        Array.prototype.forEach.call(elements, function(el, i) {
-            if (el.getAttribute("title") && (el.className != "emoji")) {
-                const caption = document.createElement('figcaption');
-                var node = document.createTextNode(el.getAttribute("title"));
-                caption.appendChild(node);
-                const wrapper = document.createElement('figure');
-                wrapper.className = 'image';
-                el.parentNode.insertBefore(wrapper, el);
-                el.parentNode.removeChild(el);
-                wrapper.appendChild(el);
-                wrapper.appendChild(caption);
-            }
-        });
-    } else { document.addEventListener('DOMContentLoaded', fn); }
-}
-window.onload = wrap_img;
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-    // add link icon to anchor tags
-    var elem = document.querySelectorAll(".anchor-link")
-    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/4.1.0/dotdotdot.js"></script>
+  <script>
+    $(document).ready(function () {
+      $(".post-meta-description").dotdotdot({
+        height: null,
+        fallbackToLetter: true,
+        watch: true,
+      });
     });
-</script>
+  </script>
 
-<script>
-$(document).ready(function(){
-    $('.footnote-ref a, .citation').hover(function(event) {
+  <script type="text/javascript"
+    src="https://platform-api.sharethis.com/js/sharethis.js#property=603f0250406a11001102d3d8&product=sticky-share-buttons"
+    async="async"></script>
+  <!-- 
+    hypothesis off for now-->
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css"
+    integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg=="
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+    crossorigin="anonymous" />
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css"
+    integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw=="
+    crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js"
+    integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js"
+    integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"
+    integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A=="
+    crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "[%", right: "%]", display: true },
+          { left: "$", right: "$", display: false }
+        ],
+        macros: {
+          // wrapping -1 with curly braces here to enable footnote usage
+          "\\inv": "{-1}",
+        }
+      });
+    });
+  </script>
+
+
+  <script>
+    function wrap_img(fn) {
+      if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function (el, i) {
+          if (el.getAttribute("title") && (el.className != "emoji")) {
+            const caption = document.createElement('figcaption');
+            var node = document.createTextNode(el.getAttribute("title"));
+            caption.appendChild(node);
+            const wrapper = document.createElement('figure');
+            wrapper.className = 'image';
+            el.parentNode.insertBefore(wrapper, el);
+            el.parentNode.removeChild(el);
+            wrapper.appendChild(el);
+            wrapper.appendChild(caption);
+          }
+        });
+      } else { document.addEventListener('DOMContentLoaded', fn); }
+    }
+    window.onload = wrap_img;
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // add link icon to anchor tags
+      var elem = document.querySelectorAll(".anchor-link")
+      elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('.footnote-ref a, .citation').hover(function (event) {
         // find the footnote corresponding to the link
         var fnid = $(this).attr('href');
-        if (!$('#footnote-popup').length){
-            // get location of mousehover
-            var x = event.pageX + 50;
-            var y = event.pageY - 20;
-            var fndiv = $(fnid).clone()
-            // remove the "return to line" part of footnote
-            fndiv.children("a:last").remove();
-            // set new footnote to where the hover happened
-            fndiv.css({
-                top: y,
-                left: x,
-                "list-style-type":"none",
-            });
-            // change id to control look of popup
-            fndiv.attr({
-                id: 'footnote-popup',
-            });
-            // set up fadein transition
-            fndiv.hide();
-            $('body').append(fndiv);
-            fndiv.fadeIn(500);
+        if (!$('#footnote-popup').length) {
+          // get location of mousehover
+          var x = event.pageX + 50;
+          var y = event.pageY - 20;
+          var fndiv = $(fnid).clone()
+          // remove the "return to line" part of footnote
+          fndiv.children("a:last").remove();
+          // set new footnote to where the hover happened
+          fndiv.css({
+            top: y,
+            left: x,
+            "list-style-type": "none",
+          });
+          // change id to control look of popup
+          fndiv.attr({
+            id: 'footnote-popup',
+          });
+          // set up fadein transition
+          fndiv.hide();
+          $('body').append(fndiv);
+          fndiv.fadeIn(500);
         }
-    }, function() {
+      }, function () {
         // remove footnote when no longer hovering
-        $('#footnote-popup').fadeOut(500, function(){
-            $(this).remove();
+        $('#footnote-popup').fadeOut(500, function () {
+          $(this).remove();
         });
+      });
     });
-});
-</script>
+  </script>
 </head>
-<body><header class="site-header">
 
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Opening the Black Box</a><nav class="site-nav">
+<body>
+  <header class="site-header">
+
+    <div class="wrapper"><a class="site-title" rel="author" href="/">Opening the Black Box</a>
+      <nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
         <label for="nav-trigger">
           <span class="menu-icon">
             <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+              <path
+                d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z" />
             </svg>
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/categories/">Tags</a><a class="page-link footer_gone" target="_blank" href="https://twitter.com/rcsaxe">Twitter</a>
-          <a class="page-link footer_gone" target="_blank" href="https://github.com/RyanSaxe">Github</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <div class="Box rounded-1 col-12" style="margin-bottom:30px;">
-  <div class="col-4 d-table-cell p-3 v-align-middle">
-      <img class="image-preview " src="/images/headshot.jpg" />
-  </div>
-  <div class="col-12 about-table-cell">
-    <p class="about-meta-description">
-      My name is Ryan Saxe, and I'm a Senior Global Manager of Data Science and Analytics at Anheuser-Busch InBev.
-        
-    When I'm not working on something machine Learning related, you can find me dancing on the streets of New York City, or traveling the world to play Magic: the Gathering!   
-  
-    Many of my personal projects are at the intersection of my hobbies. One project is an AI for drafting MTG. I used this algorithm to achieve a high rank (#27 in the world)! This is, as far as I am aware, the first case of AI successfuly competing in MTG. You can view the code in <a target="_blank" href="https://github.com/RyanSaxe/mtg">this github repository</a>. 
-    </p>
-  </div>
-</div>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link"
+            href="/categories/">Tags</a><a class="page-link footer_gone" target="_blank"
+            href="https://twitter.com/rcsaxe">Twitter</a>
+          <a class="page-link footer_gone" target="_blank" href="https://github.com/RyanSaxe">Github</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      <div class="Box rounded-1 col-12" style="margin-bottom:30px;">
+        <div class="col-4 d-table-cell p-3 v-align-middle">
+          <img class="image-preview " src="/images/headshot.jpg" />
+        </div>
+        <div class="col-12 about-table-cell">
+          <p class="about-meta-description">
+            My name is Ryan Saxe, and I'm a Senior Global Manager of Data Science and Analytics at Anheuser-Busch InBev.
 
-<!-- <div class="image-txt-container">
+            When I'm not working on something machine Learning related, you can find me dancing on the streets of New
+            York City, or traveling the world to play Magic: the Gathering!
+
+            Many of my personal projects are at the intersection of my hobbies. One project is an AI for drafting MTG. I
+            used this algorithm to achieve a high rank (#27 in the world)! This is, as far as I am aware, the first case
+            of AI successfuly competing in MTG. You can view the code in <a target="_blank"
+              href="https://github.com/RyanSaxe/mtg">this github repository</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- <div class="image-txt-container">
   <img class="face" src="/images/headshot.jpg">
   <h3 style="margin:0px !important;">
     My name is Ryan Saxe, and I'm a Senior Machine Learning Research Scientist at PepsiCo.
@@ -172,85 +202,132 @@ $(document).ready(function(){
   </h3>
 </div> -->
 
-<div class="timeline_box">
-  <ul id="first-list">
-        <li class="current">
-          <span></span>
-          <div class="title">Senior Global Manager of Data Science and Analytics</div>
-          <div class="info">
-            I am currently the technical lead and manager for the teams dedicated to providing Machine Learning solutions to report the efficacy of marketing tactics as well as automate the allocation of marketing spend.
-          </div>
-          <div class="name">AB-InBev</div>
-          <div class="time">
+      <div class="timeline_box">
+        <ul id="first-list">
+          <li class="current">
+            <span></span>
+            <div class="title">Global Principal Data Scientist</div>
+            <div class="info">
+              I am currently the tech lead of tech leads across all global products pertaining to commercial
+              applications of
+              machine learning (sales, marketing, and finance).
+            </div>
+            <div class="name">AB-InBev</div>
+            <div class="time">
               <span>CURRENT</span>
+              <span>Jan, 2023</span>
+            </div>
+          </li>
+          <li>
+            <span></span>
+            <div class="title">Senior Global Manager of Data Science and Analytics</div>
+            <div class="info">
+              Tech lead + manager for team of 10 Data Scientists dedicated to providing Machine Learning solutions to
+              report
+              the efficacy of marketing tactics as well as automate the allocation of marketing spend.
+            </div>
+            <div class="name">AB-InBev</div>
+            <div class="time">
+              <span></span>
               <span>Mar, 2021</span>
-          </div>
-      </li>
-      <li>
-          <span></span>
-          <div class="title">Senior ML Research Scientist</div>
-          <div class="info">
-            My areas of research were Graph Neural Networks applied to product introduction, embedding regularization techniques, and transparent neural architectures.
-          </div>
-          <div class="name">PepsiCo Ecommerce</div>
-          <div class="time">
+            </div>
+          </li>
+          <li>
+            <span></span>
+            <div class="title">Senior ML Research Scientist</div>
+            <div class="info">
+              My areas of research were Graph Neural Networks applied to product introduction, embedding regularization
+              techniques, and transparent neural architectures.
+              Published a <a
+                href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/20220398503">patent</a> at
+              the intersection of contrastive loss and anomaly detection.
+            </div>
+            <div class="name">PepsiCo Ecommerce</div>
+            <div class="time">
               <span></span>
               <span>OCT, 2020</span>
-          </div>
-      </li>
-      <li>
-          <span></span>
-          <div class="title">Data Scientist</div>
-          <div class="info">
-            My main contributions were an internal API for training deep learning systems with economic priors, which has been used for optimizing marketing spend and determining price elasticity. 
-            I also designed a multi-modal Graph Embedding model capable of measuring product similarity, which has been integrated with multiple models to help account for product cannibalization.
-          </div>
-          <div class="name">PepsiCo Ecommerce</div>
-          <div class="time">
+            </div>
+          </li>
+          <li>
+            <span></span>
+            <div class="title">Data Scientist</div>
+            <div class="info">
+              My main contributions were an internal API for training deep learning systems with economic priors, which
+              has been used for optimizing marketing spend and determining price elasticity.
+              I also designed a multi-modal Graph Embedding model capable of measuring product similarity, which has
+              been integrated with multiple models to help account for product cannibalization.
+            </div>
+            <div class="name">PepsiCo Ecommerce</div>
+            <div class="time">
               <span></span>
               <span>JUl, 2019</span>
-          </div>
-      </li>
-      <li>
-          <span></span>
-          <div class="title">Master of Science in CS</div>
-          <div class="info">
-            My area of research focus was Machine Vision applications for Gait Recognition and Classification of Pathological Disorders. I pursued this research at the RiskEcon Lab for Decision Metrics, and published this corresponding <a target="_blank" href="https://arxiv.org/pdf/2012.14465.pdf">survey paper</a>. 
-          </div>
-          <div class="name">New York University</div>
-          <div class="time">
+            </div>
+          </li>
+          <li>
+            <span></span>
+            <div class="title">Master of Science in CS</div>
+            <div class="info">
+              My area of research focus was Machine Vision applications for Gait Recognition and Classification of
+              Pathological Disorders. I pursued this research at the RiskEcon Lab for Decision Metrics, and published
+              this corresponding <a target="_blank" href="https://arxiv.org/pdf/2012.14465.pdf">survey paper</a>.
+            </div>
+            <div class="name">New York University</div>
+            <div class="time">
               <span></span>
               <span>SEP, 2017</span>
-          </div>
-      </li>
-      <li class="start_timeline">
-        <span></span>
-        <div class="title">Bachelor of Arts in Math & CS</div>
-        <div class="name">New York University</div>
-        <div class="time">
+            </div>
+          </li>
+          <li class="start_timeline">
             <span></span>
-            <span>SEP, 2013</span>
+            <div class="title">Bachelor of Arts in Math & CS</div>
+            <div class="name">New York University</div>
+            <div class="time">
+              <span></span>
+              <span>SEP, 2013</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+  <footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+      <div class="footer-col-wrapper">
+        <div class="footer-col">
+          <ul class="social-media-list">
+            <li><a target="_blank" rel="me" href="https://www.facebook.com/ryancsaxe" title="ryancsaxe"><svg
+                  class="svg-icon grey">
+                  <use xlink:href="/assets/minima-social-icons.svg#facebook"></use>
+                </svg></a></li>
+            <li><a target="_blank" rel="me" href="https://github.com/ryansaxe" title="ryansaxe"><svg
+                  class="svg-icon grey">
+                  <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+                </svg></a></li>
+            <li><a target="_blank" rel="me" href="https://www.linkedin.com/in/ryancsaxe" title="ryancsaxe"><svg
+                  class="svg-icon grey">
+                  <use xlink:href="/assets/minima-social-icons.svg#linkedin"></use>
+                </svg></a></li>
+            <li><a target="_blank" rel="me" href="https://twitter.com/rcsaxe" title="rcsaxe"><svg class="svg-icon grey">
+                  <use xlink:href="/assets/minima-social-icons.svg#twitter"></use>
+                </svg></a></li>
+            <li><a target="_blank" rel="me" href="https://twitch.tv/ryancsaxe" title=""><svg class="svg-icon grey"
+                  viewBox="0 0 25 23">
+                  <path
+                    d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+                </svg></a></li>
+          </ul>
         </div>
-    </li>
-  </ul>
-</div>
-
-      </div>
-    </main>  <footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
-
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col"><ul class="social-media-list"><li><a target="_blank" rel="me" href="https://www.facebook.com/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a target="_blank" rel="me" href="https://github.com/ryansaxe" title="ryansaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a target="_blank" rel="me" href="https://www.linkedin.com/in/ryancsaxe" title="ryancsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a target="_blank" rel="me" href="https://twitter.com/rcsaxe" title="rcsaxe"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a target="_blank" rel="me" href="https://twitch.tv/ryancsaxe" title=""><svg class="svg-icon grey" viewBox="0 0 25 23"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></a></li></ul>
-      </div>
-      <div class="footer-col">
-        <p style="float:right">explaining and exploring how machines learn</p>
+        <div class="footer-col">
+          <p style="float:right">explaining and exploring how machines learn</p>
+        </div>
       </div>
     </div>
-  </div>
 
-</footer>
+  </footer>
 </body>
 
 </html>
