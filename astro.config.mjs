@@ -16,8 +16,8 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       themes: {
-        light: "github-light",
-        dark: "one-dark-pro",
+        light: "tokyo-night-light",
+        dark: "tokyo-night",
       },
     },
   },
