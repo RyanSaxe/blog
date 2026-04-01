@@ -6,8 +6,6 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const [featured, ...rest] = posts;
 ---
 
 <BaseLayout title="Ryan Saxe's Blog" description="ML, engineering, and whatever else.">
@@ -17,34 +15,15 @@ const [featured, ...rest] = posts;
         <p class="text-[var(--color-text-muted)]">No posts yet.</p>
       ) : (
         <div class="flex flex-col gap-6">
-          {/* Featured post */}
-          {featured && (
+          {posts.map((post) => (
             <PostCard
-              title={featured.data.title}
-              description={featured.data.description}
-              date={featured.data.date}
-              heroImage={featured.data.heroImage}
-              slug={featured.id}
-              categories={featured.data.categories}
-              featured
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              slug={post.id}
+              categories={post.data.categories}
             />
-          )}
-
-          {/* Rest of posts */}
-          {rest.length > 0 && (
-            <div class="grid gap-4 sm:grid-cols-2">
-              {rest.map((post) => (
-                <PostCard
-                  title={post.data.title}
-                  description={post.data.description}
-                  date={post.data.date}
-                  heroImage={post.data.heroImage}
-                  slug={post.id}
-                  categories={post.data.categories}
-                />
-              ))}
-            </div>
-          )}
+          ))}
         </div>
       )
     }

@@ -33,7 +33,9 @@
     updateIcons();
   }
 
-  document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
-  updateIcons();
+  document.addEventListener("astro:page-load", () => {
+    document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
+    updateIcons();
+  });
   document.addEventListener("astro:after-swap", updateIcons);
 </script>

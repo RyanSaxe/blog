@@ -1,51 +1,39 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import Timeline from "@/components/Timeline.astro";
+import SocialIcons from "@/components/SocialIcons.astro";
 import { projects } from "@/data/projects";
 ---
 
 <PageLayout title="About — Ryan Saxe" description="ML engineer, MTG competitor, and New York dancer.">
   <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
     <!-- Hero -->
-    <section class="mb-12 flex flex-col gap-8 sm:flex-row sm:items-start">
-      <img
-        src="/images/headshot.jpg"
-        alt="Ryan Saxe"
-        class="h-36 w-36 flex-shrink-0 rounded-2xl object-cover"
-      />
-      <div>
-        <h1 class="mb-1 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">
-          Ryan Saxe
-        </h1>
-        <p class="mb-4 text-[var(--color-text-muted)]">
-          Global Principal Data Scientist at AB-InBev
-        </p>
-        <p class="leading-relaxed text-[var(--color-text-muted)]">
-          I build machine learning systems by day, dance in New York City by night, and
-          travel the world to play Magic: the Gathering. I built an
-          <a
-            href="https://github.com/RyanSaxe/mtg"
-            target="_blank"
-            class="text-[var(--color-accent)] hover:underline">AI drafting bot for MTG</a
-          > that reached rank #27 in the world.
-        </p>
-
-        <div class="mt-4 flex gap-4">
-          {
-            [
-              { href: "https://github.com/RyanSaxe", label: "GitHub" },
-              { href: "https://x.com/rcsaxe", label: "X" },
-              { href: "https://linkedin.com/in/ryancsaxe", label: "LinkedIn" },
-            ].map((link) => (
-              <a
-                href={link.href}
-                target="_blank"
-                class="text-sm text-[var(--color-text-faint)] transition-colors hover:text-[var(--color-accent)]"
-              >
-                {link.label}
-              </a>
-            ))
-          }
+    <section class="mb-12 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+      <div class="flex flex-col sm:flex-row">
+        <div class="sm:w-44 sm:flex-shrink-0">
+          <img
+            src="/images/headshot.jpg"
+            alt="Ryan Saxe"
+            class="h-48 w-full object-cover sm:h-full"
+          />
+        </div>
+        <div class="p-6 sm:p-8">
+          <h1 class="mb-1 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">
+            Ryan Saxe
+          </h1>
+          <p class="mb-4 text-[var(--color-text-muted)]">
+            Global Principal Data Scientist at AB-InBev
+          </p>
+          <p class="leading-relaxed text-[var(--color-text-muted)]">
+            I build machine learning systems by day, dance in New York City by night, and
+            travel the world to play Magic: the Gathering. I built an
+            <a
+              href="https://github.com/RyanSaxe/mtg"
+              target="_blank"
+              class="text-[var(--color-accent)] hover:underline">AI drafting bot for MTG</a
+            > that reached rank #27 in the world.
+          </p>
+          <SocialIcons class="mt-4" iconSize="h-5 w-5" />
         </div>
       </div>
     </section>
@@ -110,19 +98,19 @@ import { projects } from "@/data/projects";
   </div>
 
   <script>
-    document.querySelectorAll("[data-tab]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const tab = (btn as HTMLElement).dataset.tab!;
+    document.addEventListener("astro:page-load", () => {
+      document.querySelectorAll("[data-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tab = (btn as HTMLElement).dataset.tab!;
 
-        // Update button states
-        document.querySelectorAll("[data-tab]").forEach((b) => {
-          b.setAttribute("aria-selected", b === btn ? "true" : "false");
-        });
+          document.querySelectorAll("[data-tab]").forEach((b) => {
+            b.setAttribute("aria-selected", b === btn ? "true" : "false");
+          });
 
-        // Show/hide content
-        document.querySelectorAll("[data-tab-content]").forEach((section) => {
-          const el = section as HTMLElement;
-          el.classList.toggle("hidden", el.dataset.tabContent !== tab);
+          document.querySelectorAll("[data-tab-content]").forEach((section) => {
+            const el = section as HTMLElement;
+            el.classList.toggle("hidden", el.dataset.tabContent !== tab);
+          });
         });
       });
     });

@@ -50,13 +50,15 @@ const formattedDate = date.toLocaleDateString("en-US", {
   </article>
 
   <script>
-    const bar = document.getElementById("reading-progress");
-    if (bar) {
-      window.addEventListener("scroll", () => {
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-        bar.style.width = `${progress}%`;
-      });
-    }
+    document.addEventListener("astro:page-load", () => {
+      const bar = document.getElementById("reading-progress");
+      if (bar) {
+        window.addEventListener("scroll", () => {
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+          bar.style.width = `${progress}%`;
+        });
+      }
+    });
   </script>
 </BaseLayout>
