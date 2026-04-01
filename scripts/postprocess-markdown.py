@@ -108,6 +108,13 @@ def fix_image_paths(text: str, slug: str) -> str:
         text = text.replace(
             f"{dirname}/", f"/images/generated/{slug}/"
         )
+    # Handle absolute /tmp/ paths from nbconvert runs
+    text = re.sub(
+        r"!\[([^\]]*)\]\(/tmp/([^)]+)\)",
+        rf"![\1](/images/generated/{slug}/\2)",
+        text,
+    )
+    text = re.sub(r'src="/tmp/', f'src="/images/generated/{slug}/', text)
     return text
 
 

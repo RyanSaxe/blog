@@ -40,7 +40,7 @@ Where $b_j$ is a b-spline, $\beta_j$ is a learned coefficient corresponding to $
 
 
     
-![png](/tmp/test-gann_4_0.png)
+![png](/images/generated/transparent-nn/output_4_0.png)
     
 
 
@@ -58,7 +58,7 @@ If neural networks can be used to approximate any continuous function, then they
 
 
     
-![png](/tmp/test-gann_7_0.png)
+![png](/images/generated/transparent-nn/output_7_0.png)
     
 
 
@@ -79,7 +79,7 @@ gam = LinearGAM(
 
 
     
-![png](/tmp/test-gann_10_0.png)
+![png](/images/generated/transparent-nn/output_10_0.png)
     
 
 
@@ -99,80 +99,78 @@ Below is code for creating a GANN using [Keras](https://www.keras.io). As you ca
 
 
 ```python
-import tensorflow as tf
-from tensorflow.keras import layers, Model
+import torch
+import torch.nn as nn
 
 #define a simple multi-layer perceptron
-class NN(Model):
-    def __init__(
-        self,
-        name=None
-    ):
-        super().__init__(name=name)
-        # relu helps learn more jagged functions if necessary.
-        self.l1 = layers.Dense(8, activation='relu')
-        # softplus helps smooth between the jagged areas from above
-        #     as softplus is referred to as "SmoothRELU"
-        self.l2 = layers.Dense(8, activation='softplus')
-        self.l3 = layers.Dense(8, activation='softplus')
-        self.l4 = layers.Dense(8, activation='softplus')
-        self.output_layer = layers.Dense(1)
-    
-    def call(self, x, training=None):
-        x = self.l1(x)
-        x = self.l2(x)
-        x = self.l3(x)
-        x = self.l4(x)
-        return self.output_layer(x)
-    
+class NN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            # relu helps learn more jagged functions if necessary.
+            nn.Linear(1, 8), nn.ReLU(),
+            # softplus helps smooth between the jagged areas from above
+            #     as softplus is referred to as "SmoothRELU"
+            nn.Linear(8, 8), nn.Softplus(),
+            nn.Linear(8, 8), nn.Softplus(),
+            nn.Linear(8, 8), nn.Softplus(),
+            nn.Linear(8, 1),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
 #define a Generalized Additive Neural Network for n features
-class GANN(Model):
-    def __init__(
-        self,
-        n_features,
-        name=None
-    ):
-        super().__init__(name=name)
+class GANN(nn.Module):
+    def __init__(self, n_features):
+        super().__init__()
         self.n_features = n_features
         # initialize MLP for each input feature
-        self.components = [NN() for i in range(n_features)]
+        self.components = nn.ModuleList([NN() for _ in range(n_features)])
         # create final layer for a linear combination of learned components
-        self.linear_combination = layers.Dense(1)
-    
-    @tf.function
-    def call(self, x, training=None):
+        self.linear_combination = nn.Linear(n_features, 1)
+
+    def forward(self, x):
         #split up by individual features
-        individual_features = tf.split(x, self.n_features, axis=1)
+        individual_features = torch.split(x, 1, dim=1)
         components = []
         #apply the proper MLP to each individual feature
-        for f_idx,individual_feature in enumerate(individual_features):
+        for f_idx, individual_feature in enumerate(individual_features):
             component = self.components[f_idx](individual_feature)
             components.append(component)
         #concatenate learned components and return linear combination of them
-        components = tf.concat(components, axis=1)
+        components = torch.cat(components, dim=1)
         return self.linear_combination(components)
+
 ```
 
 
 ```python
-#hide_output
+X_tensor = torch.tensor(X.to_numpy(), dtype=torch.float32)
+y_tensor = torch.tensor(y.to_numpy(), dtype=torch.float32).unsqueeze(1)
+loader = DataLoader(TensorDataset(X_tensor, y_tensor), batch_size=1024, shuffle=True)
+
 model = GANN(n_features=2)
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(),
-    loss='mean_squared_error',
-    metrics=['mean_absolute_error']
-)
-hist = model.fit(
-    X.to_numpy(),
-    y.to_numpy(),
-    epochs=50,
-    batch_size=32,
-)
+optimizer = optim.Adam(model.parameters())
+loss_fn = nn.MSELoss()
+
+for epoch in range(50):
+    epoch_loss = 0.0
+    for xb, yb in loader:
+        pred = model(xb)
+        loss = loss_fn(pred, yb)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        epoch_loss += loss.item()
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch {epoch+1}/50, Loss: {epoch_loss/len(loader):.4f}')
+
 ```
 
 
     
-![png](/tmp/test-gann_15_0.png)
+![png](/images/generated/transparent-nn/output_15_0.png)
     
 
 
@@ -194,12 +192,12 @@ The plots below are what happens when we simply adjust the learned intercepts fo
 
 
     
-![png](/tmp/test-gann_17_0.png)
+![png](/images/generated/transparent-nn/output_17_0.png)
     
 
 
     
-![png](/tmp/test-gann_18_0.png)
+![png](/images/generated/transparent-nn/output_18_0.png)
     
 
 
@@ -264,53 +262,43 @@ Additional Note: this specific example requires learning a conditional function 
 
 
 ```python
-class BinaryNN(Model):
-    def __init__(
-        self,
-        threshold=0.5,
-        name=None
-    ):
-        super().__init__(name=name)
+class BinaryNN(nn.Module):
+    def __init__(self, threshold=0.5):
+        super().__init__()
         self.threshold = threshold
-        self.l1 = layers.Dense(8, activation='relu')
-        self.l2 = layers.Dense(8, activation='relu')
-        self.l3 = layers.Dense(8, activation='relu')
-        #sigmoid to ensure the output is in the range 0,1
-        # before we round to be binary
-        self.output_layer = layers.Dense(1, activation='sigmoid')
-    
-    def call(self, x, training=None):
-        x = self.l1(x)
-        x = self.l2(x)
-        x = self.l3(x)
-        x = self.output_layer(x)
+        self.net = nn.Sequential(
+            nn.Linear(2, 8), nn.ReLU(),
+            nn.Linear(8, 8), nn.ReLU(),
+            nn.Linear(8, 8), nn.ReLU(),
+            #sigmoid to ensure the output is in the range 0,1
+            # before we round to be binary
+            nn.Linear(8, 1), nn.Sigmoid(),
+        )
+
+    def forward(self, x):
+        x = self.net(x)
         return self.round_to_binary(x)
-    
+
     def round_to_binary(self, x):
         """
         x is a number between 0 and 1, and is set
             to be 0 if less than self.threshold, 1
             if greater than self.threshold.
-            
-        Computing the factor to add to x in order to
-            round accordingly is not a differentiable 
-            operation, so we wrap it in tf.stop_gradient 
-            so that it is treated as a constant when 
-            differentiating.
+
+        We use a straight-through estimator: the forward
+            pass rounds to binary, but the backward pass
+            passes gradients through as if rounding didn't happen.
         """
-        return x + tf.stop_gradient(
-            tf.cast(x > self.threshold, tf.float32) - x
-        )
+        hard = (x > self.threshold).float()
+        # straight-through: forward uses hard, backward uses x
+        return x + (hard - x).detach()
+
 ```
 
 
 ```python
-class TransparentNN(Model):
-    def __init__(
-        self,
-        threshold=0.5,
-        binary_idx=2,
-    ):
+class TransparentNN(nn.Module):
+    def __init__(self, threshold=0.5, binary_idx=2):
         super().__init__()
         self.binary_idx = binary_idx
         #layer for learning a function that maps to a binary
@@ -319,45 +307,53 @@ class TransparentNN(Model):
         #two different linear regression models where linear_1
         # is used when the binary layer specifies 1, otherwise
         # we use linear_2
-        self.linear_1 = layers.Dense(1, activation="linear")
-        self.linear_2 = layers.Dense(1, activation="linear")
+        self.linear_1 = nn.Linear(3, 1)
+        self.linear_2 = nn.Linear(3, 1)
         #note: if you want to model this as a complex non-linear
-        # function, you can replace these dense layers with an MLP
-        
-    def call(self, input_layer, training=None):
+        # function, you can replace these linear layers with an MLP
+
+    def forward(self, x):
         #get features to pass to the binary layer
-        binary_slice = input_layer[:,:self.binary_idx]
+        binary_slice = x[:, :self.binary_idx]
         #get features to pass to the linear layers
-        linear_slice = input_layer[:,self.binary_idx:]
+        linear_slice = x[:, self.binary_idx:]
         #compute binary flag
         binary_flag = self.binary_layer(binary_slice)
         #return the function we are trying to model
         return (
-            (binary_flag) * self.linear_1(linear_slice) + 
+            binary_flag * self.linear_1(linear_slice) +
             (1 - binary_flag) * self.linear_2(linear_slice)
         )
+
 ```
 
 
 ```python
-#hide_output
+x_tensor = torch.tensor(x, dtype=torch.float32)
+y_tensor = torch.tensor(y, dtype=torch.float32).unsqueeze(1)
+loader = DataLoader(TensorDataset(x_tensor, y_tensor), batch_size=1024, shuffle=True)
+
 model = TransparentNN(threshold=0.5)
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(),
-    loss='mean_squared_error',
-    metrics=['mean_absolute_error']
-)
-hist = model.fit(
-    x,
-    y,
-    epochs=50,
-    batch_size=32,
-)
+optimizer = optim.Adam(model.parameters())
+loss_fn = nn.MSELoss()
+
+for epoch in range(50):
+    epoch_loss = 0.0
+    for xb, yb in loader:
+        pred = model(xb)
+        loss = loss_fn(pred, yb)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        epoch_loss += loss.item()
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch {epoch+1}/50, Loss: {epoch_loss/len(loader):.4f}')
+
 ```
 
 
     
-![png](/tmp/test-gann_25_0.png)
+![png](/images/generated/transparent-nn/output_25_0.png)
     
 
 

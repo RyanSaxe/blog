@@ -93,31 +93,35 @@ Furthermore, this means that a neural network with zero hidden layers and a line
 
 
 ```python
-import tensorflow as tf
-from tensorflow.keras import layers, Model
+import torch
+import torch.nn as nn
 
-class LinearRegression(Model):
-    def __init__(self):
+class LinearRegression(nn.Module):
+    def __init__(self, n_features):
         super().__init__()
-        # zero hidden layers with a linear activation on one output node
-        self.output_layer = layers.Dense(1, activation='linear')
-    
-    def call(self, input_layer, training=None):
-        return self.output_layer(input_layer)
-    
-class LogisticRegression(Model):
-    def __init__(self):
+        # zero hidden layers with a linear output
+        self.output_layer = nn.Linear(n_features, 1)
+
+    def forward(self, x):
+        return self.output_layer(x)
+
+class LogisticRegression(nn.Module):
+    def __init__(self, n_features):
         super().__init__()
         # zero hidden layers with a sigmoid activation on one output node
-        self.output_layer = layers.Dense(1, activation='sigmoid')
-    
-    def call(self, input_layer, training=None):
-        return self.output_layer(input_layer)
+        self.output_layer = nn.Linear(n_features, 1)
+
+    def forward(self, x):
+        return torch.sigmoid(self.output_layer(x))
+
 ```
 
+    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_25591/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+      X['target'] = betaX.sum(1)
+
 
     
-![png](/tmp/test-linear_5_0.png)
+![png](/images/generated/linear-nn/output_5_1.png)
     
 
 

@@ -58,12 +58,16 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
     echo "  Installing dependencies..."
     (cd "$nb_dir" && uv sync --quiet)
 
+    echo "  Registering kernel..."
+    (cd "$nb_dir" && uv run python -m ipykernel install --user --name python3 --display-name "Python 3" 2>/dev/null)
+
     echo "  Executing notebook..."
     (cd "$nb_dir" && uv run jupyter nbconvert \
         --to notebook \
         --execute \
         --output=executed.ipynb \
         --ExecutePreprocessor.timeout=600 \
+        --ExecutePreprocessor.kernel_name=python3 \
         tagged.ipynb)
 
     # 3. Convert to markdown
