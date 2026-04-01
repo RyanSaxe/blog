@@ -1,0 +1,45 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+const pathname = Astro.url.pathname;
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-[var(--color-border-dark)] bg-[var(--color-surface-dark)]/80 backdrop-blur-md light:border-[var(--color-border-light)] light:bg-[var(--color-surface-light)]/80"
+>
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+    <a href="/" class="text-lg font-bold text-white light:text-[var(--color-text-light)]">
+      Opening the Black Box
+    </a>
+
+    <div class="flex items-center gap-6">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "text-sm font-medium transition-colors",
+              pathname === link.href
+                ? "text-[var(--color-accent)]"
+                : "text-gray-400 hover:text-white light:text-gray-600 light:hover:text-[var(--color-text-light)]",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href="/resume.pdf"
+        target="_blank"
+        class="text-sm font-medium text-gray-400 transition-colors hover:text-white light:text-gray-600 light:hover:text-[var(--color-text-light)]"
+      >
+        Resume
+      </a>
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,36 @@
+---
+const socialLinks = [
+  { href: "https://github.com/RyanSaxe", label: "GitHub" },
+  { href: "https://x.com/rcsaxe", label: "X" },
+  { href: "https://linkedin.com/in/ryancsaxe", label: "LinkedIn" },
+];
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="border-t border-[var(--color-border-dark)] light:border-[var(--color-border-light)]"
+>
+  <div class="mx-auto flex max-w-4xl flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:justify-between">
+    <div class="flex gap-6">
+      {
+        socialLinks.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-gray-400 transition-colors hover:text-[var(--color-accent)] light:text-gray-600"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href="/rss.xml"
+        class="text-sm text-gray-400 transition-colors hover:text-[var(--color-accent)] light:text-gray-600"
+      >
+        RSS
+      </a>
+    </div>
+    <p class="text-sm text-gray-500">&copy; {year} Ryan Saxe</p>
+  </div>
+</footer>

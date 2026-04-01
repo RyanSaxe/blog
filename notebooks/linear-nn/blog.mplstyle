@@ -1,0 +1,20 @@
+figure.facecolor: '#0d1117'
+axes.facecolor: '#0d1117'
+axes.edgecolor: '#30363d'
+axes.labelcolor: '#e6edf3'
+axes.prop_cycle: cycler('color', ['#4bbaff', '#ff6b6b', '#4bffba', '#ffba4b', '#ba4bff', '#ff4bba'])
+text.color: '#e6edf3'
+xtick.color: '#e6edf3'
+ytick.color: '#e6edf3'
+grid.color: '#21262d'
+figure.figsize: 10, 6
+figure.dpi: 150
+savefig.dpi: 150
+savefig.facecolor: '#0d1117'
+savefig.bbox: tight
+font.size: 12
+axes.titlesize: 14
+axes.labelsize: 12
+legend.facecolor: '#161b22'
+legend.edgecolor: '#30363d'
+legend.fontsize: 10

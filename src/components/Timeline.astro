@@ -1,0 +1,58 @@
+---
+import { timeline } from "@/data/timeline";
+---
+
+<div class="relative ml-4 border-l-2 border-[var(--color-border-dark)] pl-8 light:border-[var(--color-border-light)]">
+  {
+    timeline.map((entry, i) => (
+      <div class="relative mb-10 last:mb-0">
+        {/* Dot */}
+        <div
+          class:list={[
+            "absolute -left-[2.56rem] top-1 h-4 w-4 rounded-full border-2",
+            !entry.endDate
+              ? "border-[var(--color-accent)] bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent)]"
+              : "border-[var(--color-accent)] bg-[var(--color-surface-dark)] light:bg-[var(--color-surface-light)]",
+          ]}
+        />
+
+        {/* Date */}
+        <div class="mb-1 flex items-center gap-3">
+          <span class="text-sm font-medium text-[var(--color-accent)]">
+            {entry.startDate} &mdash; {entry.endDate ?? "Present"}
+          </span>
+          {!entry.endDate && (
+            <span class="rounded-full bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
+              Current
+            </span>
+          )}
+        </div>
+
+        {/* Title & Org */}
+        <h3 class="text-lg font-semibold text-white light:text-[var(--color-text-light)]">
+          {entry.title}
+        </h3>
+        <p class="text-sm font-medium text-gray-400 light:text-gray-600">{entry.organization}</p>
+
+        {/* Description */}
+        {entry.description && (
+          <p class="mt-2 text-sm leading-relaxed text-gray-400 light:text-gray-500">
+            {entry.description}
+          </p>
+        )}
+
+        {/* Link */}
+        {entry.link && (
+          <a
+            href={entry.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-2 inline-block text-sm text-[var(--color-accent)] hover:underline"
+          >
+            View &rarr;
+          </a>
+        )}
+      </div>
+    ))
+  }
+</div>

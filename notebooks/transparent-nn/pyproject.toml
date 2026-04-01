@@ -1,0 +1,13 @@
+[project]
+name = "transparent-nn"
+version = "0.1.0"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "tensorflow>=2.15",
+    "matplotlib>=3.7",
+    "pandas>=2.0",
+    "numpy>=1.24,<2.0",
+    "pygam>=0.9",
+    "jupyter>=1.0",
+    "nbconvert>=7.0",
+]

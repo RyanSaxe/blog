@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  heroImage?: string;
+  slug: string;
+  categories?: string[];
+}
+
+const { title, description, date, heroImage, slug, categories = [] } = Astro.props;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<a href={`/blog/${slug}`} class="group block">
+  <article
+    class="flex gap-6 rounded-xl border border-[var(--color-border-dark)] bg-[var(--color-surface-dark-alt)] p-6 transition-all hover:border-[var(--color-accent)]/50 hover:shadow-lg hover:shadow-[var(--color-accent)]/5 light:border-[var(--color-border-light)] light:bg-[var(--color-surface-light-alt)] light:hover:border-[var(--color-accent)]/50"
+  >
+    {
+      heroImage && (
+        <img
+          src={heroImage}
+          alt=""
+          class="hidden h-32 w-32 flex-shrink-0 rounded-lg object-cover sm:block"
+        />
+      )
+    }
+    <div class="flex flex-col gap-2">
+      <h2
+        class="text-xl font-semibold text-white transition-colors group-hover:text-[var(--color-accent)] light:text-[var(--color-text-light)]"
+      >
+        {title}
+      </h2>
+      <p class="line-clamp-2 text-sm text-gray-400 light:text-gray-600">{description}</p>
+      <div class="flex items-center gap-3">
+        <time class="text-xs text-gray-500" datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {
+          categories.map((cat) => (
+            <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+              {cat}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </article>
+</a>

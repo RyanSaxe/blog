@@ -1,0 +1,50 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  heroImage?: string;
+  categories?: string[];
+}
+
+const { title, description, date, heroImage, categories = [] } = Astro.props;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={title} description={description} image={heroImage}>
+  <article>
+    <header class="mb-10">
+      <div class="mb-4 flex items-center gap-3">
+        <time class="text-sm text-gray-400 light:text-gray-500" datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {
+          categories.map((cat) => (
+            <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+              {cat}
+            </span>
+          ))
+        }
+      </div>
+      <h1
+        class="text-3xl font-bold leading-tight text-white sm:text-4xl light:text-[var(--color-text-light)]"
+      >
+        {title}
+      </h1>
+      <p class="mt-4 text-lg text-gray-400 light:text-gray-600">{description}</p>
+    </header>
+
+    {heroImage && <img src={heroImage} alt="" class="mb-10 w-full rounded-xl" />}
+
+    <div class="prose prose-lg max-w-none dark:prose-invert">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
