@@ -1,12 +1,13 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import Timeline from "@/components/Timeline.astro";
+import { projects } from "@/data/projects";
 ---
 
 <PageLayout title="About — Ryan Saxe" description="ML engineer, MTG competitor, and New York dancer.">
   <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
     <!-- Hero -->
-    <section class="mb-14 flex flex-col gap-8 sm:flex-row sm:items-start">
+    <section class="mb-12 flex flex-col gap-8 sm:flex-row sm:items-start">
       <img
         src="/images/headshot.jpg"
         alt="Ryan Saxe"
@@ -49,12 +50,81 @@ import Timeline from "@/components/Timeline.astro";
       </div>
     </section>
 
-    <!-- Timeline -->
-    <section>
-      <h2 class="mb-6 font-[var(--font-serif)] text-xl font-semibold text-[var(--color-text)]">
-        Experience & Education
-      </h2>
+    <!-- Tabs -->
+    <div class="mb-8 flex gap-6 border-b border-[var(--color-border)]" role="tablist">
+      <button class="tab-button" role="tab" aria-selected="true" data-tab="experience">
+        Experience
+      </button>
+      <button class="tab-button" role="tab" aria-selected="false" data-tab="projects">
+        Projects
+      </button>
+    </div>
+
+    <!-- Experience tab -->
+    <section id="tab-experience" data-tab-content="experience">
       <Timeline />
     </section>
+
+    <!-- Projects tab -->
+    <section id="tab-projects" data-tab-content="projects" class="hidden">
+      <div class="flex flex-col gap-4">
+        {
+          projects.map((project) => (
+            <div class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+              <div class="mb-2 flex flex-wrap items-center gap-2">
+                <h3 class="text-sm font-medium text-[var(--color-text)]">{project.name}</h3>
+                {project.tags?.map((tag) => (
+                  <span class="rounded-full bg-[var(--color-accent-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-accent)]">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {project.description}
+              </p>
+              <div class="flex gap-4">
+                {project.url && (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    class="text-sm text-[var(--color-accent)] hover:underline"
+                  >
+                    Website &rarr;
+                  </a>
+                )}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    class="text-sm text-[var(--color-accent)] hover:underline"
+                  >
+                    GitHub &rarr;
+                  </a>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
   </div>
+
+  <script>
+    document.querySelectorAll("[data-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tab = (btn as HTMLElement).dataset.tab!;
+
+        // Update button states
+        document.querySelectorAll("[data-tab]").forEach((b) => {
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+
+        // Show/hide content
+        document.querySelectorAll("[data-tab-content]").forEach((section) => {
+          const el = section as HTMLElement;
+          el.classList.toggle("hidden", el.dataset.tabContent !== tab);
+        });
+      });
+    });
+  </script>
 </PageLayout>

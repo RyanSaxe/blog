@@ -2,14 +2,13 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-20 border-t border-[var(--color-border)] px-6 py-8">
-  <div class="mx-auto flex max-w-3xl items-center justify-between text-xs text-[var(--color-text-faint)]">
+<footer class="mt-20 border-t border-[var(--color-border)]">
+  <div class="mx-auto flex max-w-3xl items-center justify-between px-6 py-8 text-xs text-[var(--color-text-faint)]">
     <span>&copy; {year} Ryan Saxe</span>
-    <a
-      href="/rss.xml"
-      class="transition-colors hover:text-[var(--color-text-muted)]"
-    >
-      RSS
-    </a>
+    <div class="flex gap-4">
+      <a href="https://github.com/RyanSaxe" target="_blank" class="transition-colors hover:text-[var(--color-text-muted)]">GitHub</a>
+      <a href="https://x.com/rcsaxe" target="_blank" class="transition-colors hover:text-[var(--color-text-muted)]">X</a>
+      <a href="https://linkedin.com/in/ryancsaxe" target="_blank" class="transition-colors hover:text-[var(--color-text-muted)]">LinkedIn</a>
+    </div>
   </div>
 </footer>

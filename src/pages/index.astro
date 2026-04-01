@@ -10,7 +10,7 @@ const posts = (await getCollection("blog"))
 const [featured, ...rest] = posts;
 ---
 
-<BaseLayout title="Ryan Saxe" description="Personal blog — ML, engineering, and whatever else.">
+<BaseLayout title="Ryan Saxe's Blog" description="ML, engineering, and whatever else.">
   <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
     {
       posts.length === 0 ? (

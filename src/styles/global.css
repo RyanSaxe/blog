@@ -2,33 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  /* Dark palette (primary) */
-  --color-bg: #0a0e17;
-  --color-surface: #111827;
-  --color-surface-hover: #1a2332;
-  --color-text: #e2e8f0;
-  --color-text-muted: #94a3b8;
-  --color-text-faint: #64748b;
-  --color-border: #1e293b;
-  --color-accent: #60a5fa;
-  --color-accent-muted: #60a5fa26;
-  --color-accent-glow: #60a5fa1a;
-
-  /* Typography */
-  --font-serif: "Lora", "Georgia", serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-}
-
-/* ---- Base ---- */
-html {
-  color-scheme: dark;
-  background-color: var(--color-bg);
-  scroll-behavior: smooth;
-}
-
-html.light {
-  color-scheme: light;
+  /* Light palette (primary) */
   --color-bg: #fafafa;
   --color-surface: #ffffff;
   --color-surface-hover: #f1f5f9;
@@ -39,6 +13,32 @@ html.light {
   --color-accent: #2563eb;
   --color-accent-muted: #2563eb1a;
   --color-accent-glow: #2563eb0d;
+
+  /* Typography */
+  --font-serif: "Lora", "Georgia", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ---- Base ---- */
+html {
+  color-scheme: light;
+  background-color: var(--color-bg);
+  scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-bg: #0a0e17;
+  --color-surface: #111827;
+  --color-surface-hover: #1a2332;
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+  --color-text-faint: #64748b;
+  --color-border: #1e293b;
+  --color-accent: #60a5fa;
+  --color-accent-muted: #60a5fa26;
+  --color-accent-glow: #60a5fa1a;
   background-color: var(--color-bg);
 }
 
@@ -141,4 +141,28 @@ html, body {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px var(--color-accent-glow);
   border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* ---- About page tabs ---- */
+.tab-button {
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-faint);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.tab-button:hover {
+  color: var(--color-text-muted);
+}
+
+.tab-button[aria-selected="true"] {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
