@@ -15,10 +15,7 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
-      themes: {
-        light: "tokyo-night-light",
-        dark: "tokyo-night",
-      },
+      theme: "tokyo-night",
     },
   },
 });
