@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -40,6 +40,13 @@ jobs:
 
       - name: Build notebooks
         run: npm run build:notebooks
+
+      - name: Commit notebook outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .notebook-cache/ src/content/blog/ public/images/generated/
+          git diff --cached --quiet || (git commit -m "chore: update notebook outputs [skip ci]" && git push)
 
       - name: Build Astro site
         run: npm run build

@@ -5,8 +5,27 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 NOTEBOOKS_DIR="$REPO_ROOT/notebooks"
 OUTPUT_DIR="$REPO_ROOT/src/content/blog"
 IMAGES_DIR="$REPO_ROOT/public/images/generated"
+CACHE_DIR="$REPO_ROOT/.notebook-cache"
 
-mkdir -p "$OUTPUT_DIR" "$IMAGES_DIR"
+mkdir -p "$OUTPUT_DIR" "$IMAGES_DIR" "$CACHE_DIR"
+
+compute_hash() {
+    local dir="$1"
+    find "$dir" \
+        "$REPO_ROOT/scripts/tag-cells.py" \
+        "$REPO_ROOT/scripts/postprocess-markdown.py" \
+        -type f \
+        ! -path '*/.venv/*' \
+        ! -path '*/__pycache__/*' \
+        ! -name 'tagged.ipynb' \
+        ! -name 'executed.ipynb' \
+        ! -name 'output.md' \
+        -print0 \
+        | sort -z \
+        | xargs -0 shasum -a 256 \
+        | shasum -a 256 \
+        | cut -d' ' -f1
+}
 
 for nb_dir in "$NOTEBOOKS_DIR"/*/; do
     slug=$(basename "$nb_dir")
@@ -14,6 +33,16 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     if [ ! -f "$nb_file" ]; then
         echo "WARNING: No notebook.ipynb in $nb_dir, skipping"
+        continue
+    fi
+
+    current_hash=$(compute_hash "$nb_dir")
+    cached_hash=$(cat "$CACHE_DIR/$slug.hash" 2>/dev/null || echo "")
+
+    if [ "$current_hash" = "$cached_hash" ] \
+        && [ -f "$OUTPUT_DIR/$slug.md" ] \
+        && [ -d "$IMAGES_DIR/$slug" ]; then
+        echo "=== Skipping $slug (unchanged) ==="
         continue
     fi
 
@@ -63,7 +92,10 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
         --output "$OUTPUT_DIR/$slug.md" \
         --slug "$slug"
 
-    # 6. Cleanup
+    # 6. Save hash
+    echo "$current_hash" > "$CACHE_DIR/$slug.hash"
+
+    # 7. Cleanup intermediates
     rm -f "$nb_dir/tagged.ipynb" "$nb_dir/executed.ipynb" "$nb_dir/output.md"
     rm -rf "$nb_dir/output_files" "$nb_dir/executed_files" "$nb_dir/notebook_files"
 

@@ -6,6 +6,10 @@ __pycache__/
 .venv/
 notebooks/*/.venv/
 
-# Generated notebook markdown (rebuilt in CI and locally via npm run build:notebooks)
-src/content/blog/linear-nn.md
-src/content/blog/transparent-nn.md
+# Notebook intermediates (cleaned up by build script, but just in case)
+notebooks/*/tagged.ipynb
+notebooks/*/executed.ipynb
+notebooks/*/output.md
+notebooks/*/output_files/
+notebooks/*/executed_files/
+notebooks/*/notebook_files/

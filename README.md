@@ -1,27 +1,17 @@
-# Opening the Black Box
+# Ryan Saxe's Blog
 
-Personal blog at [ryansaxe.com](https://ryansaxe.com) — explaining and exploring how machines learn.
+Personal blog at [ryansaxe.com](https://ryansaxe.com).
 
 Built with [Astro](https://astro.build), deployed to GitHub Pages.
 
 ## Local Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build notebook posts (requires Python 3.10-3.12 + uv)
-npm run build:notebooks
-
-# Start dev server
 npm run dev
-
-# Full build (notebooks + site)
-npm run build:full
-
-# Preview production build
-npm run build:full && npm run preview
 ```
+
+Blog posts from notebooks are generated in CI and committed to the repo, so they're available locally without any extra steps.
 
 ## Adding a New Post
 
@@ -43,16 +33,17 @@ Your content here...
 ### Notebook post
 
 1. Create a directory in `notebooks/` with a `pyproject.toml` and `notebook.ipynb`
-2. Add a gitignore entry for the generated markdown in `src/content/blog/`
-3. Run `npm run build:notebooks` to convert
+2. Push to `main` — CI will execute the notebook, generate the markdown, and commit the output
+
+CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
 ## Updating the About Page
 
-Edit `src/data/timeline.ts` to add or modify timeline entries.
+Edit `src/data/timeline.ts` and `src/data/projects.ts`.
 
 ## Notebook Reproducibility
 
-Notebooks are stored without outputs (via nbstripout). CI executes them fresh on every deploy, guaranteeing reproducibility. To set up nbstripout locally:
+Notebooks are stored without outputs (via nbstripout). CI executes them fresh, guaranteeing reproducibility. To set up nbstripout locally:
 
 ```bash
 uvx nbstripout --install --attributes .gitattributes
