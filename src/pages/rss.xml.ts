@@ -5,8 +5,8 @@ import type { APIContext } from "astro";
 export async function GET(context: APIContext) {
   const posts = await getCollection("blog");
   return rss({
-    title: "Opening the Black Box",
-    description: "Explaining and exploring how machines learn",
+    title: "Ryan Saxe",
+    description: "ML, engineering, and whatever else.",
     site: context.site!,
     items: posts
       .filter((post) => !post.data.draft)

@@ -18,7 +18,7 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 <link
   rel="alternate"
   type="application/rss+xml"
-  title="Opening the Black Box"
+  title="Ryan Saxe"
   href={new URL("rss.xml", Astro.site)}
 />
 
@@ -27,31 +27,20 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 <meta name="description" content={description} />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 {ogImage && <meta property="og:image" content={ogImage} />}
 
-<!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 {ogImage && <meta property="twitter:image" content={ogImage} />}
 
-<!-- KaTeX -->
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
   crossorigin="anonymous"
-/>
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-  rel="stylesheet"
 />

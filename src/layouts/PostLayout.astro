@@ -18,33 +18,45 @@ const formattedDate = date.toLocaleDateString("en-US", {
 });
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
-  <article>
-    <header class="mb-10">
+<BaseLayout title={`${title} — Ryan Saxe`} description={description} image={heroImage}>
+  <!-- Reading progress bar -->
+  <div id="reading-progress"></div>
+
+  <article class="mx-auto max-w-3xl px-6 pt-8 pb-20">
+    <header class="mb-12">
       <div class="mb-4 flex items-center gap-3">
-        <time class="text-sm text-gray-400 light:text-gray-500" datetime={date.toISOString()}>
+        <time class="text-sm text-[var(--color-text-faint)]" datetime={date.toISOString()}>
           {formattedDate}
         </time>
         {
           categories.map((cat) => (
-            <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+            <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
               {cat}
             </span>
           ))
         }
       </div>
       <h1
-        class="text-3xl font-bold leading-tight text-white sm:text-4xl light:text-[var(--color-text-light)]"
+        class="mb-4 font-[var(--font-serif)] text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl"
       >
         {title}
       </h1>
-      <p class="mt-4 text-lg text-gray-400 light:text-gray-600">{description}</p>
+      <p class="text-lg leading-relaxed text-[var(--color-text-muted)]">{description}</p>
     </header>
 
-    {heroImage && <img src={heroImage} alt="" class="mb-10 w-full rounded-xl" />}
-
-    <div class="prose prose-lg max-w-none dark:prose-invert">
+    <div class="prose prose-lg max-w-none">
       <slot />
     </div>
   </article>
+
+  <script>
+    const bar = document.getElementById("reading-progress");
+    if (bar) {
+      window.addEventListener("scroll", () => {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+        bar.style.width = `${progress}%`;
+      });
+    }
+  </script>
 </BaseLayout>

@@ -12,6 +12,9 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
     "astro": "^6.1.2",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"

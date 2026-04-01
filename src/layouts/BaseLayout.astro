@@ -2,6 +2,13 @@
 import BaseHead from "@/components/BaseHead.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import "@fontsource/lora/400.css";
+import "@fontsource/lora/600.css";
+import "@fontsource/lora/700.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/jetbrains-mono/400.css";
 import "@/styles/global.css";
 
 interface Props {
@@ -17,7 +24,6 @@ const { title, description, image } = Astro.props;
 <html lang="en" class="dark">
   <head>
     <BaseHead title={title} description={description} image={image} />
-    <!-- Prevent flash: apply saved theme before paint -->
     <script is:inline>
       if (localStorage.getItem("theme") === "light") {
         document.documentElement.classList.add("light");
@@ -26,12 +32,39 @@ const { title, description, image } = Astro.props;
     </script>
   </head>
   <body
-    class="min-h-screen bg-[var(--color-surface-dark)] text-[var(--color-text-dark)] light:bg-[var(--color-surface-light)] light:text-[var(--color-text-light)]"
+    class="min-h-screen bg-[var(--color-bg)] font-[var(--font-sans)] text-[var(--color-text)] antialiased"
   >
     <Header />
-    <main class="mx-auto max-w-4xl px-6 py-12">
+    <main>
       <slot />
     </main>
     <Footer />
+
+    <!-- Back to top button -->
+    <button
+      id="back-to-top"
+      aria-label="Back to top"
+      class="cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-lg"
+    >
+      <svg
+        class="h-4 w-4 text-[var(--color-accent)]"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
+      </svg>
+    </button>
+
+    <script>
+      const btn = document.getElementById("back-to-top");
+      window.addEventListener("scroll", () => {
+        btn?.classList.toggle("visible", window.scrollY > 500);
+      });
+      btn?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
   </body>
 </html>

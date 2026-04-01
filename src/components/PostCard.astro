@@ -6,49 +6,67 @@ interface Props {
   heroImage?: string;
   slug: string;
   categories?: string[];
+  featured?: boolean;
 }
 
-const { title, description, date, heroImage, slug, categories = [] } = Astro.props;
+const { title, description, date, heroImage, slug, categories = [], featured = false } = Astro.props;
 
 const formattedDate = date.toLocaleDateString("en-US", {
   year: "numeric",
-  month: "long",
+  month: "short",
   day: "numeric",
 });
 ---
 
 <a href={`/blog/${slug}`} class="group block">
-  <article
-    class="flex gap-6 rounded-xl border border-[var(--color-border-dark)] bg-[var(--color-surface-dark-alt)] p-6 transition-all hover:border-[var(--color-accent)]/50 hover:shadow-lg hover:shadow-[var(--color-accent)]/5 light:border-[var(--color-border-light)] light:bg-[var(--color-surface-light-alt)] light:hover:border-[var(--color-accent)]/50"
-  >
-    {
-      heroImage && (
-        <img
-          src={heroImage}
-          alt=""
-          class="hidden h-32 w-32 flex-shrink-0 rounded-lg object-cover sm:block"
-        />
-      )
-    }
-    <div class="flex flex-col gap-2">
-      <h2
-        class="text-xl font-semibold text-white transition-colors group-hover:text-[var(--color-accent)] light:text-[var(--color-text-light)]"
-      >
-        {title}
-      </h2>
-      <p class="line-clamp-2 text-sm text-gray-400 light:text-gray-600">{description}</p>
-      <div class="flex items-center gap-3">
-        <time class="text-xs text-gray-500" datetime={date.toISOString()}>
+  {
+    featured ? (
+      <article class="card-hover relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+        {heroImage && (
+          <div class="absolute inset-0 opacity-[0.07]">
+            <img src={heroImage} alt="" class="h-full w-full object-cover" />
+          </div>
+        )}
+        <div class="relative p-8 sm:p-10">
+          {categories.length > 0 && (
+            <div class="mb-3 flex gap-2">
+              {categories.map((cat) => (
+                <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                  {cat}
+                </span>
+              ))}
+            </div>
+          )}
+          <h2 class="mb-3 font-[var(--font-serif)] text-2xl font-semibold leading-tight text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)] sm:text-3xl">
+            {title}
+          </h2>
+          <p class="mb-4 leading-relaxed text-[var(--color-text-muted)]">{description}</p>
+          <time class="text-sm text-[var(--color-text-faint)]" datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+        </div>
+      </article>
+    ) : (
+      <article class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+        {categories.length > 0 && (
+          <div class="mb-2 flex gap-2">
+            {categories.map((cat) => (
+              <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                {cat}
+              </span>
+            ))}
+          </div>
+        )}
+        <h3 class="mb-2 font-[var(--font-serif)] text-lg font-semibold leading-snug text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
+          {title}
+        </h3>
+        <p class="mb-3 line-clamp-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          {description}
+        </p>
+        <time class="text-xs text-[var(--color-text-faint)]" datetime={date.toISOString()}>
           {formattedDate}
         </time>
-        {
-          categories.map((cat) => (
-            <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-              {cat}
-            </span>
-          ))
-        }
-      </div>
-    </div>
-  </article>
+      </article>
+    )
+  }
 </a>
