@@ -79,7 +79,7 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
         --to notebook \
         --execute \
         --output=executed.ipynb \
-        --ExecutePreprocessor.timeout=600 \
+        --ExecutePreprocessor.timeout=-1 \
         --ExecutePreprocessor.kernel_name=python3 \
         tagged.ipynb)
 

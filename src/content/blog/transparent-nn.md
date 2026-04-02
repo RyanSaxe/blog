@@ -3,7 +3,7 @@ title: "Designing Transparent Neural Networks"
 description: "Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it's possible to design Neural Networks that are just as transparent."
 date: 2021-03-04
 heroImage: "/images/nam.png"
-categories: ["transparency"]
+categories: ["interpretability"]
 ---
 
 Most systems we interact with are part of some pipeline that integrates Machine Learning (ML). Sometimes we interact with an ML model directly, like Spotify's recommender system for songs. Other times, this interaction is more detatched; we post a comment on Twitter or Facebook, and this comment is used to train some language model at the respective company. As ML models become more and more prevalent, interpreting and explaining the decisions these models make become increasingly important.

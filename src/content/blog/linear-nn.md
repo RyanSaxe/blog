@@ -116,8 +116,8 @@ class LogisticRegression(nn.Module):
 
 ```
 
-    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_58337/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
-      X['target'] = betaX.sum(1)
+    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_86293/1823655870.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+      X.loc[:, 'target'] = betaX.sum(1)
 
 
     
