@@ -20,7 +20,7 @@ Prior to jumping into such a neural architecture, it's important to understand t
 
 ## Generalized Additive Models
 
-Generalized Additive Models (GAMs), introduced in [^GAM], take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:
+Generalized Additive Models (GAMs), introduced in <cite id="cite-GAM"><a href="#ref-GAM">(Hastie & Tibshirani, 1986)</a></cite>, take another step towards reducing the restrictions within linear models. There are two modifications that GAMs make to classic GLMs, which truly moves from rigid assumptions to flexible modeling:
 
 1. **Allow non-linearity**: GAMs wrap each component $X_i$ with a function $h_k$, where $h_k$ is some learned function that can be non-linear, but must be smooth[^fn-1]. It is also usually non-parametric.
     
@@ -30,13 +30,13 @@ Hence, equations for GAMs could look like this:
 
 $$g(\mu(X)) = \beta_0 + h_1(X_1) + h_2(X_2, X_3) + \cdots + h_m(X_n) + \epsilon$$
 
-Technically, this makes GLMs a special case of GAMs where all functions $h_k$ simply multiply their corresponding input feature(s) by a single parameter $\beta_k$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: [^backfitting_orig], [^backfitting_two]. 
+Technically, this makes GLMs a special case of GAMs where all functions $h_k$ simply multiply their corresponding input feature(s) by a single parameter $\beta_k$. However, unlike GLMs, these functions require a more convoluted fitting mechanism. If you are interested in the history of GAMs and how they are fit, please refer to the original papers on the backfitting algorithm: <cite id="cite-backfitting_orig"><a href="#ref-backfitting_orig">(Friedman & Stuetzle, 1981)</a></cite>, <cite id="cite-backfitting_two"><a href="#ref-backfitting_two">(Breiman & Friedman, 1985)</a></cite>. 
 
 Don't worry if you are not familiar with some of the terms (e.g. [b-spline](https://en.wikipedia.org/wiki/B-spline)), as they won't be relevant to the main body of this blog post about transparent neural networks. What follows is a simplification to provide intuition on what these $h_k$ functions are. 
 
 $$h_k(x_i) = \sum_{j=1}^n b_j(x_i)\beta_j$$
 
-Where $b_j$ is a b-spline, $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of b-splines to use to fit the GAM. A linear combination of b-splines uniquely describes any spline function sharing the same properties as the b-splines [^bspline], which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of b-splines.
+Where $b_j$ is a b-spline, $\beta_j$ is a learned coefficient corresponding to $b_j$, and $n$ is a hyperparameter describing the number of b-splines to use to fit the GAM. A linear combination of b-splines uniquely describes any spline function sharing the same properties as the b-splines <cite id="cite-bspline"><a href="#ref-bspline">(Prautzsch et al., 2002)</a></cite>, which means these $h_k$ functions are spline functions. Below is an example of fitting a smooth function ($h_k(x_i) = sin(x_i)$) using a linear combination of b-splines.
 
 
     
@@ -50,7 +50,7 @@ There is so much more to learn about GAMs, such as how these splines are learned
 
 # Transparent Neural Networks
 
-[^univ_approx_orig] is the original paper suggesting NNs are a type of universal approximator. The theory of this contribution was explored in multi-layer perceptrons in [^pinkus_1999] and generally formalized by [^univ_approx_thm]. The theorem can be summarized by:
+<cite id="cite-univ_approx_orig"><a href="#ref-univ_approx_orig">(Hornik et al., 1989)</a></cite> is the original paper suggesting NNs are a type of universal approximator. The theory of this contribution was explored in multi-layer perceptrons in <cite id="cite-pinkus_1999"><a href="#ref-pinkus_1999">(Pinkus, 1999)</a></cite> and generally formalized by <cite id="cite-univ_approx_thm"><a href="#ref-univ_approx_thm">(Csáji, 2001)</a></cite>. The theorem can be summarized by:
 
 > A neural network with a single hidden layer of infinite width can approximate any continuous function.
 
@@ -89,7 +89,7 @@ Luckily, because these functions are continuous, we can use a neural network to 
 
 ## Generalized Additive Neural Networks
 
-The trick is to use a different neural network for each individual feature, and add them together just like how GAMs work! By replacing the non-linear, non-parametric, functions in GAMs by neural networks, we get Generalized Additive Neural Networks (GANNs), introduced in [^GANN]. Unfortunately, this contribution did not take off because we didn't have the technical capacity to train large networks as we do today. Luckily, now it is quite easy to fit such a model.
+The trick is to use a different neural network for each individual feature, and add them together just like how GAMs work! By replacing the non-linear, non-parametric, functions in GAMs by neural networks, we get Generalized Additive Neural Networks (GANNs), introduced in <cite id="cite-GANN"><a href="#ref-GANN">(Potts, 1999)</a></cite>. Unfortunately, this contribution did not take off because we didn't have the technical capacity to train large networks as we do today. Luckily, now it is quite easy to fit such a model.
 
 ![](/images/nam.png)
 
@@ -207,9 +207,9 @@ The next section provides a brief overview of Neural Additive Models (NAMs), whi
 
 ## Neural Additive Models
 
-Real world data doesn't look like beautifully continuous functions. It's often messy, and there will be multiple data points with extremely similar features that have noticeably different results. Many machine learning models have existing structure that prevents learning functions that look crazy and jump all over the place. Linear regression has to learn the best fitting line because $X^T\beta$ can't describe a "jumpy" function. GAMs are regularized to enforce smoothness to prevent this as well. [^nam_2020] explores a particular modification to the mathematic computations made on nodes in GANNs in order to let them fit "jumpy" functions. They call these modified nodes "exp-centered hidden units" or "ExU units", and they work as follows:
+Real world data doesn't look like beautifully continuous functions. It's often messy, and there will be multiple data points with extremely similar features that have noticeably different results. Many machine learning models have existing structure that prevents learning functions that look crazy and jump all over the place. Linear regression has to learn the best fitting line because $X^T\beta$ can't describe a "jumpy" function. GAMs are regularized to enforce smoothness to prevent this as well. <cite id="cite-nam_2020"><a href="#ref-nam_2020">(Agarwal et al., 2020)</a></cite> explores a particular modification to the mathematic computations made on nodes in GANNs in order to let them fit "jumpy" functions. They call these modified nodes "exp-centered hidden units" or "ExU units", and they work as follows:
 
-Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The excerpt below is taken directly from [^nam_2020] and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).
+Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The excerpt below is taken directly from <cite><a href="#ref-nam_2020">(Agarwal et al., 2020)</a></cite> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).
 
 ![](/images/nam_exerpt.png)
 
@@ -258,7 +258,7 @@ Specifically, the purpose of $f_1$ is to learn some binary feature to determine 
 
 I have simulated a dataset that defines $f_1$ as whether $x_1,x_2$ are inside the unit circle, and defines $f_2$ and $f_3$ as basic linear models[^fn-4]. The code below defines a a neural network that learns these three functions to make a prediction. And below I show the results to demonstrate that we learn the correct circle boundaries and linear models, which maintains full transparency!
 
-Additional Note: this specific example requires learning a conditional function $f_1$, which is not continuous and hence requires some tricks to learn via neural networks. You can see my code below for the BinaryNN, which learns a continuous function, modifies it to be binary, but applies backpropigation as if that modification was the identity function. This is called the Straight-Through estimator, and was introduced by Hinton in his 2012 Coursera lectures. Refer to [^conditional_nn] If you'd like further reading on conditional computation.  
+Additional Note: this specific example requires learning a conditional function $f_1$, which is not continuous and hence requires some tricks to learn via neural networks. You can see my code below for the BinaryNN, which learns a continuous function, modifies it to be binary, but applies backpropigation as if that modification was the identity function. This is called the Straight-Through estimator, and was introduced by Hinton in his 2012 Coursera lectures. Refer to <cite id="cite-conditional_nn"><a href="#ref-conditional_nn">(Bengio et al., 2013)</a></cite> If you'd like further reading on conditional computation.  
 
 
 ```python
@@ -361,6 +361,21 @@ As you can see above, our neural network designed to fit our specified function 
 
 This whole blog post built up to an understanding of how additive models can maintain feature-wise interpretability, and that it's possible to design a neural network architecture that leverages that. However, the computational graph generalizes even further, and I hope the example above helped demonstrate that. Focus on the math. Focus on the specifics of the problem at hand. You can design interpretable architectures as a function of these feature-networks as long as you meticulously control how the features interact according to the computational graph. Then, because you controlled and isolated features in the computational graph, you can easily discern how those features were used in order to make the final prediction $\hat{y}$, which is the definition of a transparent model!
 
+---
+
+## References
+
+1. <span id="ref-GAM">Hastie & Tibshirani, "Generalized Additive Models", Statistical Science, 1986. <a href="#cite-GAM" aria-label="Back to reference">↩</a></span>
+2. <span id="ref-backfitting_orig">Friedman & Stuetzle, "Projection Pursuit Regression", Journal of the American Statistical Association, 1981. <a href="#cite-backfitting_orig" aria-label="Back to reference">↩</a></span>
+3. <span id="ref-backfitting_two">Breiman & Friedman, "Estimating Optimal Transformations for Multiple Regression and Correlation", Journal of the American Statistical Association, 1985. <a href="#cite-backfitting_two" aria-label="Back to reference">↩</a></span>
+4. <span id="ref-bspline">Prautzsch, Boehm & Paluszny, Bézier and B-Spline Techniques, 2002. <a href="#cite-bspline" aria-label="Back to reference">↩</a></span>
+5. <span id="ref-univ_approx_orig">Hornik, Stinchcombe & White, "Multilayer feedforward networks are universal approximators", Neural Networks, 1989. <a href="#cite-univ_approx_orig" aria-label="Back to reference">↩</a></span>
+6. <span id="ref-pinkus_1999">Pinkus, "Approximation theory of the MLP model in neural networks", Acta Numerica, 1999. <a href="#cite-pinkus_1999" aria-label="Back to reference">↩</a></span>
+7. <span id="ref-univ_approx_thm">Csáji Balázs, "Approximation with Artificial Neural Networks", 2001. <a href="#cite-univ_approx_thm" aria-label="Back to reference">↩</a></span>
+8. <span id="ref-GANN">Potts, "Generalized Additive Neural Networks", KDD '99, 1999. <a href="#cite-GANN" aria-label="Back to reference">↩</a></span>
+9. <span id="ref-nam_2020">Agarwal et al., "Neural Additive Models: Interpretable Machine Learning with Neural Nets", arXiv:2004.13912, 2020. <a href="#cite-nam_2020" aria-label="Back to reference">↩</a></span>
+10. <span id="ref-conditional_nn">Bengio, Léonard & Courville, "Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation", 2013. <a href="#cite-conditional_nn" aria-label="Back to reference">↩</a></span>
+
 [^fn-1]: The "smoothness" of a function is described by the continuity of the derivatives. The set of functions with a smoothness of 0 is equivalent to the set of continuous functions. The set of functions with a smoothness of 1 is the set of continuous functions such that their first derivative is continuous. So on, and so forth. Generally, a function is considered "smooth" if it has "smoothness" of $\infty$. In other words, it is infinitely differentiable.
 
 [^fn-2]: The actual function being fit here is $f(x_1,x_2) = a(x_1) + b(x_2)$, however I plot the function $f(x_1 + x_2) = a(x_1) + b(x_2)$ in order to project it as two-dimensional, as that is easier for readers to look at.
@@ -368,23 +383,3 @@ This whole blog post built up to an understanding of how additive models can mai
 [^fn-3]: Technically, this could be fit where the sub-networks take more than a single feature as input, but this comes at a cost of interpretability. It is still possible to explore the relationship between both features and the output, however it becomes high-dimensional, entangled, and hence more difficult to interpret.
 
 [^fn-4]: I am setting $f_2$ and $f_3$ as linear models for simplicity in demonstrating a transparent model. This methodology ports over to any function you would want to define as $f_2$ and $f_3$.
-
-[^GAM]: Hastie & Tibshirani, "Generalized Additive Models", Statistical Science, 1986.
-
-[^GANN]: Potts, "Generalized Additive Neural Networks", KDD '99, 1999.
-
-[^backfitting_orig]: Friedman & Stuetzle, "Projection Pursuit Regression", Journal of the American Statistical Association, 1981.
-
-[^backfitting_two]: Breiman & Friedman, "Estimating Optimal Transformations for Multiple Regression and Correlation", Journal of the American Statistical Association, 1985.
-
-[^bspline]: Prautzsch, Boehm & Paluszny, Bézier and B-Spline Techniques, 2002.
-
-[^conditional_nn]: Bengio, Léonard & Courville, "Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation", 2013.
-
-[^nam_2020]: Agarwal et al., "Neural Additive Models: Interpretable Machine Learning with Neural Nets", arXiv:2004.13912, 2020.
-
-[^pinkus_1999]: Pinkus, "Approximation theory of the MLP model in neural networks", Acta Numerica, 1999.
-
-[^univ_approx_orig]: Hornik, Stinchcombe & White, "Multilayer feedforward networks are universal approximators", Neural Networks, 1989.
-
-[^univ_approx_thm]: Csáji Balázs, "Approximation with Artificial Neural Networks", 2001.

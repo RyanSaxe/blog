@@ -1,0 +1,51 @@
+univ_approx_orig:
+  short: "Hornik et al., 1989"
+  full: 'Hornik, Stinchcombe & White, "Multilayer feedforward networks are universal approximators", Neural Networks, 1989.'
+
+GLM:
+  short: "Nelder & Wedderburn, 1972"
+  full: 'Nelder & Wedderburn, "Generalized Linear Models", Journal of the Royal Statistical Society, 1972.'
+
+GAM:
+  short: "Hastie & Tibshirani, 1986"
+  full: 'Hastie & Tibshirani, "Generalized Additive Models", Statistical Science, 1986.'
+
+backfitting_orig:
+  short: "Friedman & Stuetzle, 1981"
+  full: 'Friedman & Stuetzle, "Projection Pursuit Regression", Journal of the American Statistical Association, 1981.'
+
+backfitting_two:
+  short: "Breiman & Friedman, 1985"
+  full: 'Breiman & Friedman, "Estimating Optimal Transformations for Multiple Regression and Correlation", Journal of the American Statistical Association, 1985.'
+
+bspline:
+  short: "Prautzsch et al., 2002"
+  full: 'Prautzsch, Boehm & Paluszny, Bézier and B-Spline Techniques, 2002.'
+
+pinkus_1999:
+  short: "Pinkus, 1999"
+  full: 'Pinkus, "Approximation theory of the MLP model in neural networks", Acta Numerica, 1999.'
+
+univ_approx_thm:
+  short: "Csáji, 2001"
+  full: 'Csáji Balázs, "Approximation with Artificial Neural Networks", 2001.'
+
+nam_2020:
+  short: "Agarwal et al., 2020"
+  full: 'Agarwal et al., "Neural Additive Models: Interpretable Machine Learning with Neural Nets", arXiv:2004.13912, 2020.'
+
+GANN:
+  short: "Potts, 1999"
+  full: "Potts, \"Generalized Additive Neural Networks\", KDD '99, 1999."
+
+conditional_nn:
+  short: "Bengio et al., 2013"
+  full: 'Bengio, Léonard & Courville, "Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation", 2013.'
+
+piecewise_relu:
+  short: "Arora et al., 2018"
+  full: 'Arora et al., "Understanding Deep Neural Networks with Rectified Linear Units", arXiv:1611.01491, 2018.'
+
+bspline_gauss:
+  short: "Wang & Lee, 1998"
+  full: 'Wang & Lee, "Scale-space derived from B-splines", IEEE TPAMI, 1998.'

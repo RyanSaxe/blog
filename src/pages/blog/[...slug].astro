@@ -12,6 +12,20 @@ export async function getStaticPaths() {
 
 const post = Astro.props;
 const { Content, headings } = await render(post);
+
+const body = post.body || "";
+const plainText = body
+  .replace(/---[\s\S]*?---/, "")
+  .replace(/```[\s\S]*?```/g, "")
+  .replace(/\$\$[\s\S]*?\$\$/g, "")
+  .replace(/\$[^$]+\$/g, "")
+  .replace(/<[^>]+>/g, "")
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+  .replace(/\[\^[^\]]+\]/g, "")
+  .replace(/\[\^[^\]]+\]:.*/g, "");
+const wordCount = plainText.split(/\s+/).filter((w) => w.length > 0).length;
+const readingTime = Math.max(1, Math.round(wordCount / 225));
 ---
 
 <PostLayout
@@ -21,6 +35,7 @@ const { Content, headings } = await render(post);
   heroImage={post.data.heroImage}
   categories={post.data.categories}
   headings={headings}
+  readingTime={readingTime}
 >
   <Content />
 </PostLayout>

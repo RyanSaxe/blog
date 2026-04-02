@@ -6,7 +6,7 @@ heroImage: "/images/nnflow.png"
 categories: ["fundamentals"]
 ---
 
-Neural Networks (NNs) are an extremely popular type of machine learning algorithm known for, theoretically, being able to approximate any continuous function [^univ_approx_orig]. Furthermore, they are incredibly non-linear and can be difficult to interpret, unlike linear models. However, it is possible to understand how they work with only the math background of linear models.
+Neural Networks (NNs) are an extremely popular type of machine learning algorithm known for, theoretically, being able to approximate any continuous function <cite id="cite-univ_approx_orig"><a href="#ref-univ_approx_orig">(Hornik et al., 1989)</a></cite>. Furthermore, they are incredibly non-linear and can be difficult to interpret, unlike linear models. However, it is possible to understand how they work with only the math background of linear models.
 
 Linear models are one of the simplest approaches to supervised learning. The general goal of supervised learning is to discover some function $f$ that minimizes an error-term $\epsilon$ given a set of input features $X$ and a corresponding target $y$ such that $y = f(X) + \epsilon$. Additionally, the output of a supervised model is often written as $\hat{y} = f(X)$ because $f(X)$ is our best approximation of $y$.
 
@@ -47,7 +47,7 @@ Unfortunately, these assumptions are quite rigid for the real world. Many datase
 
 # Generalized Linear Models
 
-Generalized Linear Models (GLMs), introduced in [^GLM], loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:
+Generalized Linear Models (GLMs), introduced in <cite id="cite-GLM"><a href="#ref-GLM">(Nelder & Wedderburn, 1972)</a></cite>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:
 
 1. **Random Component**: The probability distribution of $y$ (typically belonging to the exponential family[^fn-3]).
 2. **Systematic Component**: the right side of the equation for predicting $y$ (typically $X^T\beta$).
@@ -116,7 +116,7 @@ class LogisticRegression(nn.Module):
 
 ```
 
-    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_85951/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_58337/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
       X['target'] = betaX.sum(1)
 
 
@@ -166,12 +166,15 @@ Hopefully this blog post helped you understand how neural networks work! However
 3. **Optimization**: These algorithms determine how a neural network learns the weights and biases. Most variants of optimization algorithms you will come across are some form of gradient descent. [This post](https://www.kdnuggets.com/2020/12/optimization-algorithms-neural-networks.html) covers different variations of gradient descent optimization algorithms, and [this post](https://www.neuraldesigner.com/blog/5_algorithms_to_train_a_neural_network) covers some additional optimization methods. Finally, [this post](http://neuralnetworksanddeeplearning.com/chap2.html) covers backpropogation, which is the algorithm that computes the gradients necessary for all of the optimization algorithms in the other linked blog posts.
 4. **Regularization**: Regularization is a technique that adds a penalty to the loss function in order to prevent overfitting and help machine learning algorithms generalize. [This post](http://neuralnetworksanddeeplearning.com/chap3.html#regularization) provides a variety of example problems for regularization and introduces a variety of different regularization techniques.
 
+---
+
+## References
+
+1. <span id="ref-univ_approx_orig">Hornik, Stinchcombe & White, "Multilayer feedforward networks are universal approximators", Neural Networks, 1989. <a href="#cite-univ_approx_orig" aria-label="Back to reference">↩</a></span>
+2. <span id="ref-GLM">Nelder & Wedderburn, "Generalized Linear Models", Journal of the Royal Statistical Society, 1972. <a href="#cite-GLM" aria-label="Back to reference">↩</a></span>
+
 [^fn-1]: This means that there does not exist a set of scalars $[\alpha_1,\alpha_2,\cdots,\alpha_n]$, where at least one such $\alpha$ is non-zero, such that $\alpha_1 X_1 + \alpha_2 X_2 + \cdots + \alpha_n X_n = 0$. In other words, there is no multi-colinearity in $X$ and that the rows of $X$ must span the columns.
 
 [^fn-2]: The closed form solution for OLS is $\beta = (X^TX)^{-1} X^Ty$. This requires $X^TX$ to be invertible, which is the case when the elements in $X$ are linearly independent. This is satisfied by our assumption of independence. Without this assumption, there is no closed form solution, and $\beta$ can be approximated by the maximum likelihood estimation function: $min_\beta(y - \beta X)^T(y - \beta X)$.
 
 [^fn-3]: The exponential family is a particular family of probability distributions such that their probability density function (PDF) can be writted as: $P(x | \theta) = f(x) g(\theta) exp \Big( \eta(\theta) \cdot T(x) \Big)$, where $f$, $g$, $\eta$, and $T$ are known functions and $\theta \in \mathbb{R}$ is the only parameter to the PDF.
-
-[^GLM]: Nelder & Wedderburn, "Generalized Linear Models", Journal of the Royal Statistical Society, 1972.
-
-[^univ_approx_orig]: Hornik, Stinchcombe & White, "Multilayer feedforward networks are universal approximators", Neural Networks, 1989.

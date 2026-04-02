@@ -51,7 +51,7 @@ const numbered = filtered.map((heading) => {
                       : "text-xs text-[var(--color-text-faint)]",
                   ]}
                 >
-                  <span class="mr-2 inline-block min-w-5 text-right text-[var(--color-text-faint)]">{label}</span>{text}
+                  <span class:list={["mr-2 inline-block text-left tabular-nums text-[var(--color-text-faint)]", level === 0 ? "min-w-5" : level === 1 ? "min-w-7" : "min-w-10"]}>{label}</span>{text}
                 </a>
               </li>
             );

@@ -1,0 +1,5 @@
+title: "From Linear Models to Neural Networks"
+description: "Neural Networks are a popular machine learning algorithm notorious for being difficult to interpret. It is possible to understand how they work with only the math background of linear models."
+date: 2021-03-03
+heroImage: "/images/nnflow.png"
+categories: ["fundamentals"]

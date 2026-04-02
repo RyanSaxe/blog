@@ -10,9 +10,10 @@ interface Props {
   heroImage?: string;
   categories?: string[];
   headings?: Array<{ depth: number; slug: string; text: string }>;
+  readingTime?: number;
 }
 
-const { title, description, date, heroImage, categories = [], headings = [] } = Astro.props;
+const { title, description, date, heroImage, categories = [], headings = [], readingTime } = Astro.props;
 const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
 
 const formattedDate = date.toLocaleDateString("en-US", {
@@ -32,13 +33,21 @@ const formattedDate = date.toLocaleDateString("en-US", {
         <time class="text-sm text-[var(--color-text-faint)]" datetime={date.toISOString()}>
           {formattedDate}
         </time>
-        {
-          categories.map((cat) => (
-            <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-              {cat}
-            </span>
-          ))
-        }
+        {readingTime && (
+          <>
+            <span class="text-sm text-[var(--color-text-faint)]">&middot;</span>
+            <span class="text-sm text-[var(--color-text-faint)]">{readingTime} min read</span>
+          </>
+        )}
+        <div class="ml-auto flex gap-2">
+          {
+            categories.map((cat) => (
+              <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                {cat}
+              </span>
+            ))
+          }
+        </div>
       </div>
       <h1
         class="mb-4 font-[var(--font-serif)] text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl"

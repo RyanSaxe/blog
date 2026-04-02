@@ -14,6 +14,7 @@ compute_hash() {
     find "$dir" \
         "$REPO_ROOT/scripts/tag-cells.py" \
         "$REPO_ROOT/scripts/postprocess-markdown.py" \
+        "$REPO_ROOT/notebooks/citations.yaml" \
         -type f \
         ! -path '*/.venv/*' \
         ! -path '*/__pycache__/*' \
@@ -26,6 +27,18 @@ compute_hash() {
         | shasum -a 256 \
         | cut -d' ' -f1
 }
+
+# Clean up outputs for notebooks that no longer exist
+for hash_file in "$CACHE_DIR"/*.hash; do
+    [ -f "$hash_file" ] || continue
+    slug=$(basename "$hash_file" .hash)
+    if [ ! -d "$NOTEBOOKS_DIR/$slug" ]; then
+        echo "=== Cleaning stale outputs: $slug ==="
+        rm -f "$OUTPUT_DIR/$slug.md"
+        rm -rf "$IMAGES_DIR/$slug"
+        rm -f "$hash_file"
+    fi
+done
 
 for nb_dir in "$NOTEBOOKS_DIR"/*/; do
     slug=$(basename "$nb_dir")
@@ -81,7 +94,8 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
         --TagRemovePreprocessor.remove_all_outputs_tags='["remove_output"]' \
         executed.ipynb)
 
-    # 4. Move generated images
+    # 4. Move generated images (clean first to remove stale outputs)
+    rm -rf "$IMAGES_DIR/$slug"
     mkdir -p "$IMAGES_DIR/$slug"
     for img_dir in "$nb_dir"/output_files "$nb_dir"/executed_files "$nb_dir"/notebook_files; do
         if [ -d "$img_dir" ]; then
@@ -91,10 +105,11 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     # 5. Post-process markdown
     echo "  Post-processing..."
-    python3 "$REPO_ROOT/scripts/postprocess-markdown.py" \
+    uvx --with pyyaml -- python3 "$REPO_ROOT/scripts/postprocess-markdown.py" \
         --input "$nb_dir/output.md" \
         --output "$OUTPUT_DIR/$slug.md" \
-        --slug "$slug"
+        --slug "$slug" \
+        --notebook-dir "$nb_dir"
 
     # 6. Save hash
     echo "$current_hash" > "$CACHE_DIR/$slug.hash"
