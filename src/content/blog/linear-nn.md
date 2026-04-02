@@ -89,7 +89,7 @@ The image below isolates a single neuron from the image above, taking input from
 
 In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!
 
-Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with [Keras](https://www.keras.io), and tests it on a simulated dataset.
+Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with [PyTorch](https://docs.pytorch.org/docs/stable/index.html/), and tests it on a simulated dataset.
 
 
 ```python
@@ -116,7 +116,7 @@ class LogisticRegression(nn.Module):
 
 ```
 
-    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_25591/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+    /var/folders/bc/33y59_xn6yd3smds_z3wsl9r0000gp/T/ipykernel_85951/208870801.py:3: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
       X['target'] = betaX.sum(1)
 
 
@@ -165,10 +165,6 @@ Hopefully this blog post helped you understand how neural networks work! However
 2. **Activation Functions**: Selecting the activation functions for introducing non-linearity into your neural network requires building up some intuition on how they work and how they impact learning. [This post](https://towardsdatascience.com/a-quick-guide-to-activation-functions-in-deep-learning-4042e7addd5b) provides a nice overview of many activation functions as well as an introduction to the intuition and math behind when to use which activation function.
 3. **Optimization**: These algorithms determine how a neural network learns the weights and biases. Most variants of optimization algorithms you will come across are some form of gradient descent. [This post](https://www.kdnuggets.com/2020/12/optimization-algorithms-neural-networks.html) covers different variations of gradient descent optimization algorithms, and [this post](https://www.neuraldesigner.com/blog/5_algorithms_to_train_a_neural_network) covers some additional optimization methods. Finally, [this post](http://neuralnetworksanddeeplearning.com/chap2.html) covers backpropogation, which is the algorithm that computes the gradients necessary for all of the optimization algorithms in the other linked blog posts.
 4. **Regularization**: Regularization is a technique that adds a penalty to the loss function in order to prevent overfitting and help machine learning algorithms generalize. [This post](http://neuralnetworksanddeeplearning.com/chap3.html#regularization) provides a variety of example problems for regularization and introduces a variety of different regularization techniques.
-
----
-
-## Notes
 
 [^fn-1]: This means that there does not exist a set of scalars $[\alpha_1,\alpha_2,\cdots,\alpha_n]$, where at least one such $\alpha$ is non-zero, such that $\alpha_1 X_1 + \alpha_2 X_2 + \cdots + \alpha_n X_n = 0$. In other words, there is no multi-colinearity in $X$ and that the rows of $X$ must span the columns.
 

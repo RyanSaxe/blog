@@ -66,10 +66,11 @@ def extract_footnotes_from_fndetail(text: str) -> dict[int, str]:
     """Extract footnote definitions from fndetail Liquid syntax."""
     footnotes = {}
     # Match {{ 'text' | fndetail: N }} or {{ "text" | fndetail: N }}
-    pattern = r"\{\{\s*['\"](.+?)['\"].*?\|\s*fndetail:\s*(\d+)\s*\}\}"
+    # Use backreference so closing quote matches the opening quote type
+    pattern = r"""\{\{\s*(?P<q>['\"])(.+?)(?P=q)\s*\|\s*fndetail:\s*(\d+)\s*\}\}"""
     for match in re.finditer(pattern, text, re.DOTALL):
-        content = match.group(1).strip()
-        num = int(match.group(2))
+        content = match.group(2).strip()
+        num = int(match.group(3))
         footnotes[num] = content
     return footnotes
 
@@ -226,29 +227,28 @@ def postprocess(input_path: str, output_path: str, slug: str) -> None:
     # Step 8: Generate frontmatter
     frontmatter = generate_frontmatter(slug)
 
-    # Step 9: Build footnote definitions section
-    footnote_defs = []
-
-    # Fndetail footnotes
+    # Step 9: Build footnote and reference sections separately
+    fn_items = []
     for num in sorted(fn_definitions):
         content = fn_definitions[num]
         content = fix_latex(content)
-        footnote_defs.append(f"[^fn-{num}]: {content}")
+        fn_items.append(f"[^fn-{num}]: {content}")
 
-    # Citation footnotes
+    ref_items = []
     for key in sorted(used_citations):
         if key in CITATIONS:
-            footnote_defs.append(f"[^{key}]: {CITATIONS[key]}")
+            ref_items.append(f"[^{key}]: {CITATIONS[key]}")
 
-    # Step 10: Assemble final document
-    footnotes_section = ""
-    if footnote_defs:
-        footnotes_section = "\n\n---\n\n## Notes\n\n" + "\n\n".join(footnote_defs)
+    # Step 10: Assemble tail (definitions only, no headings — rehype plugin splits them)
+    all_defs = fn_items + ref_items
+    tail = ""
+    if all_defs:
+        tail = "\n\n" + "\n\n".join(all_defs)
 
     # Clean up excessive blank lines
     text = re.sub(r"\n{4,}", "\n\n\n", text)
 
-    final = f"{frontmatter}\n\n{text.strip()}{footnotes_section}\n"
+    final = f"{frontmatter}\n\n{text.strip()}{tail}\n"
 
     Path(output_path).write_text(final)
     print(f"  Written: {output_path}")

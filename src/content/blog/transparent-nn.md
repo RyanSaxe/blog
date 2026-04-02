@@ -361,11 +361,7 @@ As you can see above, our neural network designed to fit our specified function 
 
 This whole blog post built up to an understanding of how additive models can maintain feature-wise interpretability, and that it's possible to design a neural network architecture that leverages that. However, the computational graph generalizes even further, and I hope the example above helped demonstrate that. Focus on the math. Focus on the specifics of the problem at hand. You can design interpretable architectures as a function of these feature-networks as long as you meticulously control how the features interact according to the computational graph. Then, because you controlled and isolated features in the computational graph, you can easily discern how those features were used in order to make the final prediction $\hat{y}$, which is the definition of a transparent model!
 
----
-
-## Notes
-
-[^fn-1]: The
+[^fn-1]: The "smoothness" of a function is described by the continuity of the derivatives. The set of functions with a smoothness of 0 is equivalent to the set of continuous functions. The set of functions with a smoothness of 1 is the set of continuous functions such that their first derivative is continuous. So on, and so forth. Generally, a function is considered "smooth" if it has "smoothness" of $\infty$. In other words, it is infinitely differentiable.
 
 [^fn-2]: The actual function being fit here is $f(x_1,x_2) = a(x_1) + b(x_2)$, however I plot the function $f(x_1 + x_2) = a(x_1) + b(x_2)$ in order to project it as two-dimensional, as that is easier for readers to look at.
 

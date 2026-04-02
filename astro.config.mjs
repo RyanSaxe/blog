@@ -3,6 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeSplitFootnotes from "./plugins/rehype-split-footnotes.mjs";
 
 export default defineConfig({
   site: "https://ryansaxe.com",
@@ -13,7 +14,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    rehypePlugins: [rehypeKatex, rehypeSplitFootnotes],
     shikiConfig: {
       theme: "catppuccin-mocha",
     },

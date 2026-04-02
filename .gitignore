@@ -13,3 +13,4 @@ notebooks/*/output.md
 notebooks/*/output_files/
 notebooks/*/executed_files/
 notebooks/*/notebook_files/
+notebooks/*/.ipynb_checkpoints/
