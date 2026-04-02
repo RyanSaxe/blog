@@ -9,17 +9,25 @@ export interface TimelineEntry {
 
 export const timeline: TimelineEntry[] = [
   {
-    title: "Global Principal Data Scientist",
+    title: "Director, Global Data & Analytics",
     organization: "AB-InBev",
     description:
-      "Tech lead of tech leads across all global products pertaining to commercial applications of machine learning (sales, marketing, and finance).",
-    startDate: "Jan 2023",
+      "Head of Science and Engineering for analytics globally. Responsible for the technology behind 15 analytics products.",
+    startDate: "Nov 2024",
   },
   {
-    title: "Senior Global Manager of Data Science & Analytics",
+    title: "Principal Data Scientist, Global Data & Analytics",
     organization: "AB-InBev",
     description:
-      "Tech lead and manager for a team of 10 Data Scientists dedicated to ML solutions for marketing efficacy and automated spend allocation.",
+      "Tech lead for all commercial applications of machine learning (sales, marketing, and finance).",
+    startDate: "Jan 2023",
+    endDate: "Nov 2024",
+  },
+  {
+    title: "Senior Manager, Global Data & Analytics",
+    organization: "AB-InBev",
+    description:
+      "Tech lead Manager for a team of 10 Data Scientists dedicated to ML solutions for marketing efficacy and automated spend allocation.",
     startDate: "Mar 2021",
     endDate: "Jan 2023",
   },

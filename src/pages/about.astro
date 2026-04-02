@@ -5,7 +5,7 @@ import SocialIcons from "@/components/SocialIcons.astro";
 import { projects } from "@/data/projects";
 ---
 
-<PageLayout title="About — Ryan Saxe" description="ML engineer, MTG competitor, and New York dancer.">
+<PageLayout title="About — Ryan Saxe" description="Build to learn. Write to understand.">
   <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
     <!-- Hero -->
     <section class="mb-12 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
@@ -22,16 +22,10 @@ import { projects } from "@/data/projects";
             Ryan Saxe
           </h1>
           <p class="mb-4 text-[var(--color-text-muted)]">
-            Global Principal Data Scientist at AB-InBev
+            Build to learn. Write to understand.
           </p>
           <p class="leading-relaxed text-[var(--color-text-muted)]">
-            I build machine learning systems by day, dance in New York City by night, and
-            travel the world to play Magic: the Gathering. I built an
-            <a
-              href="https://github.com/RyanSaxe/mtg"
-              target="_blank"
-              class="text-[var(--color-accent)] hover:underline">AI drafting bot for MTG</a
-            > that reached rank #27 in the world.
+            I design large, interpretable ML systems. I'm curious about everything else.
           </p>
           <SocialIcons class="mt-4" iconSize="h-5 w-5" />
         </div>
@@ -59,13 +53,8 @@ import { projects } from "@/data/projects";
         {
           projects.map((project) => (
             <div class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-              <div class="mb-2 flex flex-wrap items-center gap-2">
+              <div class="mb-2">
                 <h3 class="text-sm font-medium text-[var(--color-text)]">{project.name}</h3>
-                {project.tags?.map((tag) => (
-                  <span class="rounded-full bg-[var(--color-accent-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-accent)]">
-                    {tag}
-                  </span>
-                ))}
               </div>
               <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
                 {project.description}
