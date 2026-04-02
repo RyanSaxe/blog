@@ -3,12 +3,27 @@ interface Props {
   headings: Array<{ depth: number; slug: string; text: string }>;
 }
 
+const EXCLUDED = new Set(["footnotes", "references"]);
+
 const { headings } = Astro.props;
-const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const filtered = headings.filter(
+  (h) => h.depth >= 1 && h.depth <= 3 && !EXCLUDED.has(h.slug),
+);
+const minDepth = Math.min(...filtered.map((h) => h.depth));
+
+// Compute hierarchical numbering (1, 1.1, 1.2.1, etc.)
+const counters = [0, 0, 0];
+const numbered = filtered.map((heading) => {
+  const level = heading.depth - minDepth;
+  counters[level]++;
+  for (let i = level + 1; i < counters.length; i++) counters[i] = 0;
+  const label = counters.slice(0, level + 1).join(".");
+  return { ...heading, level, label };
+});
 ---
 
 {
-  filtered.length > 0 && (
+  numbered.length > 0 && (
     <details
       open
       class="mb-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
@@ -16,18 +31,31 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       <summary class="cursor-pointer font-[var(--font-serif)] text-sm font-semibold text-[var(--color-text)] select-none">
         Table of Contents
       </summary>
-      <nav class="mt-3">
-        <ul class="space-y-1.5 text-sm">
-          {filtered.map((heading) => (
-            <li class:list={[heading.depth === 3 && "ml-4"]}>
-              <a
-                href={`#${heading.slug}`}
-                class="text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
+      <nav class="mt-4">
+        <ul>
+          {numbered.map(({ slug, text, level, label }) => {
+            const isTop = level === 0;
+            return (
+              <li
+                class:list={[
+                  level === 1 && "ml-4",
+                  level === 2 && "ml-8",
+                ]}
               >
-                {heading.text}
-              </a>
-            </li>
-          ))}
+                <a
+                  href={`#${slug}`}
+                  class:list={[
+                    "block rounded px-2 py-1 transition-colors hover:bg-[var(--color-accent-muted)] hover:text-[var(--color-accent)]",
+                    isTop
+                      ? "text-sm font-medium text-[var(--color-text)]"
+                      : "text-xs text-[var(--color-text-faint)]",
+                  ]}
+                >
+                  <span class="mr-2 inline-block min-w-5 text-right text-[var(--color-text-faint)]">{label}</span>{text}
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </details>
