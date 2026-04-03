@@ -1,0 +1,54 @@
+---
+import { timeline } from "@/data/timeline";
+---
+
+<div class="flex flex-col gap-4">
+  {
+    timeline.map((entry) => {
+      const isCurrent = !entry.endDate;
+      return (
+        <div
+          class:list={[
+            "rounded-xl border p-5 transition-colors",
+            isCurrent
+              ? "border-[color-mix(in_srgb,var(--color-accent)_30%,transparent)] bg-[var(--color-accent-glow)]"
+              : "border-[var(--color-border)] bg-[var(--color-surface)]",
+          ]}
+        >
+          <div class="mb-1 flex flex-wrap items-center gap-2">
+            <span class="text-sm font-medium text-[var(--color-text)]">
+              {entry.title}
+            </span>
+            {isCurrent && (
+              <span class="rounded-full bg-[var(--color-accent-muted)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+                Current
+              </span>
+            )}
+          </div>
+          <div class="mb-2 flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
+            <span>{entry.organization}</span>
+            <span class="text-[var(--color-text-faint)]">&middot;</span>
+            <span class="text-[var(--color-text-faint)]">
+              {entry.startDate} &ndash; {entry.endDate ?? "Present"}
+            </span>
+          </div>
+          {entry.description && (
+            <p class="text-sm leading-relaxed text-[var(--color-text-muted)]">
+              {entry.description}
+            </p>
+          )}
+          {entry.link && (
+            <a
+              href={entry.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-2 inline-block text-sm text-[var(--color-accent)] hover:underline"
+            >
+              View publication &rarr;
+            </a>
+          )}
+        </div>
+      );
+    })
+  }
+</div>

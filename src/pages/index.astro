@@ -1,0 +1,31 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Ryan Saxe's Blog" description="ML, engineering, and whatever else.">
+  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
+    {
+      posts.length === 0 ? (
+        <p class="text-[var(--color-text-muted)]">No posts yet.</p>
+      ) : (
+        <div class="flex flex-col gap-6">
+          {posts.map((post) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              slug={post.id}
+              categories={post.data.categories}
+            />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

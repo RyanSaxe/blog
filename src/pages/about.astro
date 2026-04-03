@@ -1,0 +1,103 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Timeline from "@/components/Timeline.astro";
+import SocialIcons from "@/components/SocialIcons.astro";
+import { projects } from "@/data/projects";
+---
+
+<PageLayout title="About — Ryan Saxe" description="Build to learn. Write to understand.">
+  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
+    <!-- Hero -->
+    <section class="mb-12 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+      <div class="flex flex-col sm:flex-row">
+        <div class="sm:w-44 sm:flex-shrink-0">
+          <img
+            src="/images/headshot.jpg"
+            alt="Ryan Saxe"
+            class="h-48 w-full object-cover sm:h-full"
+          />
+        </div>
+        <div class="p-6 sm:p-8">
+          <h1 class="mb-1 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Build to learn.</h1>
+          <h1 class="mb-4 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Write to understand.</h1>
+          <p class="mb-3 leading-relaxed text-[var(--color-text-muted)]">
+          I design large and interpretable ML/AI systems. I find an odd amount of joy in explaining complex concepts in simple ways.
+          </p>
+          <SocialIcons class="mt-4" iconSize="h-5 w-5" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="mb-8 flex gap-6 border-b border-[var(--color-border)]" role="tablist">
+      <button class="tab-button" role="tab" aria-selected="true" data-tab="experience">
+        Experience
+      </button>
+      <button class="tab-button" role="tab" aria-selected="false" data-tab="projects">
+        Projects
+      </button>
+    </div>
+
+    <!-- Experience tab -->
+    <section id="tab-experience" data-tab-content="experience">
+      <Timeline />
+    </section>
+
+    <!-- Projects tab -->
+    <section id="tab-projects" data-tab-content="projects" class="hidden">
+      <div class="flex flex-col gap-4">
+        {
+          projects.map((project) => (
+            <div class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+              <div class="mb-2">
+                <h3 class="text-sm font-medium text-[var(--color-text)]">{project.name}</h3>
+              </div>
+              <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {project.description}
+              </p>
+              <div class="flex gap-4">
+                {project.url && (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    class="text-sm text-[var(--color-accent)] hover:underline"
+                  >
+                    Website &rarr;
+                  </a>
+                )}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    class="text-sm text-[var(--color-accent)] hover:underline"
+                  >
+                    GitHub &rarr;
+                  </a>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener("astro:page-load", () => {
+      document.querySelectorAll("[data-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tab = (btn as HTMLElement).dataset.tab!;
+
+          document.querySelectorAll("[data-tab]").forEach((b) => {
+            b.setAttribute("aria-selected", b === btn ? "true" : "false");
+          });
+
+          document.querySelectorAll("[data-tab-content]").forEach((section) => {
+            const el = section as HTMLElement;
+            el.classList.toggle("hidden", el.dataset.tabContent !== tab);
+          });
+        });
+      });
+    });
+  </script>
+</PageLayout>

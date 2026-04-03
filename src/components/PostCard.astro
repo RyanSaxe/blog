@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  slug: string;
+  categories?: string[];
+}
+
+const { title, description, date, slug, categories = [] } = Astro.props;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<a href={`/blog/${slug}`} class="group block">
+  <article class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+    <div class="flex flex-1 flex-col">
+      <h3 class="mb-3 font-[var(--font-serif)] text-lg font-semibold leading-snug text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
+        {title}
+      </h3>
+      <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+        {description}
+      </p>
+      <div class="mt-auto flex items-center justify-between">
+        <time class="text-xs text-[var(--color-text-faint)]" datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {categories.length > 0 && (
+          <div class="flex gap-2">
+            {categories.map((cat) => (
+              <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                {cat}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </article>
+</a>

@@ -1,0 +1,63 @@
+---
+interface Props {
+  headings: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const EXCLUDED = new Set(["footnotes", "references"]);
+
+const { headings } = Astro.props;
+const filtered = headings.filter(
+  (h) => h.depth >= 1 && h.depth <= 3 && !EXCLUDED.has(h.slug),
+);
+const minDepth = Math.min(...filtered.map((h) => h.depth));
+
+// Compute hierarchical numbering (1, 1.1, 1.2.1, etc.)
+const counters = [0, 0, 0];
+const numbered = filtered.map((heading) => {
+  const level = heading.depth - minDepth;
+  counters[level]++;
+  for (let i = level + 1; i < counters.length; i++) counters[i] = 0;
+  const label = counters.slice(0, level + 1).join(".");
+  return { ...heading, level, label };
+});
+---
+
+{
+  numbered.length > 0 && (
+    <details
+      open
+      class="mb-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
+    >
+      <summary class="cursor-pointer font-[var(--font-serif)] text-sm font-semibold text-[var(--color-text)] select-none">
+        Table of Contents
+      </summary>
+      <nav class="mt-4">
+        <ul>
+          {numbered.map(({ slug, text, level, label }) => {
+            const isTop = level === 0;
+            return (
+              <li
+                class:list={[
+                  level === 1 && "ml-4",
+                  level === 2 && "ml-8",
+                ]}
+              >
+                <a
+                  href={`#${slug}`}
+                  class:list={[
+                    "block rounded px-2 py-1 transition-colors hover:bg-[var(--color-accent-muted)] hover:text-[var(--color-accent)]",
+                    isTop
+                      ? "text-sm font-medium text-[var(--color-text)]"
+                      : "text-xs text-[var(--color-text-faint)]",
+                  ]}
+                >
+                  <span class:list={["mr-2 inline-block text-left tabular-nums text-[var(--color-text-faint)]", level === 0 ? "min-w-5" : level === 1 ? "min-w-7" : "min-w-10"]}>{label}</span>{text}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </details>
+  )
+}

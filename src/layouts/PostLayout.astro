@@ -1,0 +1,81 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import ShareButtons from "@/components/ShareButtons.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  heroImage?: string;
+  categories?: string[];
+  headings?: Array<{ depth: number; slug: string; text: string }>;
+  readingTime?: number;
+}
+
+const { title, description, date, heroImage, categories = [], headings = [], readingTime } = Astro.props;
+const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={`${title} — Ryan Saxe`} description={description} image={heroImage}>
+  <!-- Reading progress bar -->
+  <div id="reading-progress"></div>
+
+  <article class="mx-auto max-w-3xl px-6 pt-8 pb-20">
+    <header class="mb-12">
+      <div class="mb-4 flex items-center gap-3">
+        <time class="text-sm text-[var(--color-text-faint)]" datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {readingTime && (
+          <>
+            <span class="text-sm text-[var(--color-text-faint)]">&middot;</span>
+            <span class="text-sm text-[var(--color-text-faint)]">{readingTime} min read</span>
+          </>
+        )}
+        <div class="ml-auto flex gap-2">
+          {
+            categories.map((cat) => (
+              <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                {cat}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+      <h1
+        class="mb-4 font-[var(--font-serif)] text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl"
+      >
+        {title}
+      </h1>
+      <p class="text-lg italic leading-relaxed text-[var(--color-text-muted)]">{description}</p>
+      <ShareButtons url={shareUrl} title={title} />
+      <hr class="mt-6 border-[var(--color-border)]" />
+    </header>
+
+    {headings.length > 0 && <TableOfContents headings={headings} />}
+
+    <div class="prose prose-lg max-w-none">
+      <slot />
+    </div>
+  </article>
+
+  <script>
+    document.addEventListener("astro:page-load", () => {
+      const bar = document.getElementById("reading-progress");
+      if (bar) {
+        window.addEventListener("scroll", () => {
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+          bar.style.width = `${progress}%`;
+        });
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,13 +1,16 @@
-*.swp
-~*
-*~
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
-_notebooks/.ipynb_checkpoints
-# Local Netlify folder
-.netlify
-.tweet-cache
-__pycache__
+node_modules/
+dist/
+.astro/
+.DS_Store
+__pycache__/
+.venv/
+notebooks/*/.venv/
+
+# Notebook intermediates (cleaned up by build script, but just in case)
+notebooks/*/tagged.ipynb
+notebooks/*/executed.ipynb
+notebooks/*/output.md
+notebooks/*/output_files/
+notebooks/*/executed_files/
+notebooks/*/notebook_files/
+notebooks/*/.ipynb_checkpoints/
