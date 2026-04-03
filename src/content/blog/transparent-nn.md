@@ -148,9 +148,10 @@ class GANN(nn.Module):
 ```python
 X_tensor = torch.tensor(X.to_numpy(), dtype=torch.float32)
 y_tensor = torch.tensor(y.to_numpy(), dtype=torch.float32).unsqueeze(1)
-loader = DataLoader(TensorDataset(X_tensor, y_tensor), batch_size=1024, shuffle=True)
+loader = DataLoader(TensorDataset(X_tensor, y_tensor), batch_size=32, shuffle=True)
 
 model = GANN(n_features=2)
+model.compile()
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.MSELoss()
 
@@ -163,7 +164,7 @@ for epoch in range(50):
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
-    if (epoch + 1) % 10 == 0:
+    if (epoch + 1) % 1 == 0:
         print(f'Epoch {epoch+1}/50, Loss: {epoch_loss/len(loader):.4f}')
 
 ```
@@ -331,13 +332,14 @@ class TransparentNN(nn.Module):
 ```python
 x_tensor = torch.tensor(x, dtype=torch.float32)
 y_tensor = torch.tensor(y, dtype=torch.float32).unsqueeze(1)
-loader = DataLoader(TensorDataset(x_tensor, y_tensor), batch_size=1024, shuffle=True)
+loader = DataLoader(TensorDataset(x_tensor, y_tensor), batch_size=32, shuffle=True)
 
 model = TransparentNN(threshold=0.5)
+model.compile()
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.MSELoss()
 
-for epoch in range(50):
+for epoch in range(5):
     epoch_loss = 0.0
     for xb, yb in loader:
         pred = model(xb)
@@ -346,7 +348,7 @@ for epoch in range(50):
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
-    if (epoch + 1) % 10 == 0:
+    if (epoch + 1) % 1 == 0:
         print(f'Epoch {epoch+1}/50, Loss: {epoch_loss/len(loader):.4f}')
 
 ```

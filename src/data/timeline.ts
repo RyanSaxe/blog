@@ -12,7 +12,7 @@ export const timeline: TimelineEntry[] = [
     title: "Director, Global Data & Analytics",
     organization: "AB-InBev",
     description:
-      "Head of Science and Engineering for analytics globally. Responsible for the technology behind 15 analytics products.",
+      "Head of Science and Engineering. Responsible for the technology behind all global analytics products.",
     startDate: "Nov 2024",
   },
   {
@@ -27,13 +27,13 @@ export const timeline: TimelineEntry[] = [
     title: "Senior Manager, Global Data & Analytics",
     organization: "AB-InBev",
     description:
-      "Tech lead Manager for a team of 10 Data Scientists dedicated to ML solutions for marketing efficacy and automated spend allocation.",
+      "Tech lead Manager for a team dedicated to ML solutions for marketing efficacy and automated spend allocation.",
     startDate: "Mar 2021",
     endDate: "Jan 2023",
   },
   {
-    title: "Senior ML Research Scientist",
-    organization: "PepsiCo Ecommerce",
+    title: "Senior Research Scientist, Ecommerce",
+    organization: "PepsiCo",
     description:
       "Research in Graph Neural Networks for product introduction, embedding regularization techniques, and transparent neural architectures. Published a patent at the intersection of contrastive loss and anomaly detection.",
     startDate: "Oct 2020",
@@ -41,8 +41,8 @@ export const timeline: TimelineEntry[] = [
     link: "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/20220398503",
   },
   {
-    title: "Data Scientist",
-    organization: "PepsiCo Ecommerce",
+    title: "Data Scientist, Ecommerce",
+    organization: "PepsiCo",
     description:
       "Built an internal API for training deep learning systems with economic priors. Designed a multi-modal Graph Embedding model for product similarity.",
     startDate: "Jul 2019",
