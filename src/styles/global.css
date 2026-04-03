@@ -25,6 +25,7 @@ html {
   color-scheme: light;
   background-color: var(--color-bg);
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 
 html.dark {
