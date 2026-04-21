@@ -9,6 +9,6 @@ dependencies = [
     "numpy>=1.24",
     "pygam>=0.9",
     "jupyter>=1.0",
-    "nbconvert>=7.0",
+    "nbconvert>=7.17.1",
     "ipykernel>=6.0",
 ]
