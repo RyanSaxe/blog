@@ -5,6 +5,13 @@ export const WRITING = {
   subtitle: "Essays, articles and podcasts",
 };
 
+/** The opening line of the landing, Projects, Writing and About pages, after "I’m Ryan Saxe." */
+export const TAGLINE = "I design interpretable machine learning and AI systems, and I build tools for working with AI agents.";
+
+/** The short paragraph the opening line opens into when a visitor clicks it. */
+export const TAGLINE_MORE =
+  "I’ve spent my career building machine learning that has to work at scale and still make sense to the people who rely on it. These days I’m obsessed with how people work with agents, and how agents work with each other, so I build tools to find out. I write to understand what I build, which is how I ended up with over 400 articles about Magic: The Gathering.";
+
 export const SOCIAL = [
   { label: "GitHub", href: "https://github.com/RyanSaxe" },
   { label: "X", href: "https://x.com/rcsaxe" },

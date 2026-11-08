@@ -5,17 +5,11 @@ import Panel from "@/components/Panel.astro";
 import Intro from "@/components/Intro.astro";
 import { projects } from "@/data/projects";
 import { writing } from "@/data/writing";
-import { WRITING } from "@/data/site";
+import { TAGLINE, WRITING } from "@/data/site";
 ---
 
-<SiteLayout
-  title="Ryan Saxe"
-  description="I lead science and engineering for AB InBev's global analytics and build tools for working with AI agents."
->
-  <Intro face>
-    I’m <a class="me" href="/about/">Ryan Saxe</a>.
-    <Fragment slot="rest">I lead science and engineering for AB&nbsp;InBev’s global analytics and build tools for working with AI agents.</Fragment>
-  </Intro>
+<SiteLayout title="Ryan Saxe" description={TAGLINE}>
+  <Intro />
 
   <div data-fit>
     <Rail id="projects" title="Projects" items={projects} allHref="/projects/" allLabel="All projects" eager />
@@ -114,8 +108,8 @@ import { WRITING } from "@/data/site";
   [data-fit] .shelf.compact .m {
     display: none;
   }
+  /* Only the space below the opening line tightens, so it sits where it does on every other page. */
   html[style*="--fit-t"] .intro {
-    padding-top: calc(36px - 12px * var(--fit-t));
     padding-bottom: calc(52px - 24px * var(--fit-t));
   }
   html[style*="--fit-t"] [data-fit] .shelf + .shelf {
@@ -126,7 +120,6 @@ import { WRITING } from "@/data/site";
   }
   @media (max-width: 640px) {
     html[style*="--fit-t"] .intro {
-      padding-top: calc(24px - 8px * var(--fit-t));
       padding-bottom: calc(36px - 12px * var(--fit-t));
     }
     html[style*="--fit-t"] [data-fit] .shelf + .shelf {

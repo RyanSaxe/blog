@@ -10,10 +10,7 @@ const description = `${WRITING.subtitle}, on machine learning and on Magic: The 
 ---
 
 <SiteLayout title={`${WRITING.name} · Ryan Saxe`} description={description} section="writing">
-  <Intro heading>
-    {WRITING.name}.
-    <Fragment slot="rest">{description}</Fragment>
-  </Intro>
+  <Intro />
   <CardGrid items={writing} label={WRITING.name} />
   <Panel />
 </SiteLayout>

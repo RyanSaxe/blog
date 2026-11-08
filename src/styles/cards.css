@@ -185,6 +185,19 @@
   align-items: baseline;
   gap: 8px;
 }
+/* A list page's h1 above its grid, set like a landing row's title. */
+.grid-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 7px var(--g);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+}
+.grid-head .n,
 .shelf-head .n {
   font-weight: 400;
   color: var(--muted);
@@ -707,6 +720,10 @@
   .shelf-head {
     margin-bottom: 12px;
     height: 28px;
+  }
+  .grid-head {
+    margin-bottom: 12px;
+    padding: 4px var(--g);
   }
   .arrow {
     display: none;
