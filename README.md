@@ -40,7 +40,7 @@ CI uses per-notebook hashing to only re-run notebooks whose source files changed
 ## Updating Site Content
 
 - Projects: `src/data/projects.ts`
-- Ideas (essays, articles and podcasts): `src/data/ideas.ts`
+- Writing & Podcasts (essays, articles and podcasts): `src/data/writing.ts`
 - About page career: `src/data/timeline.ts`
 - Section names and social links: `src/data/site.ts`
 

@@ -39,7 +39,7 @@ const neighbours = [
 ].filter((n) => !!n);
 ---
 
-<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="ideas">
+<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="writing">
   <article class="essay">
     <header class="essay-head">
       <h1>{title}</h1>
@@ -156,7 +156,8 @@ const neighbours = [
   .essay-head {
     width: min(var(--measure), 100% - 40px);
     margin: 0 auto;
-    padding: 76px 0 52px;
+    /* Same distance below the header as the Intro on every other page. */
+    padding: 36px 0 52px;
   }
   .essay-head h1 {
     margin: 0;
@@ -262,7 +263,7 @@ const neighbours = [
 
   @media (max-width: 640px) {
     .essay-head {
-      padding: 36px 0 36px;
+      padding: 24px 0 36px;
     }
     .essay-head h1 {
       font-size: 30px;

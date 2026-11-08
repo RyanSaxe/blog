@@ -1,7 +1,8 @@
-// Site-wide names and links. The writing section's name lives here only, so a rename is one line.
-export const IDEAS = {
-  name: "Ideas",
-  path: "/ideas/",
+// Site-wide names and links. The writing section's name and address live here only.
+export const WRITING = {
+  name: "Writing & Podcasts",
+  short: "Writing",
+  path: "/writing/",
   subtitle: "Essays, articles and podcasts",
 };
 
@@ -12,10 +13,10 @@ export const SOCIAL = [
   { label: "RSS", href: "/rss.xml" },
 ];
 
-export type Section = "projects" | "ideas" | "about";
+export type Section = "projects" | "writing" | "about";
 
-export const NAV: { section: Section; label: string; href: string }[] = [
+export const NAV: { section: Section; label: string; short?: string; href: string }[] = [
   { section: "projects", label: "Projects", href: "/projects/" },
-  { section: "ideas", label: IDEAS.name, href: IDEAS.path },
+  { section: "writing", label: WRITING.name, short: WRITING.short, href: WRITING.path },
   { section: "about", label: "About", href: "/about/" },
 ];

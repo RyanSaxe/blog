@@ -1,9 +1,9 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Timeline from "@/components/Timeline.astro";
-import { IDEAS, SOCIAL } from "@/data/site";
+import { WRITING, SOCIAL } from "@/data/site";
 import { projects } from "@/data/projects";
-import { ideas } from "@/data/ideas";
+import { writing } from "@/data/writing";
 import { imgSrc, type CardItem } from "@/data/cards";
 
 const profiles = SOCIAL.filter((s) => s.href.startsWith("http"));
@@ -16,9 +16,9 @@ const shelves = [
     text: "Tools for working with AI agents, machine learning for Magic: The Gathering, and a Magic format that runs online.",
   },
   {
-    title: IDEAS.name,
-    href: IDEAS.path,
-    items: ideas,
+    title: WRITING.name,
+    href: WRITING.path,
+    items: writing,
     text: "Two essays on interpretable neural networks, 400+ articles on Magic, and podcast episodes on drafting and cube design.",
   },
 ];

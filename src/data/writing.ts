@@ -2,7 +2,7 @@ import type { CardItem } from "./cards";
 
 const SCG = "https://articles.starcitygames.com/";
 
-export const ideas: CardItem[] = [
+export const writing: CardItem[] = [
   {
     id: "transparent-nn",
     title: "Designing Transparent Neural Networks",

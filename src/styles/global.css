@@ -128,35 +128,6 @@ button {
   white-space: nowrap;
 }
 
-/* A page title block for section pages: <header class="page-head"><h1/><p/></header> */
-.page-head {
-  padding: 56px var(--g) 36px;
-}
-.page-head h1 {
-  margin: 0;
-  font-size: 30px;
-  line-height: 38px;
-  font-weight: 600;
-  letter-spacing: -0.022em;
-}
-.page-head p {
-  margin: 8px 0 0;
-  max-width: 640px;
-  font-size: 16px;
-  line-height: 25px;
-  color: var(--ink-2);
-  text-wrap: pretty;
-}
-@media (max-width: 640px) {
-  .page-head {
-    padding: 32px var(--g) 24px;
-  }
-  .page-head h1 {
-    font-size: 26px;
-    line-height: 32px;
-  }
-}
-
 /* ---- KaTeX ---- */
 .katex-display {
   overflow-x: auto;

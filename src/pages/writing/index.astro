@@ -1,0 +1,19 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Intro from "@/components/Intro.astro";
+import CardGrid from "@/components/CardGrid.astro";
+import Panel from "@/components/Panel.astro";
+import { writing } from "@/data/writing";
+import { WRITING } from "@/data/site";
+
+const description = `${WRITING.subtitle}, on machine learning and on Magic: The Gathering.`;
+---
+
+<SiteLayout title={`${WRITING.name} · Ryan Saxe`} description={description} section="writing">
+  <Intro heading>
+    {WRITING.name}.
+    <Fragment slot="rest">{description}</Fragment>
+  </Intro>
+  <CardGrid items={writing} label={WRITING.name} />
+  <Panel />
+</SiteLayout>

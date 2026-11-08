@@ -12,7 +12,7 @@ export default defineConfig({
   output: "static",
   integrations: [sitemap()],
   redirects: {
-    "/blog/": "/ideas/",
+    "/blog/": "/writing/",
   },
   devToolbar: { enabled: false },
   vite: {
