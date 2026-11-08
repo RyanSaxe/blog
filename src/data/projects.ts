@@ -112,7 +112,8 @@ export const projects: CardItem[] = [
     year: "2020–2026",
     fact: "Used by over 100k players",
     gallery: [
-      { name: "cc-search", dark: true, alt: "CubeCobra’s Smart Search ranking creature cards by how well each fits a cube", caption: "Smart Search ranks a card search by how well each card fits the cube" },
+      { name: "cc-model", dark: true, alt: "Diagram: a set of cards goes into one shared encoder, which narrows from 512 to 256 to 128 numbers; four heads read those numbers for recommendations, draft picks, deck building and card correlations", caption: "One encoder sums up a set of cards in 128 numbers, and four heads read them" },
+      { name: "cc-search", dark: true, alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube", caption: "Smart Search ranks a card search by how well each card fits the cube" },
       { name: "cc-home", dark: true, alt: "The CubeCobra home page", caption: "cubecobra.com" },
     ],
     paras: [
@@ -157,8 +158,9 @@ export const projects: CardItem[] = [
     year: "2026",
     fact: "Built with AI coding agents",
     gallery: [
-      { name: "cr-home", dark: true, alt: "The cruciblemtg.com home page: a starting hand of three cards and three lands on a green table", caption: "cruciblemtg.com" },
-      { name: "cr-play", dark: true, alt: "The play page, with a Goldfish mode that battles historically winning hands", caption: "Goldfish mode battles historically winning hands" },
+      { name: "cr-battle", alt: "A battle in Goldfish mode: each player has two creatures, three lands, a Treasure and a poison counter on a green table", caption: "A battle in Goldfish mode, against a historically winning hand" },
+      { name: "cr-build", alt: "The build phase: a hand of three cards above three basic lands, a Treasure and a poison counter", caption: "Building a hand and choosing lands before the battle" },
+      { name: "cr-home", alt: "The cruciblemtg.com home page: a starting hand of three cards and three lands on a green table", caption: "cruciblemtg.com" },
     ],
     paras: [
       "Crucible is a Magic: The Gathering format inspired by roguelikes and autobattlers. Players alternate between drafting cards and short battles, the loser of each battle takes poison counters, and the game ends when one player is left.",
