@@ -400,7 +400,13 @@
   $$(".card .hit").forEach((h) => h.addEventListener("click", () => openPanel(h.closest(".card") as HTMLElement)));
   dim.addEventListener("click", closePanel);
   frame.addEventListener("dragstart", (e) => e.preventDefault());
-  addEventListener("resize", () => { if (S) finish(true); });
+  // iOS resizes the window when its toolbar collapses during a scroll; only a width change (rotation) should close the panel.
+  let lastWidth = innerWidth;
+  addEventListener("resize", () => {
+    if (innerWidth === lastWidth) return;
+    lastWidth = innerWidth;
+    if (S) finish(true);
+  });
   addEventListener("keydown", (e) => {
     if (!S) return;
     if (e.key === "Escape") { e.preventDefault(); closePanel(); return; }
