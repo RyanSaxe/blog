@@ -39,5 +39,50 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 <meta property="twitter:description" content={description} />
 {ogImage && <meta property="twitter:image" content={ogImage} />}
 
-<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#121214" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#fafafa" />
+
+<!--
+  Sets data-theme on <html> before the page paints: the visitor's choice from the header toggle, or the
+  device's setting until they make one. Dark image sources ([data-dark]) follow the theme rather than the
+  device, including ones the panel clones in later. window.setTheme is the toggle's way in.
+-->
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const device = matchMedia("(prefers-color-scheme: dark)");
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const stored = () => {
+      try {
+        const t = localStorage.getItem("theme");
+        return t === "light" || t === "dark" ? t : null;
+      } catch {
+        return null;
+      }
+    };
+    const sync = (node) => {
+      const media = root.dataset.theme === "dark" ? "all" : "not all";
+      const fix = (s) => s.media !== media && (s.media = media);
+      if (node.matches?.("source[data-dark]")) fix(node);
+      node.querySelectorAll?.("source[data-dark]").forEach(fix);
+      node.querySelectorAll?.("template").forEach((t) => sync(t.content));
+    };
+    const apply = (theme) => {
+      root.dataset.theme = theme;
+      meta?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
+      sync(document);
+    };
+    apply(stored() ?? (device.matches ? "dark" : "light"));
+    new MutationObserver((records) => {
+      for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
+    }).observe(root, { childList: true, subtree: true });
+    // a template's content is parsed outside the document, so the observer cannot see it
+    document.addEventListener("DOMContentLoaded", () => sync(document));
+    device.addEventListener("change", (e) => stored() || apply(e.matches ? "dark" : "light"));
+    window.setTheme = (theme) => {
+      try {
+        localStorage.setItem("theme", theme);
+      } catch {}
+      apply(theme);
+    };
+  })();
+</script>

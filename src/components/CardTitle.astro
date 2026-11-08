@@ -10,13 +10,13 @@ const { item } = Astro.props;
 {
   item.logo === "pair" ? (
     <picture class="wordmark">
-      <source media="(prefers-color-scheme: dark)" srcset="/images/site/pair-logo-dark.svg" />
+      <source data-dark media="(prefers-color-scheme: dark)" srcset="/images/site/pair-logo-dark.svg" />
       <img src="/images/site/pair-logo.svg" alt={item.title} width="32" height="24" />
     </picture>
   ) : item.logo === "byor" ? (
     <>
       <picture class="mark">
-        <source media="(prefers-color-scheme: dark)" srcset="/images/site/byor-mark-dark.png" />
+        <source data-dark media="(prefers-color-scheme: dark)" srcset="/images/site/byor-mark-dark.png" />
         <img src="/images/site/byor-mark.png" alt="" width="31" height="16" />
       </picture>
       <span class="tt">{item.title}</span>

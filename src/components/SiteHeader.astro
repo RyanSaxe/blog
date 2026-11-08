@@ -18,6 +18,12 @@ const { section } = Astro.props;
       ))
     }
   </nav>
+  <button class="theme" type="button" aria-label="Dark theme" aria-pressed="false" data-theme-toggle>
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+      <path class="half" d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"></path>
+    </svg>
+  </button>
 </header>
 
 <script>
@@ -25,6 +31,18 @@ const { section } = Astro.props;
   const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 4);
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
+  const root = document.documentElement;
+  const show = () => toggle.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
+  show();
+  new MutationObserver(show).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  toggle.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    const set = () => (window as any).setTheme(next);
+    if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(set);
+    else set();
+  });
 </script>
 
 <style>
@@ -36,7 +54,6 @@ const { section } = Astro.props;
     padding: 0 var(--g);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background: var(--bg);
   }
   .site-header::after {
@@ -54,6 +71,7 @@ const { section } = Astro.props;
     opacity: 1;
   }
   .home {
+    margin-right: auto;
     font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.011em;
@@ -79,6 +97,31 @@ const { section } = Astro.props;
     text-decoration-line: underline;
     text-decoration-color: var(--faint);
   }
+  .theme {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin: 0 -7px 0 21px;
+    border-radius: 50%;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: color 0.15s var(--ease);
+  }
+  .theme:hover {
+    color: var(--ink);
+  }
+  .theme svg {
+    width: 16px;
+    height: 16px;
+  }
+  .theme .half {
+    transform-origin: 8px 8px;
+    transition: transform 0.45s var(--ease);
+  }
+  .theme[aria-pressed="true"] .half {
+    transform: rotate(180deg);
+  }
   @media (max-width: 640px) {
     .site-header {
       height: 56px;
@@ -93,6 +136,17 @@ const { section } = Astro.props;
   @media (max-width: 380px) {
     nav {
       gap: 14px;
+    }
+    .theme {
+      margin-left: 9px;
+    }
+  }
+  @media (max-width: 340px) {
+    nav {
+      gap: 12px;
+    }
+    .theme {
+      margin-left: 5px;
     }
   }
 </style>

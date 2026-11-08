@@ -12,7 +12,7 @@ const { pic, sizes, eager = false, class: cls, alt = pic.alt } = Astro.props;
 ---
 
 <picture class={cls}>
-  {pic.dark && <source media="(prefers-color-scheme: dark)" srcset={imgSet(pic.name + "-dark")} sizes={sizes} />}
+  {pic.dark && <source data-dark media="(prefers-color-scheme: dark)" srcset={imgSet(pic.name + "-dark")} sizes={sizes} />}
   <img
     src={imgSrc(pic.name, 800)}
     srcset={imgSet(pic.name)}

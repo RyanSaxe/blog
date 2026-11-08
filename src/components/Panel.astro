@@ -21,7 +21,7 @@
   document.body.appendChild(overlay); // outside <main>, so the page behind can be made inert
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const narrow = matchMedia("(max-width: 760px)");
-  const dark = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => document.documentElement.dataset.theme === "dark";
 
   /* ---------- motion ---------- */
   /* One critically damped spring, solved exactly so any frame time gives the same pose. */
@@ -303,8 +303,8 @@
     const r = lerp(16, S.rP, p), rb = phone ? lerp(16, 0, p) : r;
     frame.style.borderRadius = `${r}px ${r}px ${rb}px ${rb}px`;
     frame.style.boxShadow = phone
-      ? `0 0 0 1px ${dark.matches ? `rgba(255,255,255,${0.075 * (1 - p)})` : `rgba(0,0,0,${0.065 * (1 - p)})`}`
-      : dark.matches
+      ? `0 0 0 1px ${isDark() ? `rgba(255,255,255,${0.075 * (1 - p)})` : `rgba(0,0,0,${0.065 * (1 - p)})`}`
+      : isDark()
         ? `0 0 0 1px rgba(255,255,255,${lerp(0.075, 0.09, p)}), 0 30px 80px -24px rgba(0,0,0,${0.7 * p})`
         : `0 0 0 1px rgba(0,0,0,${lerp(0.065, 0.08, p)}), 0 2px 4px rgba(0,0,0,${0.04 * p}), 0 30px 80px -24px rgba(0,0,0,${0.3 * p})`;
     // the content stays put on screen while the frame grows around it

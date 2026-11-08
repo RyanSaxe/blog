@@ -426,11 +426,9 @@ const neighbours = [
     background: var(--fig-plate);
     box-shadow: var(--card-shadow);
   }
-  @media (prefers-color-scheme: dark) {
-    .essay-body > .fig {
-      --fig-plate: #dcdce0;
-      box-shadow: none;
-    }
+  :global([data-theme="dark"]) .essay-body > .fig {
+    --fig-plate: #dcdce0;
+    box-shadow: none;
   }
   .essay-body > .fig + * {
     margin-top: 36px;
@@ -470,11 +468,9 @@ const neighbours = [
   .astro-code span {
     color: var(--shiki-light);
   }
-  @media (prefers-color-scheme: dark) {
-    .astro-code,
-    .astro-code span {
-      color: var(--shiki-dark);
-    }
+  :global([data-theme="dark"]) .astro-code,
+  :global([data-theme="dark"]) .astro-code span {
+    color: var(--shiki-dark);
   }
 
   /* ---- Math ---- */

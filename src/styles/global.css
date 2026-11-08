@@ -2,7 +2,8 @@
 @plugin "@tailwindcss/typography";
 
 /*
- * Site tokens. One light grey surface with white cards; the dark theme follows the device.
+ * Site tokens. One light grey surface with white cards. BaseHead sets data-theme on <html> from the
+ * header's toggle, or from the device until the visitor uses it.
  * Use these variables in every page and component instead of raw colors.
  */
 :root {
@@ -48,27 +49,25 @@
   --font-mono: var(--mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --bg: #121214;
-    --card: #1a1a1d;
-    --plate: #232327;
-    --ink: #ededef;
-    --ink-2: #b2b2b9;
-    --muted: #898990;
-    --faint: #56565c;
-    --line: rgba(255, 255, 255, 0.08);
-    --edge: rgba(255, 255, 255, 0.075);
-    --edge-2: rgba(255, 255, 255, 0.15);
-    --accent: #84a8ff;
-    --focus: #84a8ff;
-    --dim: rgba(0, 0, 0, 0.55);
-    --card-shadow: 0 0 0 1px var(--edge);
-    --card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
-    --panel-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 30px 80px -24px rgba(0, 0, 0, 0.7);
-    --code-bg: #1f1f23;
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121214;
+  --card: #1a1a1d;
+  --plate: #232327;
+  --ink: #ededef;
+  --ink-2: #b2b2b9;
+  --muted: #898990;
+  --faint: #56565c;
+  --line: rgba(255, 255, 255, 0.08);
+  --edge: rgba(255, 255, 255, 0.075);
+  --edge-2: rgba(255, 255, 255, 0.15);
+  --accent: #84a8ff;
+  --focus: #84a8ff;
+  --dim: rgba(0, 0, 0, 0.55);
+  --card-shadow: 0 0 0 1px var(--edge);
+  --card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
+  --panel-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 30px 80px -24px rgba(0, 0, 0, 0.7);
+  --code-bg: #1f1f23;
 }
 
 /* ---- Base ---- */
