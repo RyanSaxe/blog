@@ -12,15 +12,8 @@ const { section } = Astro.props;
   <nav aria-label="Main">
     {
       NAV.map((item) => (
-        <a href={item.href} aria-current={item.section === section ? "page" : undefined} aria-label={item.short && item.label}>
-          {item.short ? (
-            <>
-              <span class="full">{item.label}</span>
-              <span class="short" aria-hidden="true">{item.short}</span>
-            </>
-          ) : (
-            item.label
-          )}
+        <a href={item.href} aria-current={item.section === section ? "page" : undefined}>
+          {item.label}
         </a>
       ))
     }
@@ -86,9 +79,6 @@ const { section } = Astro.props;
     text-decoration-line: underline;
     text-decoration-color: var(--faint);
   }
-  .short {
-    display: none;
-  }
   @media (max-width: 640px) {
     .site-header {
       height: 56px;
@@ -100,18 +90,9 @@ const { section } = Astro.props;
       font-size: 14px;
     }
   }
-  /* The full section name does not fit beside "Ryan Saxe" on the narrowest phones. */
   @media (max-width: 380px) {
     nav {
       gap: 14px;
-    }
-  }
-  @media (max-width: 371px) {
-    .full {
-      display: none;
-    }
-    .short {
-      display: inline;
     }
   }
 </style>

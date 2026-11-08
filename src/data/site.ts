@@ -1,7 +1,6 @@
 // Site-wide names and links. The writing section's name and address live here only.
 export const WRITING = {
-  name: "Writing & Podcasts",
-  short: "Writing",
+  name: "Writing",
   path: "/writing/",
   subtitle: "Essays, articles and podcasts",
 };
@@ -15,8 +14,8 @@ export const SOCIAL = [
 
 export type Section = "projects" | "writing" | "about";
 
-export const NAV: { section: Section; label: string; short?: string; href: string }[] = [
+export const NAV: { section: Section; label: string; href: string }[] = [
   { section: "projects", label: "Projects", href: "/projects/" },
-  { section: "writing", label: WRITING.name, short: WRITING.short, href: WRITING.path },
+  { section: "writing", label: WRITING.name, href: WRITING.path },
   { section: "about", label: "About", href: "/about/" },
 ];
