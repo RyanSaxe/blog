@@ -426,7 +426,7 @@ const neighbours = [
     background: var(--fig-plate);
     box-shadow: var(--card-shadow);
   }
-  :global([data-theme="dark"]) .essay-body > .fig {
+  [data-theme="dark"] .essay-body > .fig {
     --fig-plate: #dcdce0;
     box-shadow: none;
   }
@@ -468,8 +468,8 @@ const neighbours = [
   .astro-code span {
     color: var(--shiki-light);
   }
-  :global([data-theme="dark"]) .astro-code,
-  :global([data-theme="dark"]) .astro-code span {
+  [data-theme="dark"] .astro-code,
+  [data-theme="dark"] .astro-code span {
     color: var(--shiki-dark);
   }
 
