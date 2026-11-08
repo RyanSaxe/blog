@@ -18,6 +18,8 @@
 .cover {
   position: relative;
   margin: 8px 8px 0;
+  /* WebKit sizes a stretched item's aspect ratio from the card's width, ignoring the margins, so the cover came out 11px too tall. */
+  width: calc(100% - 16px);
   aspect-ratio: 3 / 2;
   border-radius: 10px;
   overflow: hidden;
