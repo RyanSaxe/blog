@@ -32,17 +32,18 @@ Your content here...
 
 ### Notebook post
 
-1. Create a directory in `notebooks/` with a `pyproject.toml` and `notebook.ipynb`
-2. Push to `main` — CI will execute the notebook, generate the markdown, and commit the output
+1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `#hide`, `#hide_input` or `#hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
+2. Run `npm run build:notebooks` to see it locally, or push to `main` — CI will execute the notebook, generate the markdown, and commit the output
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
 ## Updating Site Content
 
 - Projects: `src/data/projects.ts`
-- Writing & Podcasts (essays, articles and podcasts): `src/data/writing.ts`
+- Writing (essays, articles and podcasts): `src/data/writing.ts`
 - About page career: `src/data/timeline.ts`
-- Section names and social links: `src/data/site.ts`
+- The opening line on every page, the paragraph it opens into, section names and social links: `src/data/site.ts`
+- About page introduction: `src/pages/about.astro`
 
 Images for cards live in `public/images/site/`.
 
