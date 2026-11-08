@@ -1,63 +1,105 @@
 ---
+/*
+ * The essay's sections as a quiet rail in the left margin, with the section being read marked.
+ * Wide screens only: on narrower screens there is no margin to hold it, and the essay reads
+ * fine top to bottom without one.
+ */
 interface Props {
   headings: Array<{ depth: number; slug: string; text: string }>;
 }
 
 const EXCLUDED = new Set(["footnotes", "references"]);
-
-const { headings } = Astro.props;
-const filtered = headings.filter(
-  (h) => h.depth >= 1 && h.depth <= 3 && !EXCLUDED.has(h.slug),
-);
-const minDepth = Math.min(...filtered.map((h) => h.depth));
-
-// Compute hierarchical numbering (1, 1.1, 1.2.1, etc.)
-const counters = [0, 0, 0];
-const numbered = filtered.map((heading) => {
-  const level = heading.depth - minDepth;
-  counters[level]++;
-  for (let i = level + 1; i < counters.length; i++) counters[i] = 0;
-  const label = counters.slice(0, level + 1).join(".");
-  return { ...heading, level, label };
-});
+const items = Astro.props.headings.filter((h) => h.depth <= 2 && !EXCLUDED.has(h.slug));
 ---
 
 {
-  numbered.length > 0 && (
-    <details
-      open
-      class="mb-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
-    >
-      <summary class="cursor-pointer font-[var(--font-serif)] text-sm font-semibold text-[var(--color-text)] select-none">
-        Table of Contents
-      </summary>
-      <nav class="mt-4">
-        <ul>
-          {numbered.map(({ slug, text, level, label }) => {
-            const isTop = level === 0;
-            return (
-              <li
-                class:list={[
-                  level === 1 && "ml-4",
-                  level === 2 && "ml-8",
-                ]}
-              >
-                <a
-                  href={`#${slug}`}
-                  class:list={[
-                    "block rounded px-2 py-1 transition-colors hover:bg-[var(--color-accent-muted)] hover:text-[var(--color-accent)]",
-                    isTop
-                      ? "text-sm font-medium text-[var(--color-text)]"
-                      : "text-xs text-[var(--color-text-faint)]",
-                  ]}
-                >
-                  <span class:list={["mr-2 inline-block text-left tabular-nums text-[var(--color-text-faint)]", level === 0 ? "min-w-5" : level === 1 ? "min-w-7" : "min-w-10"]}>{label}</span>{text}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-    </details>
+  items.length > 1 && (
+    <nav class="toc" aria-label="Sections">
+      <div class="toc-in">
+        <p class="toc-title">Sections</p>
+        <ol>
+          {items.map((h) => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </nav>
   )
 }
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+  const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+  let frame = 0;
+  function mark() {
+    frame = 0;
+    const line = innerHeight * 0.3;
+    let current = -1;
+    targets.forEach((t, i) => {
+      if (t && t.getBoundingClientRect().top < line) current = i;
+    });
+    links.forEach((a, i) => {
+      if (i === current) a.setAttribute("aria-current", "location");
+      else a.removeAttribute("aria-current");
+    });
+  }
+  if (links.length) {
+    addEventListener("scroll", () => (frame ||= requestAnimationFrame(mark)), { passive: true });
+    addEventListener("resize", () => (frame ||= requestAnimationFrame(mark)), { passive: true });
+    mark();
+  }
+</script>
+
+<style>
+  .toc {
+    display: none;
+  }
+  @media (min-width: 1240px) {
+    .toc {
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--g);
+      width: calc(50% - var(--measure) / 2 - 64px - var(--g));
+      max-width: 240px;
+    }
+  }
+  .toc-in {
+    position: sticky;
+    top: 104px;
+  }
+  .toc-title {
+    margin: 0 0 10px;
+    font-size: 12.5px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li + li {
+    margin-top: 2px;
+  }
+  a {
+    display: block;
+    padding: 4px 0;
+    font-size: 13.5px;
+    line-height: 19px;
+    color: var(--muted);
+    text-decoration: none;
+    text-wrap: pretty;
+    transition: color 0.2s var(--ease);
+  }
+  a:hover {
+    color: var(--ink-2);
+  }
+  a[aria-current] {
+    color: var(--ink);
+  }
+</style>

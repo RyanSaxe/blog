@@ -1,103 +1,366 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 import Timeline from "@/components/Timeline.astro";
-import SocialIcons from "@/components/SocialIcons.astro";
+import { IDEAS, SOCIAL } from "@/data/site";
 import { projects } from "@/data/projects";
+import { ideas } from "@/data/ideas";
+import { imgSrc, type CardItem } from "@/data/cards";
+
+const profiles = SOCIAL.filter((s) => s.href.startsWith("http"));
+
+const shelves = [
+  {
+    title: "Projects",
+    href: "/projects/",
+    items: projects,
+    text: "Tools for working with AI agents, machine learning for Magic: The Gathering, and a Magic format that runs online.",
+  },
+  {
+    title: IDEAS.name,
+    href: IDEAS.path,
+    items: ideas,
+    text: "Two essays on interpretable neural networks, 400+ articles on Magic, and podcast episodes on drafting and cube design.",
+  },
+];
+
+const covers = (items: CardItem[]) => items.slice(0, 3).map((item) => item.gallery[0]);
 ---
 
-<PageLayout title="About — Ryan Saxe" description="Build to learn. Write to understand.">
-  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
-    <!-- Hero -->
-    <section class="mb-12 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
-      <div class="flex flex-col sm:flex-row">
-        <div class="sm:w-44 sm:flex-shrink-0">
-          <img
-            src="/images/headshot.jpg"
-            alt="Ryan Saxe"
-            class="h-48 w-full object-cover sm:h-full"
-          />
+<SiteLayout
+  title="About · Ryan Saxe"
+  description="Ryan Saxe leads science and engineering for global analytics at AB InBev, builds tools for working with AI agents, and writes about machine learning and Magic: The Gathering."
+  section="about"
+>
+  <div class="about">
+    <section class="row intro" aria-labelledby="about-title">
+      <div class="side">
+        <div class="portrait">
+          <img src="/images/about/ryan-saxe-720.webp" width="720" height="900" alt="Portrait of Ryan Saxe" />
         </div>
-        <div class="p-6 sm:p-8">
-          <h1 class="mb-1 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Build to learn.</h1>
-          <h1 class="mb-4 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Write to understand.</h1>
-          <p class="mb-3 leading-relaxed text-[var(--color-text-muted)]">
-          I design large and interpretable ML/AI systems. I find an odd amount of joy in explaining complex concepts in simple ways.
+      </div>
+      <div class="main">
+        <h1 id="about-title">
+          I’m Ryan Saxe. <span class="rest"
+            >I design large, interpretable machine learning and AI systems, and I lead the teams that build them.</span
+          >
+        </h1>
+        <div class="copy">
+          <p>
+            Today I’m Global Director, Data &amp; Analytics, and Head of Science and Engineering at AB&nbsp;InBev. I’m
+            responsible for the technology behind all of our global analytics products.
           </p>
-          <SocialIcons class="mt-4" iconSize="h-5 w-5" />
+          <p>
+            I also build software of my own, from the model to the interface. Lately that means tools for working with
+            AI agents.
+          </p>
+          <p>
+            I find an odd amount of joy in explaining complex concepts in simple ways, so I write about what I learn.
+          </p>
         </div>
+        <ul class="profiles" aria-label="Profiles">
+          {
+            profiles.map((p) => (
+              <li>
+                <a href={p.href} target="_blank" rel="noopener">
+                  {p.label}
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                    <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                  </svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
-    <!-- Tabs -->
-    <div class="mb-8 flex gap-6 border-b border-[var(--color-border)]" role="tablist">
-      <button class="tab-button" role="tab" aria-selected="true" data-tab="experience">
-        Experience
-      </button>
-      <button class="tab-button" role="tab" aria-selected="false" data-tab="projects">
-        Projects
-      </button>
-    </div>
-
-    <!-- Experience tab -->
-    <section id="tab-experience" data-tab-content="experience">
-      <Timeline />
+    <section class="row" aria-labelledby="h-career">
+      <div class="side">
+        <h2 id="h-career">Career</h2>
+      </div>
+      <div class="main">
+        <Timeline />
+      </div>
     </section>
 
-    <!-- Projects tab -->
-    <section id="tab-projects" data-tab-content="projects" class="hidden">
-      <div class="flex flex-col gap-4">
+    <section class="row" aria-labelledby="h-work">
+      <div class="side">
+        <h2 id="h-work">Building and writing</h2>
+      </div>
+      <div class="main shelves">
         {
-          projects.map((project) => (
-            <div class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-              <div class="mb-2">
-                <h3 class="text-sm font-medium text-[var(--color-text)]">{project.name}</h3>
-              </div>
-              <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
-                {project.description}
-              </p>
-              <div class="flex gap-4">
-                {project.url && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    class="text-sm text-[var(--color-accent)] hover:underline"
-                  >
-                    Website &rarr;
-                  </a>
-                )}
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    class="text-sm text-[var(--color-accent)] hover:underline"
-                  >
-                    GitHub &rarr;
-                  </a>
-                )}
-              </div>
-            </div>
+          shelves.map((shelf) => (
+            <a class="shelf" href={shelf.href}>
+              <span class="strip" aria-hidden="true">
+                {covers(shelf.items).map((pic) => (
+                  <span class="thumb">
+                    <picture>
+                      {pic.dark && <source srcset={imgSrc(`${pic.name}-dark`, 800)} media="(prefers-color-scheme: dark)" />}
+                      <img src={imgSrc(pic.name, 800)} alt="" width="800" height="533" loading="lazy" decoding="async" />
+                    </picture>
+                  </span>
+                ))}
+              </span>
+              <span class="shelf-text">
+                <span class="shelf-title">
+                  {shelf.title}
+                  <span class="n">{shelf.items.length}</span>
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+                    <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                  </svg>
+                </span>
+                <span class="shelf-sub">{shelf.text}</span>
+              </span>
+            </a>
           ))
         }
       </div>
     </section>
+
+    <section class="row" aria-labelledby="h-magic">
+      <div class="side">
+        <h2 id="h-magic">Magic: The Gathering</h2>
+      </div>
+      <div class="main copy">
+        <p>
+          I wrote 400+ articles about Magic for StarCityGames, built a drafting AI that reached Mythic rank on Magic
+          Arena, and design cubes, including Crucible.
+        </p>
+      </div>
+    </section>
   </div>
+</SiteLayout>
 
-  <script>
-    document.addEventListener("astro:page-load", () => {
-      document.querySelectorAll("[data-tab]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const tab = (btn as HTMLElement).dataset.tab!;
+<style>
+  .about {
+    --side: 264px;
+    padding: 0 var(--g);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    column-gap: 56px;
+  }
+  .row + .row {
+    margin-top: 88px;
+  }
+  .side h2 {
+    position: sticky;
+    top: 96px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 600;
+    letter-spacing: -0.011em;
+  }
 
-          document.querySelectorAll("[data-tab]").forEach((b) => {
-            b.setAttribute("aria-selected", b === btn ? "true" : "false");
-          });
+  /* Opening */
+  .intro {
+    padding-top: 64px;
+  }
+  .portrait {
+    padding: 8px;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--plate);
+  }
+  .intro .main {
+    padding-top: 6px;
+  }
+  h1 {
+    margin: 0;
+    max-width: 780px;
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: 500;
+    letter-spacing: -0.021em;
+    text-wrap: balance;
+  }
+  h1 .rest {
+    color: var(--muted);
+  }
+  .copy {
+    max-width: 620px;
+  }
+  .intro .copy {
+    margin-top: 28px;
+  }
+  .copy p {
+    margin: 0;
+    font-size: 16.5px;
+    line-height: 27px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .copy p + p {
+    margin-top: 14px;
+  }
+  .profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .profiles a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14.5px;
+    line-height: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .profiles a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .profiles svg {
+    width: 11px;
+    height: 11px;
+  }
 
-          document.querySelectorAll("[data-tab-content]").forEach((section) => {
-            const el = section as HTMLElement;
-            el.classList.toggle("hidden", el.dataset.tabContent !== tab);
-          });
-        });
-      });
-    });
-  </script>
-</PageLayout>
+  /* Projects and ideas */
+  .shelves {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .shelf {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    text-decoration: none;
+    transition: box-shadow 0.2s var(--ease);
+  }
+  .shelf:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+  .shelf:focus-visible {
+    outline-offset: 2px;
+    border-radius: 16px;
+  }
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .thumb {
+    aspect-ratio: 3 / 2;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--plate);
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+  }
+  .shelf:hover .thumb img {
+    transform: scale(1.03);
+  }
+  .shelf-text {
+    display: block;
+    padding: 14px 10px 10px;
+  }
+  .shelf-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+  }
+  .shelf-title .n {
+    font-weight: 400;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .shelf-title svg {
+    align-self: center;
+    width: 12px;
+    height: 12px;
+    margin-left: auto;
+    color: var(--ink-2);
+    transition: transform 0.2s var(--ease);
+  }
+  .shelf:hover .shelf-title svg {
+    transform: translateX(2px);
+  }
+  .shelf-sub {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 1080px) {
+    .about {
+      --side: 200px;
+    }
+    .row {
+      column-gap: 40px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .row {
+      display: block;
+    }
+    .row + .row {
+      margin-top: 64px;
+    }
+    .side h2 {
+      position: static;
+      margin-bottom: 14px;
+    }
+    .intro {
+      padding-top: 32px;
+    }
+    .portrait {
+      width: 148px;
+      padding: 6px;
+      border-radius: 14px;
+    }
+    .portrait img {
+      border-radius: 9px;
+    }
+    .intro .main {
+      padding-top: 24px;
+    }
+    h1 {
+      font-size: 24px;
+      line-height: 32px;
+      letter-spacing: -0.018em;
+    }
+    .intro .copy {
+      margin-top: 18px;
+    }
+    .copy p {
+      font-size: 16px;
+      line-height: 26px;
+    }
+    .shelves {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+  }
+</style>

@@ -1,81 +1,617 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
-import ShareButtons from "@/components/ShareButtons.astro";
+/*
+ * An essay: title block, the rendered markdown in a reading column, and links to the
+ * neighbouring essays. Figures and code run wider than the text on large screens.
+ */
+import SiteLayout from "./SiteLayout.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
+import "katex/dist/katex.min.css";
+import "@fontsource/jetbrains-mono/400.css";
+
+interface Neighbour {
+  title: string;
+  description: string;
+  href: string;
+}
 
 interface Props {
   title: string;
   description: string;
   date: Date;
   heroImage?: string;
-  categories?: string[];
   headings?: Array<{ depth: number; slug: string; text: string }>;
-  readingTime?: number;
+  readingTime: number;
+  prev?: Neighbour;
+  next?: Neighbour;
 }
 
-const { title, description, date, heroImage, categories = [], headings = [], readingTime } = Astro.props;
-const shareUrl = new URL(Astro.url.pathname, Astro.site).href;
+const { title, description, date, heroImage, headings = [], readingTime, prev, next } = Astro.props;
 
 const formattedDate = date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
   day: "numeric",
+  timeZone: "UTC",
 });
+const neighbours = [
+  prev && { ...prev, label: "Previous essay", dir: "prev" },
+  next && { ...next, label: "Next essay", dir: "next" },
+].filter((n) => !!n);
 ---
 
-<BaseLayout title={`${title} — Ryan Saxe`} description={description} image={heroImage}>
-  <!-- Reading progress bar -->
-  <div id="reading-progress"></div>
-
-  <article class="mx-auto max-w-3xl px-6 pt-8 pb-20">
-    <header class="mb-12">
-      <div class="mb-4 flex items-center gap-3">
-        <time class="text-sm text-[var(--color-text-faint)]" datetime={date.toISOString()}>
-          {formattedDate}
-        </time>
-        {readingTime && (
-          <>
-            <span class="text-sm text-[var(--color-text-faint)]">&middot;</span>
-            <span class="text-sm text-[var(--color-text-faint)]">{readingTime} min read</span>
-          </>
-        )}
-        <div class="ml-auto flex gap-2">
-          {
-            categories.map((cat) => (
-              <span class="rounded-full bg-[var(--color-accent-muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-                {cat}
-              </span>
-            ))
-          }
-        </div>
-      </div>
-      <h1
-        class="mb-4 font-[var(--font-serif)] text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl"
-      >
-        {title}
-      </h1>
-      <p class="text-lg italic leading-relaxed text-[var(--color-text-muted)]">{description}</p>
-      <ShareButtons url={shareUrl} title={title} />
-      <hr class="mt-6 border-[var(--color-border)]" />
+<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="ideas">
+  <article class="essay">
+    <header class="essay-head">
+      <h1>{title}</h1>
+      <p class="dek">{description}</p>
+      <p class="meta">
+        <time datetime={date.toISOString().slice(0, 10)}>{formattedDate}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime} min read</span>
+      </p>
     </header>
 
-    {headings.length > 0 && <TableOfContents headings={headings} />}
-
-    <div class="prose prose-lg max-w-none">
-      <slot />
+    <div class="essay-wrap">
+      <TableOfContents headings={headings} />
+      <div class="essay-body">
+        <slot />
+      </div>
     </div>
-  </article>
 
-  <script>
-    document.addEventListener("astro:page-load", () => {
-      const bar = document.getElementById("reading-progress");
-      if (bar) {
-        window.addEventListener("scroll", () => {
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-          bar.style.width = `${progress}%`;
-        });
-      }
-    });
-  </script>
-</BaseLayout>
+    {
+      neighbours.length > 0 && (
+        <nav class:list={["pager", { single: neighbours.length === 1 }]} aria-label="More essays">
+          {neighbours.map((n) => (
+            <a class:list={["pg", n.dir]} href={n.href}>
+              <span class="pg-k">
+                {n.dir === "prev" && (
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 6H2.5M5.5 3l-3 3 3 3" />
+                  </svg>
+                )}
+                {n.label}
+                {n.dir === "next" && (
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+                    <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                  </svg>
+                )}
+              </span>
+              <span class="pg-t">{n.title}</span>
+              <span class="pg-d">{n.description}</span>
+            </a>
+          ))}
+        </nav>
+      )
+    }
+  </article>
+</SiteLayout>
+
+<script>
+  /*
+   * In-page links (sections, footnotes, citations) glide with one critically damped spring
+   * instead of jumping, then mark where they landed. Reduced motion jumps straight there.
+   */
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const OMEGA = 22; // settles in about 350 ms, no overshoot
+  let frame = 0;
+
+  function glideTo(target: number) {
+    cancelAnimationFrame(frame);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    target = Math.max(0, Math.min(max, target));
+    if (reduced.matches) return scrollTo(0, target);
+    // Long jumps start one and a half screens out, so the glide stays short and readable.
+    const reach = innerHeight * 1.5;
+    let from = scrollY;
+    if (Math.abs(target - from) > reach) {
+      from = target - Math.sign(target - from) * reach;
+      scrollTo(0, from);
+    }
+    const start = performance.now();
+    const c = from - target;
+    const step = (now: number) => {
+      const t = (now - start) / 1000;
+      const x = target + c * (1 + OMEGA * t) * Math.exp(-OMEGA * t);
+      if (Math.abs(x - target) < 0.5) return scrollTo(0, target);
+      scrollTo(0, x);
+      frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+  }
+  const stop = () => cancelAnimationFrame(frame);
+  for (const type of ["wheel", "touchstart", "keydown"]) addEventListener(type, stop, { passive: true });
+
+  function landing(el: HTMLElement) {
+    // a reference is a span inside its list item; light the whole item
+    return el.matches("span[id^='ref-']") ? (el.closest("li") ?? el) : el.matches("a") ? (el.closest("sup") ?? el) : el;
+  }
+
+  document.querySelector(".essay")?.addEventListener("click", (event) => {
+    const e = event as MouseEvent;
+    const link = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+    if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const id = decodeURIComponent(link.hash.slice(1));
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    const header = document.querySelector("[data-site-header]")?.getBoundingClientRect().height ?? 64;
+    glideTo(el.getBoundingClientRect().top + scrollY - header - 28);
+    history.pushState(null, "", `#${id}`);
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+    el.focus({ preventScroll: true });
+    if (!el.matches("h1, h2, h3")) {
+      const mark = landing(el);
+      mark.classList.remove("landed");
+      void mark.offsetWidth;
+      mark.classList.add("landed");
+    }
+  });
+</script>
+
+<style>
+  .essay {
+    --measure: 620px;
+    --wide: 920px;
+  }
+  .essay-head {
+    width: min(var(--measure), 100% - 40px);
+    margin: 0 auto;
+    padding: 76px 0 52px;
+  }
+  .essay-head h1 {
+    margin: 0;
+    font-size: 42px;
+    line-height: 48px;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+  }
+  .dek {
+    margin: 18px 0 0;
+    font-size: 19px;
+    line-height: 30px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .meta {
+    display: flex;
+    gap: 8px;
+    margin: 22px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .meta span[aria-hidden] {
+    color: var(--faint);
+  }
+  .essay-wrap {
+    position: relative;
+  }
+
+  /* Previous and next essay */
+  .pager {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: min(var(--measure), 100% - 40px);
+    margin: 72px auto 0;
+  }
+  .pager.single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pg {
+    display: flex;
+    flex-direction: column;
+    padding: 18px 20px 20px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    text-decoration: none;
+    transition: box-shadow 0.2s var(--ease);
+  }
+  .pg:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+  .pg:focus-visible {
+    outline-offset: 2px;
+    border-radius: 16px;
+  }
+  .pg.next {
+    grid-column: -2;
+  }
+  .pg-k {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--muted);
+  }
+  .pg-k svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s var(--ease);
+  }
+  .pg.next:hover .pg-k svg {
+    transform: translateX(2px);
+  }
+  .pg.prev:hover .pg-k svg {
+    transform: translateX(-2px);
+  }
+  .pg-t {
+    margin-top: 8px;
+    font-size: 17px;
+    line-height: 23px;
+    font-weight: 600;
+    letter-spacing: -0.013em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .pg-d {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .essay-head {
+      padding: 36px 0 36px;
+    }
+    .essay-head h1 {
+      font-size: 30px;
+      line-height: 36px;
+      letter-spacing: -0.022em;
+    }
+    .dek {
+      margin-top: 14px;
+      font-size: 17px;
+      line-height: 27px;
+    }
+    .meta {
+      margin-top: 16px;
+      font-size: 13.5px;
+    }
+    .pager {
+      grid-template-columns: minmax(0, 1fr);
+      margin-top: 56px;
+    }
+    .pg.next {
+      grid-column: auto;
+    }
+  }
+</style>
+
+<style is:global>
+  :root:has(.essay) {
+    scroll-padding-top: 92px;
+  }
+
+  /* ---- Reading column ---- */
+  .essay-body {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(20px, 1fr)
+      [wide-start] minmax(0, calc((var(--wide) - var(--measure)) / 2))
+      [text-start] min(var(--measure), 100% - 40px)
+      [text-end] minmax(0, calc((var(--wide) - var(--measure)) / 2))
+      [wide-end] minmax(20px, 1fr)
+      [full-end];
+    font-size: 18px;
+    line-height: 30px;
+    color: var(--ink);
+    font-feature-settings: "cv11", "ss03";
+  }
+  .essay-body > * {
+    grid-column: text;
+    margin: 0;
+    min-width: 0;
+  }
+  .essay-body > * + * {
+    margin-top: 22px;
+  }
+  .essay-body > .fig,
+  .essay-body > pre {
+    grid-column: wide;
+  }
+
+  .essay-body h1,
+  .essay-body h2,
+  .essay-body h3 {
+    font-weight: 600;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .essay-body > h1 {
+    margin-top: 64px;
+    font-size: 26px;
+    line-height: 34px;
+    letter-spacing: -0.021em;
+  }
+  .essay-body > h2 {
+    margin-top: 52px;
+    font-size: 21px;
+    line-height: 28px;
+    letter-spacing: -0.016em;
+  }
+  .essay-body > h3 {
+    margin-top: 40px;
+    font-size: 18px;
+    line-height: 26px;
+    letter-spacing: -0.012em;
+  }
+  .essay-body > :is(h1, h2, h3) + * {
+    margin-top: 14px;
+  }
+
+  .essay-body strong {
+    font-weight: 600;
+  }
+  .essay-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: text-decoration-color 0.15s var(--ease);
+  }
+  .essay-body a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .essay-body :is(ol, ul) {
+    padding-left: 1.4em;
+  }
+  .essay-body ol {
+    list-style: decimal;
+  }
+  .essay-body ul {
+    list-style: disc;
+  }
+  .essay-body li + li {
+    margin-top: 10px;
+  }
+  .essay-body li::marker {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .essay-body hr {
+    height: 1px;
+    border: 0;
+    background: var(--line);
+    margin-top: 56px;
+  }
+  .essay-body hr + * {
+    margin-top: 40px;
+  }
+
+  /* A note such as "This post builds on ..." */
+  .essay-body blockquote {
+    margin-top: 28px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--ink-2);
+  }
+  .essay-body blockquote p {
+    margin: 0;
+  }
+  .essay-body blockquote + * {
+    margin-top: 28px;
+  }
+
+  /*
+   * ---- Figures ----
+   * The PNGs are transparent and drawn in dark ink for a white page, so they sit on a light
+   * plate in both themes. In the dark theme the plate is a soft grey to cut the glare.
+   */
+  .essay-body > .fig {
+    --fig-plate: #fff;
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    padding: clamp(10px, 2.4vw, 24px);
+    border-radius: 14px;
+    background: var(--fig-plate);
+    box-shadow: var(--card-shadow);
+  }
+  @media (prefers-color-scheme: dark) {
+    .essay-body > .fig {
+      --fig-plate: #dcdce0;
+      box-shadow: none;
+    }
+  }
+  .essay-body > .fig + * {
+    margin-top: 36px;
+  }
+  .essay-body .fig img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ---- Code ---- */
+  .essay-body code {
+    font-family: var(--mono);
+    font-size: 0.84em;
+  }
+  .essay-body :not(pre) > code {
+    padding: 0.14em 0.36em;
+    border-radius: 5px;
+    background: var(--code-bg);
+  }
+  .essay-body > pre {
+    margin-top: 28px;
+    padding: 18px 22px;
+    border-radius: 12px;
+    background: var(--card) !important;
+    box-shadow: var(--card-shadow);
+    font-size: 14px;
+    line-height: 23px;
+    tab-size: 4;
+  }
+  .essay-body > pre + * {
+    margin-top: 28px;
+  }
+  .essay-body pre code {
+    font-size: inherit;
+  }
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-light);
+  }
+  @media (prefers-color-scheme: dark) {
+    .astro-code,
+    .astro-code span {
+      color: var(--shiki-dark);
+    }
+  }
+
+  /* ---- Math ---- */
+  .essay-body .katex {
+    font-size: 1.1em;
+  }
+  .essay-body .katex-display {
+    margin: 0;
+    padding: 6px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .essay-body > .katex-display,
+  .essay-body > p:has(> .katex-display:only-child) {
+    margin-top: 18px;
+  }
+
+  /* ---- Citations, footnotes and references ---- */
+  .essay-body cite {
+    font-style: normal;
+  }
+  .essay-body cite a {
+    color: var(--ink-2);
+    text-decoration-color: var(--faint);
+  }
+  .essay-body cite a:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+  .essay-body sup {
+    line-height: 0;
+  }
+  .essay-body a[data-footnote-ref] {
+    padding: 0 2px;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+  .essay-body a[data-footnote-ref]::before {
+    content: "[";
+  }
+  .essay-body a[data-footnote-ref]::after {
+    content: "]";
+  }
+  .essay-body > h2#references,
+  .essay-body .footnotes h2 {
+    margin-top: 0;
+    font-size: 15px;
+    line-height: 22px;
+    letter-spacing: -0.011em;
+  }
+  .essay-body > h2#references + ol,
+  .essay-body .footnotes ol {
+    margin-top: 12px;
+    font-size: 14.5px;
+    line-height: 23px;
+    color: var(--ink-2);
+  }
+  .essay-body > h2#references + ol li + li,
+  .essay-body .footnotes li + li {
+    margin-top: 8px;
+  }
+  .essay-body .footnotes p {
+    margin: 0;
+  }
+  .essay-body a[data-footnote-backref],
+  .essay-body > h2#references + ol a[href^="#cite-"] {
+    margin-left: 4px;
+    text-decoration: none;
+  }
+
+  /* Where an in-page link landed: a short tint that fades out. */
+  .essay .landed {
+    --tint: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 6px;
+    animation: essay-landed 1.6s var(--ease);
+  }
+  @keyframes essay-landed {
+    0%,
+    35% {
+      background-color: var(--tint);
+      box-shadow: 0 0 0 6px var(--tint);
+    }
+    100% {
+      background-color: transparent;
+      box-shadow: 0 0 0 6px transparent;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .essay-body {
+      font-size: 17px;
+      line-height: 28px;
+    }
+    .essay-body > * + * {
+      margin-top: 20px;
+    }
+    .essay-body > h1 {
+      margin-top: 48px;
+      font-size: 23px;
+      line-height: 30px;
+    }
+    .essay-body > h2 {
+      margin-top: 40px;
+      font-size: 19.5px;
+      line-height: 26px;
+    }
+    /* On a phone, figures and code use the full width of the screen. */
+    .essay-body > .fig,
+    .essay-body > pre {
+      grid-column: full;
+      border-radius: 0;
+    }
+    .essay-body > .fig {
+      padding: 14px 20px;
+    }
+    .essay-body > .fig-pan {
+      justify-content: flex-start;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+    .essay-body > .fig-pan::-webkit-scrollbar {
+      display: none;
+    }
+    .essay-body > .fig-pan img {
+      flex: none;
+      max-width: none;
+      width: 720px;
+    }
+    .essay-body > pre {
+      padding: 14px 20px;
+      font-size: 13px;
+      line-height: 21px;
+    }
+    .essay-body .katex-display > .katex {
+      font-size: 1em;
+    }
+  }
+</style>

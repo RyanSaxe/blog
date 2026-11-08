@@ -1,0 +1,14 @@
+---
+import type { CardItem } from "@/data/cards";
+import Card from "./Card.astro";
+
+interface Props {
+  items: CardItem[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<div class="card-grid" role="list" aria-label={label} data-grid>
+  {items.map((item, i) => <div role="listitem" style="display:contents"><Card item={item} eager={i < 3} sizes="(max-width: 640px) 100vw, (max-width: 1199px) 50vw, 400px" /></div>)}
+</div>

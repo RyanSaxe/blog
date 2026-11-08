@@ -37,9 +37,14 @@ Your content here...
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
-## Updating the About Page
+## Updating Site Content
 
-Edit `src/data/timeline.ts` and `src/data/projects.ts`.
+- Projects: `src/data/projects.ts`
+- Ideas (essays, articles and podcasts): `src/data/ideas.ts`
+- About page career: `src/data/timeline.ts`
+- Section names and social links: `src/data/site.ts`
+
+Images for cards live in `public/images/site/`.
 
 ## Notebook Reproducibility
 

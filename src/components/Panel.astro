@@ -1,0 +1,453 @@
+---
+/*
+ * The dialog every card opens, plus the carousel behavior. Include once per page that has cards.
+ * On a laptop the card's image grows into a centered panel; at 760px and narrower it grows into
+ * a full-screen sheet. Both use one critically damped spring and reverse exactly on close.
+ */
+---
+
+<div class="overlay" id="overlay" hidden>
+  <div class="dim" id="dim"></div>
+  <div class="frame" id="frame" role="dialog" aria-modal="true" aria-labelledby="pTitle">
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+  const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
+  const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
+
+  const overlay = $("#overlay"), dim = $("#dim"), frame = $("#frame"), content = $("#content");
+  document.body.appendChild(overlay); // outside <main>, so the page behind can be made inert
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const narrow = matchMedia("(max-width: 760px)");
+  const dark = matchMedia("(prefers-color-scheme: dark)");
+
+  /* ---------- motion ---------- */
+  /* One critically damped spring, solved exactly so any frame time gives the same pose. */
+  class Spring {
+    x: number; v = 0; w: number; eps: number; done = true; target: number; x0 = 0; v0 = 0; t0 = 0;
+    constructor(x: number, omega = 21, eps = 1e-3) { this.x = this.target = x; this.w = omega; this.eps = eps; }
+    to(target: number, now: number, v0?: number) {
+      if (!this.done) this.sample(now); else if (v0 == null) this.v = 0;
+      if (v0 != null) this.v = v0;
+      this.x0 = this.x; this.v0 = this.v; this.t0 = now; this.target = target; this.done = false;
+    }
+    jump(x: number) { this.x = this.target = x; this.v = 0; this.done = true; }
+    sample(now: number) {
+      if (this.done) return;
+      const t = Math.max(0, now - this.t0) / 1000, w = this.w;
+      const c1 = this.x0 - this.target, c2 = this.v0 + w * c1, e = Math.exp(-w * t);
+      this.x = this.target + (c1 + c2 * t) * e;
+      this.v = (c2 - w * (c1 + c2 * t)) * e;
+      if (Math.abs(this.x - this.target) < this.eps && Math.abs(this.v) < this.eps * 20) { this.x = this.target; this.v = 0; this.done = true; }
+    }
+  }
+  const OMEGA = 21; // settles in about 350 ms with no overshoot
+  type Job = (now: number) => boolean;
+  const jobs = new Set<Job>(); let rafId = 0;
+  const run = (fn: Job) => { jobs.add(fn); if (!rafId) rafId = requestAnimationFrame(tick); };
+  const stop = (fn: Job) => { jobs.delete(fn); };
+  function tick(now: number) {
+    for (const fn of [...jobs]) if (fn(now)) jobs.delete(fn);
+    rafId = jobs.size ? requestAnimationFrame(tick) : 0;
+  }
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const smooth = (a: number, b: number, x: number) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const px = (v: string) => parseFloat(v) || 0;
+
+  /* ---------- carousels ---------- */
+  class Rail {
+    el: HTMLElement; cards: HTMLElement[]; hits: HTMLButtonElement[]; prev: HTMLElement; next: HTMLElement; ticks: HTMLElement[];
+    sp = new Spring(0, 15, 0.5); glideFn: Job | null = null; drag = false; raf = 0;
+    constructor(sec: HTMLElement) {
+      this.el = $(".rail", sec); this.cards = $$(".card", this.el); this.hits = this.cards.map((c) => $<HTMLButtonElement>(".hit", c));
+      this.prev = $(".prev", sec); this.next = $(".next", sec); this.ticks = $$(".ticks i", sec);
+      this.setFocus(0);
+      this.el.addEventListener("scroll", () => this.onScroll(), { passive: true });
+      this.prev.addEventListener("click", () => this.page(-1));
+      this.next.addEventListener("click", () => this.page(1));
+      for (const ev of ["wheel", "touchstart"]) this.el.addEventListener(ev, () => this.cancelGlide(), { passive: true });
+      this.el.addEventListener("keydown", (e) => this.key(e));
+      this.hits.forEach((h, i) => h.addEventListener("focus", () => this.setFocus(i)));
+      this.dragSetup();
+      addEventListener("resize", () => this.update());
+      this.update();
+    }
+    padL() { return px(getComputedStyle(this.el).paddingLeft); }
+    snapX(i: number) { return this.cards[i].offsetLeft - this.padL(); }
+    max() { return this.el.scrollWidth - this.el.clientWidth; }
+    nearest(x: number) { let b = 0; this.cards.forEach((_, i) => { if (Math.abs(this.snapX(i) - x) < Math.abs(this.snapX(b) - x)) b = i; }); return b; }
+    perPage() { const c = this.cards[0]; return Math.max(1, Math.floor((this.el.clientWidth - this.padL() + 4) / (c.offsetWidth + px(getComputedStyle(this.el).columnGap)))); }
+    page(dir: number) {
+      if ((dir < 0 ? this.prev : this.next).getAttribute("aria-disabled") === "true") return;
+      const from = this.glideFn ? this.sp.target : this.el.scrollLeft;
+      const i = clamp(this.nearest(Math.min(from, this.max())) + dir * this.perPage(), 0, this.cards.length - 1);
+      this.glide(Math.min(this.snapX(i), this.max()));
+    }
+    glide(target: number, v0?: number) {
+      target = clamp(target, 0, this.max());
+      if (reduced.matches) { this.el.scrollLeft = target; return; }
+      if (!this.glideFn) this.sp.jump(this.el.scrollLeft);
+      this.el.style.scrollSnapType = "none";
+      this.sp.to(target, performance.now(), v0);
+      if (!this.glideFn) {
+        this.glideFn = (now) => {
+          this.sp.sample(now); this.el.scrollLeft = this.sp.x;
+          if (this.sp.done) { this.el.scrollLeft = this.sp.target; this.glideFn = null; this.releaseSnap(); return true; }
+          return false;
+        };
+        run(this.glideFn);
+      }
+    }
+    cancelGlide() { if (this.glideFn) { stop(this.glideFn); this.glideFn = null; this.releaseSnap(); } }
+    releaseSnap() { if (!this.glideFn && !this.drag) this.el.style.scrollSnapType = ""; }
+    onScroll() { if (!this.raf) this.raf = requestAnimationFrame(() => { this.raf = 0; this.update(); }); }
+    update() {
+      const sl = this.el.scrollLeft, vw = this.el.clientWidth, max = this.max();
+      this.cards.forEach((c, i) => {
+        const a = c.offsetLeft, b = a + c.offsetWidth;
+        this.ticks[i]?.classList.toggle("on", (Math.min(b, sl + vw) - Math.max(a, sl)) / c.offsetWidth > 0.55);
+      });
+      this.prev.setAttribute("aria-disabled", String(sl <= 2));
+      this.next.setAttribute("aria-disabled", String(sl >= max - 2));
+    }
+    setFocus(i: number) { this.hits.forEach((h, j) => { h.tabIndex = j === i ? 0 : -1; }); }
+    reveal(i: number) {
+      const c = this.cards[i], sl = this.glideFn ? this.sp.target : this.el.scrollLeft;
+      const a = c.offsetLeft, b = a + c.offsetWidth, vw = this.el.clientWidth;
+      if (a < sl + this.padL() - 1) this.glide(this.snapX(i));
+      else if (b > sl + vw - 24) {
+        const need = b - (vw - 24);
+        let j = 0; while (j < i && this.snapX(j) < need - 1) j++;
+        this.glide(this.snapX(j));
+      }
+    }
+    key(e: KeyboardEvent) {
+      const i = this.hits.indexOf(document.activeElement as HTMLButtonElement); if (i < 0) return;
+      const j = e.key === "ArrowRight" ? Math.min(i + 1, this.cards.length - 1) : e.key === "ArrowLeft" ? Math.max(i - 1, 0)
+        : e.key === "Home" ? 0 : e.key === "End" ? this.cards.length - 1 : null;
+      if (j == null) return;
+      e.preventDefault();
+      this.setFocus(j); this.hits[j].focus({ preventScroll: true }); this.reveal(j);
+    }
+    /* mouse drag; touch and trackpads use native scrolling */
+    dragSetup() {
+      const el = this.el;
+      let d: { x0: number; sl0: number; moved: boolean; s: [number, number][] } | null = null, suppress = false;
+      el.addEventListener("pointerdown", (e) => {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;
+        d = { x0: e.clientX, sl0: el.scrollLeft, moved: false, s: [[e.timeStamp, el.scrollLeft]] };
+      });
+      addEventListener("pointermove", (e) => {
+        if (!d) return;
+        const dx = e.clientX - d.x0;
+        if (!d.moved) {
+          if (Math.abs(dx) < 5) return;
+          d.moved = true; this.drag = true; this.cancelGlide();
+          el.style.scrollSnapType = "none"; el.classList.add("dragging");
+        }
+        el.scrollLeft = d.sl0 - dx;
+        d.s.push([e.timeStamp, el.scrollLeft]); if (d.s.length > 6) d.s.shift();
+      });
+      const end = () => {
+        if (!d) return;
+        const was = d; d = null;
+        if (!was.moved) return;
+        this.drag = false; el.classList.remove("dragging"); suppress = true;
+        setTimeout(() => { suppress = false; }, 0);
+        const a = was.s[0], b = was.s[was.s.length - 1];
+        const v = (b[1] - a[1]) / Math.max(16, b[0] - a[0]);
+        let i = this.nearest(el.scrollLeft + v * 220);
+        const now = this.nearest(el.scrollLeft);
+        if (Math.abs(v) > 0.25 && i === now) i = clamp(now + Math.sign(v), 0, this.cards.length - 1);
+        const target = Math.min(this.snapX(i), this.max()), dist = target - el.scrollLeft, vs = v * 1000;
+        // keep the release velocity only while it points at the target and cannot overshoot it
+        const v0 = Math.sign(vs) === Math.sign(dist) ? Math.sign(vs) * Math.min(Math.abs(vs), Math.abs(dist) * this.sp.w) : 0;
+        this.glide(target, v0);
+      };
+      addEventListener("pointerup", end); addEventListener("pointercancel", end);
+      el.addEventListener("click", (e) => { if (suppress) { e.stopPropagation(); e.preventDefault(); } }, true);
+    }
+  }
+  const rails = $$("[data-rail]").map((s) => new Rail(s));
+  const railOf = (card: HTMLElement) => rails.find((r) => r.cards.includes(card));
+
+  /* ---------- the panel ---------- */
+  type Part = { ce: HTMLElement; pe: HTMLElement; k: number; C: DOMRect | R; L: R };
+  type R = { x: number; y: number; w: number; h: number };
+  const rect = (el: Element): R => { const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; };
+  const snapR = (r: R): R => { const x = Math.round(r.x), y = Math.round(r.y); return { x, y, w: Math.round(r.x + r.w) - x, h: Math.round(r.y + r.h) - y }; };
+  const lerpRect = (a: R, b: R, t: number): R => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), w: lerp(a.w, b.w, t), h: lerp(a.h, b.h, t) });
+  const fs = (el: Element) => parseFloat(getComputedStyle(el).fontSize);
+
+  let S: any = null;
+  const inertTargets = () => [...document.body.children].filter((el) => el !== overlay && el.tagName !== "SCRIPT") as HTMLElement[];
+
+  function openPanel(card: HTMLElement) {
+    if (S) return;
+    const phone = narrow.matches;
+    const head = phone ? 56 : 64;
+    const cr0 = rect(card);
+    if (cr0.y < head + 8) window.scrollBy(0, cr0.y - head - 8);
+    const rail = railOf(card);
+    if (rail) rail.reveal(rail.cards.indexOf(card));
+
+    content.replaceChildren($<HTMLTemplateElement>("template", card).content.cloneNode(true));
+    overlay.hidden = false;
+    overlay.style.visibility = "hidden";
+    document.documentElement.style.overflow = "hidden"; // the page behind does not scroll
+    const W = overlay.clientWidth, H = overlay.clientHeight;
+    const PW = Math.min(1106, W - 64);
+    const P: R = phone ? { x: 0, y: 10, w: W, h: H - 10 } : { x: Math.round((W - PW) / 2), y: 0, w: PW, h: 0 };
+    frame.style.transform = `translate(${P.x}px, ${P.y}px)`;
+    frame.style.width = P.w + "px";
+    frame.style.height = "auto";
+    content.style.width = P.w + "px";
+    content.style.height = "auto";
+    content.style.position = "relative";
+    content.style.transform = "none";
+    const ptxt = $(".p-txt", content);
+
+    const pairs = (phone ? [[".t", ".p-t"], [".s", ".p-s"], [".m .y", ".p-m .y"], [".m .f", ".p-m .f"]] : []).map(([a, b]) => {
+      const ce = $(a, card), pe = $(b, content);
+      const k = fs(ce) / fs(pe);
+      // the same measure in proportion to the type size, so every line breaks in the same place
+      if (a === ".s") pe.style.width = rect(ce).w / k + "px";
+      return { ce, pe, k };
+    });
+    if (!phone) {
+      P.h = Math.min(content.offsetHeight, H - 64);
+      P.y = Math.round((H - P.h) / 2);
+      // only the text column scrolls, so the image never moves
+      ptxt.style.maxHeight = P.h + "px";
+      ptxt.classList.add("scrolls");
+    }
+    content.style.position = "";
+    content.style.height = P.h + "px";
+    frame.style.height = P.h + "px";
+    frame.style.transform = `translate(${P.x}px, ${P.y}px)`;
+
+    const cover = $(".cover", card), pimg = $(".p-img", content);
+    let ghost: HTMLElement | null = null;
+    if (!phone) {
+      // a copy of the card's text rides under the growing image and fades, so no text crosses the image
+      ghost = $(".txt", card).cloneNode(true) as HTMLElement;
+      ghost.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));
+      ghost.setAttribute("aria-hidden", "true");
+      content.appendChild(ghost);
+      placeGhost(ghost, card);
+    }
+    S = {
+      card, phone, P, pimg, gi: 0, ghost,
+      rest: phone ? $$(".rest", content) : [...$$(".rest", content), ptxt],
+      close: $(".p-close", content), bar: $(".p-bar", content), gal: phone ? $(".gal", content) : null, layers: [null, ...$$(".p-img .layer", content)],
+      parts: pairs.map((p) => ({ ...p, C: rect(p.ce), L: rect(p.pe) })) as Part[],
+      C: rect(card), Ci: rect(cover), M: rect($(".p-media", content)), TL: phone ? null : rect(ptxt).x,
+      rP: phone ? 16 : 20, riC: px(getComputedStyle(cover).borderTopLeftRadius), riP: 10,
+      sp: new Spring(0, OMEGA, 4e-4), sd: new Spring(0, 26, 0.2), fn: null as Job | null, travel: null as number | null, closing: false,
+    };
+    wirePanel();
+    card.style.visibility = "hidden";
+    $(".hit", card).setAttribute("aria-expanded", "true");
+    for (const el of inertTargets()) el.inert = true;
+    render();
+    overlay.style.visibility = "";
+    if (reduced.matches) { S.sp.jump(1); render(); settle(); }
+    else { S.sp.to(1, performance.now()); loop(); }
+    S.close.focus({ preventScroll: true });
+  }
+
+  function placeGhost(ghost: HTMLElement, card: HTMLElement) {
+    const g = rect($(".txt", card)), c0 = rect(content);
+    Object.assign(ghost.style, { position: "absolute", left: g.x - c0.x + "px", top: g.y - c0.y + "px", width: g.w + "px", height: g.h + "px", zIndex: "4", pointerEvents: "none", margin: "0" });
+  }
+
+  function wirePanel() {
+    // the cover the card already loaded shows at once; the sharper panel-sized copy fades in over it when ready
+    const hi = $<HTMLImageElement>(".p-img .hi img", content);
+    const showHi = () => hi.parentElement!.classList.add("on");
+    if (hi.complete && hi.naturalWidth) showHi(); else hi.addEventListener("load", showHi, { once: true });
+    const caption = $(".cap", content), thumbs = $$<HTMLButtonElement>(".thumbs button", content);
+    thumbs.forEach((b, i) => b.addEventListener("click", () => {
+      thumbs.forEach((x, j) => x.setAttribute("aria-current", String(i === j)));
+      S.gi = i;
+      S.layers.forEach((l: HTMLElement | null, j: number) => l?.classList.toggle("on", j === i));
+      if (S.layers[i]) $<HTMLImageElement>("img", S.layers[i]).loading = "eager";
+      if (caption) caption.textContent = b.getAttribute("aria-label")!.replace(/^Show image \d+: /, "");
+    }));
+    if (S.gal) S.gal.addEventListener("scroll", () => {
+      const i = Math.round(S.gal.scrollLeft / S.gal.clientWidth);
+      S.gi = i;
+      $$(".dots i", content).forEach((d, j) => d.classList.toggle("on", i === j));
+      const b = thumbs[i];
+      if (caption && b) caption.textContent = b.getAttribute("aria-label")!.replace(/^Show image \d+: /, "");
+    }, { passive: true });
+    $(".p-close", content).addEventListener("click", closePanel);
+  }
+
+  function travel() {
+    if (!S.parts.length) return 0;
+    if (S.travel == null) S.travel = Math.max(...S.parts.map((q: Part) => Math.hypot(q.C.x - q.L.x, q.C.y - q.L.y)));
+    return S.travel;
+  }
+  function render() {
+    const { P, parts, phone } = S;
+    const p = S.sp.x, d = S.sd.x;
+    const T = { x: P.x, y: P.y + d, w: P.w, h: P.h };
+    const F = snapR(lerpRect(S.C, T, p));
+    frame.style.transform = `translate(${F.x}px, ${F.y}px)`;
+    frame.style.width = F.w + "px";
+    frame.style.height = F.h + "px";
+    const r = lerp(16, S.rP, p), rb = phone ? lerp(16, 0, p) : r;
+    frame.style.borderRadius = `${r}px ${r}px ${rb}px ${rb}px`;
+    frame.style.boxShadow = phone
+      ? `0 0 0 1px ${dark.matches ? `rgba(255,255,255,${0.075 * (1 - p)})` : `rgba(0,0,0,${0.065 * (1 - p)})`}`
+      : dark.matches
+        ? `0 0 0 1px rgba(255,255,255,${lerp(0.075, 0.09, p)}), 0 30px 80px -24px rgba(0,0,0,${0.7 * p})`
+        : `0 0 0 1px rgba(0,0,0,${lerp(0.065, 0.08, p)}), 0 2px 4px rgba(0,0,0,${0.04 * p}), 0 30px 80px -24px rgba(0,0,0,${0.3 * p})`;
+    // the content stays put on screen while the frame grows around it
+    content.style.transform = `translate(${T.x - F.x}px, ${T.y - F.y}px)`;
+    for (const q of parts) {
+      const x = lerp(q.C.x, q.L.x, p), y = lerp(q.C.y, q.L.y + d, p), k = lerp(q.k, 1, p);
+      q.pe.style.transform = `translate(${x - q.L.x}px, ${Math.round(y) - q.L.y - d}px) scale(${k})`;
+    }
+    const M = { x: S.M.x, y: S.M.y + d, w: S.M.w, h: S.M.h };
+    const I = lerpRect(S.Ci, M, p);
+    const st = S.pimg.style;
+    st.left = I.x - M.x + "px"; st.top = I.y - M.y + "px"; st.width = I.w + "px"; st.height = I.h + "px";
+    st.borderRadius = lerp(S.riC, S.riP, p) + "px";
+    if (S.closing && S.gi > 0) S.layers[S.gi].style.opacity = String(smooth(0.3, 0.85, p));
+    if (S.ghost) {
+      S.ghost.style.transform = `translate(${I.x - S.Ci.x}px, ${I.y + I.h - S.Ci.y - S.Ci.h}px)`;
+      S.ghost.style.opacity = String(1 - smooth(0, 0.3, p));
+    }
+    // the details appear only once the moving text is within a few pixels of home
+    // on a laptop the text column waits until the moving image has cleared it
+    const clear = S.TL == null ? 1 : clamp(1 - (I.x + I.w - S.TL + 12) / 48);
+    const fade = parts.length ? clamp(Math.min(1 - ((1 - p) * travel()) / 36, (p - 0.3) / 0.4)) : Math.min(smooth(0.4, 0.92, p), clear);
+    const o = fade * fade * (3 - 2 * fade);
+    for (const el of S.rest) { el.style.opacity = String(o); el.style.transform = `translateY(${(1 - o) * 6}px)`; }
+    S.close.style.opacity = String(smooth(0.82, 1, p));
+    if (S.bar) S.bar.style.opacity = String(o);
+    dim.style.opacity = String(p * (1 - Math.min(1, d / (P.h * 0.85))));
+  }
+  function loop() {
+    if (S.fn) return;
+    S.fn = (now: number) => {
+      if (!S) return true;
+      S.sp.sample(now); S.sd.sample(now); render();
+      if (S.sp.done && S.sd.done) { S.fn = null; settle(); return true; }
+      return false;
+    };
+    run(S.fn);
+  }
+  function settle() {
+    if (!S) return;
+    if (S.sp.target === 1) {
+      if (S.sd.x !== 0) return;
+      for (const q of S.parts) q.pe.style.transform = "";
+      content.style.transform = "";
+      for (const el of S.rest) el.style.transform = "";
+      if (S.phone) content.style.overflowY = "auto";
+      if (S.gal) { S.gal.classList.add("on"); S.pimg.style.visibility = "hidden"; }
+    } else finish(false);
+  }
+  function closePanel() {
+    if (!S || (S.sp.target === 0 && !S.sp.done)) return;
+    const sc = content.scrollTop;
+    content.style.overflowY = "";
+    if (sc) { content.scrollTop = 0; $(".p-in", content).style.transform = `translateY(${-sc}px)`; }
+    if (S.gal) {
+      // the image returns to the card: show the current slide over the cover and fade it on the way
+      if (S.gi > 0) S.layers[S.gi].classList.add("on");
+      S.gal.classList.remove("on"); S.pimg.style.visibility = "";
+    }
+    S.pimg.classList.add("noanim");
+    S.closing = true;
+    if (S.sp.done && S.sp.x === 1) {
+      const d = S.sd.x;
+      for (const q of S.parts) { q.pe.style.transform = ""; q.L = rect(q.pe); q.L.y -= d; }
+      const m = rect($(".p-media", content)); m.y -= d; S.M = m;
+    }
+    // the row may have moved while the panel was open, so the panel returns to where the card is now
+    S.C = rect(S.card); S.Ci = rect($(".cover", S.card));
+    for (const q of S.parts) q.C = rect(q.ce);
+    S.travel = null;
+    if (S.ghost) placeGhost(S.ghost, S.card);
+    if (reduced.matches) { finish(false); return; }
+    S.sp.to(0, performance.now());
+    loop();
+  }
+  function finish(instant: boolean) {
+    if (!S) return;
+    if (S.fn) stop(S.fn);
+    const card = S.card as HTMLElement;
+    card.style.visibility = "";
+    $(".hit", card).setAttribute("aria-expanded", "false");
+    for (const el of inertTargets()) el.inert = false;
+    overlay.hidden = true;
+    content.replaceChildren();
+    frame.removeAttribute("style");
+    content.removeAttribute("style");
+    dim.style.opacity = "0";
+    document.documentElement.style.overflow = "";
+    S = null;
+    if (!instant) $(".hit", card).focus({ preventScroll: true });
+  }
+
+  $$(".card .hit").forEach((h) => h.addEventListener("click", () => openPanel(h.closest(".card") as HTMLElement)));
+  dim.addEventListener("click", closePanel);
+  frame.addEventListener("dragstart", (e) => e.preventDefault());
+  addEventListener("resize", () => { if (S) finish(true); });
+  addEventListener("keydown", (e) => {
+    if (!S) return;
+    if (e.key === "Escape") { e.preventDefault(); closePanel(); return; }
+    if (e.key === "Tab") {
+      const f = $$("button, a[href]", content).filter((x) => x.offsetParent);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* phone: drag the sheet down to close */
+  let drag: any = null;
+  frame.addEventListener("pointerdown", (e) => {
+    if (!S || !S.phone || S.sp.target !== 1 || e.button > 0) return;
+    const onBar = (e.target as Element).closest(".p-bar, .p-media");
+    if (!onBar && (content.scrollTop > 0 || (e.target as Element).closest("a, button"))) return;
+    drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, active: false, samples: [[e.timeStamp, 0]], start: S.sd.x };
+  });
+  addEventListener("pointermove", (e) => {
+    if (!drag || e.pointerId !== drag.id || !S) return;
+    const dy = e.clientY - drag.y0 + drag.start;
+    if (!drag.active) {
+      if (Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0) + 2) { drag = null; return; }
+      if (dy - drag.start < 6) { if (drag.start - dy > 6) drag = null; return; }
+      drag.active = true;
+      try { frame.setPointerCapture(e.pointerId); } catch (_) {}
+      S.sd.jump(S.sd.x);
+    }
+    e.preventDefault();
+    S.sd.jump(Math.max(0, dy));
+    drag.samples.push([e.timeStamp, S.sd.x]);
+    if (drag.samples.length > 6) drag.samples.shift();
+    render();
+  });
+  function endDrag(e: PointerEvent) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const was = drag; drag = null;
+    if (!was.active || !S) return;
+    const a = was.samples[0], b = was.samples[was.samples.length - 1];
+    const v = (b[1] - a[1]) / Math.max(1, b[0] - a[0]);
+    if (S.sd.x > 120 || (v > 0.45 && S.sd.x > 24)) closePanel();
+    else { S.sd.to(0, performance.now()); loop(); }
+  }
+  addEventListener("pointerup", endDrag);
+  addEventListener("pointercancel", endDrag);
+  content.addEventListener("scroll", () => { content.style.touchAction = content.scrollTop > 0 ? "pan-y" : "pan-down"; }, { passive: true });
+
+</script>

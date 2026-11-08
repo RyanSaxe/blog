@@ -1,0 +1,18 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import CardGrid from "@/components/CardGrid.astro";
+import Panel from "@/components/Panel.astro";
+import { ideas } from "@/data/ideas";
+import { IDEAS } from "@/data/site";
+
+const description = `${IDEAS.subtitle}, on machine learning and on Magic: The Gathering.`;
+---
+
+<SiteLayout title={`${IDEAS.name} · Ryan Saxe`} description={description} section="ideas">
+  <header class="page-head">
+    <h1>{IDEAS.name}</h1>
+    <p>{description}</p>
+  </header>
+  <CardGrid items={ideas} label={IDEAS.name} />
+  <Panel />
+</SiteLayout>

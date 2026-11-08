@@ -1,31 +1,81 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import PostCard from "@/components/PostCard.astro";
-import { getCollection } from "astro:content";
-
-const posts = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Rail from "@/components/Rail.astro";
+import Panel from "@/components/Panel.astro";
+import { projects } from "@/data/projects";
+import { ideas } from "@/data/ideas";
+import { IDEAS } from "@/data/site";
 ---
 
-<BaseLayout title="Ryan Saxe's Blog" description="ML, engineering, and whatever else.">
-  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
-    {
-      posts.length === 0 ? (
-        <p class="text-[var(--color-text-muted)]">No posts yet.</p>
-      ) : (
-        <div class="flex flex-col gap-6">
-          {posts.map((post) => (
-            <PostCard
-              title={post.data.title}
-              description={post.data.description}
-              date={post.data.date}
-              slug={post.id}
-              categories={post.data.categories}
-            />
-          ))}
-        </div>
-      )
+<SiteLayout
+  title="Ryan Saxe"
+  description="I lead science and engineering for AB InBev's global analytics and build tools for working with AI agents."
+>
+  <section class="hook" aria-label="Introduction">
+    <p>
+      <img class="face" src="/images/site/face.webp" alt="" width="96" height="96" />I’m <a class="me" href="/about/">Ryan Saxe</a>.
+      <span class="rest">I lead science and engineering for AB&nbsp;InBev’s global analytics and build tools for working with AI agents.</span>
+    </p>
+  </section>
+
+  <Rail id="projects" title="Projects" items={projects} allHref="/projects/" allLabel="All projects" eager />
+  <Rail id="ideas" title={IDEAS.name} items={ideas} allHref={IDEAS.path} allLabel={`All ${IDEAS.name.toLowerCase()}`} />
+
+  <Panel />
+</SiteLayout>
+
+<style>
+  .hook {
+    padding: 36px var(--g) 52px;
+  }
+  .hook p {
+    margin: 0;
+    max-width: 760px;
+    font-size: 23px;
+    line-height: 32px;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .rest {
+    color: var(--muted);
+  }
+  .me {
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 5px;
+    text-decoration-color: color-mix(in srgb, var(--ink) 22%, transparent);
+    transition: text-decoration-color 0.2s var(--ease);
+  }
+  .me:hover {
+    text-decoration-color: var(--ink);
+  }
+  .face {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: -7px;
+    margin-right: 10px;
+    box-shadow: 0 0 0 1px var(--edge);
+  }
+  @media (max-width: 640px) {
+    .hook {
+      padding: 24px var(--g) 36px;
     }
-  </div>
-</BaseLayout>
+    .hook p {
+      font-size: 19px;
+      line-height: 27px;
+      letter-spacing: -0.014em;
+    }
+    .face {
+      width: 26px;
+      height: 26px;
+      vertical-align: -6px;
+      margin-right: 8px;
+    }
+  }
+</style>

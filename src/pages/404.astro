@@ -1,15 +1,135 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { IDEAS } from "@/data/site";
+
+const destinations = [
+  { label: "Home", href: "/", note: "Projects, ideas and a short introduction" },
+  { label: "Projects", href: "/projects/", note: "Software I have built" },
+  { label: IDEAS.name, href: IDEAS.path, note: IDEAS.subtitle },
+];
 ---
 
-<PageLayout title="Not Found — Ryan Saxe" description="Page not found">
-  <div class="mx-auto max-w-3xl px-6 py-32 text-center">
-    <p class="mb-2 font-[var(--font-mono)] text-sm text-[var(--color-text-faint)]">404</p>
-    <h1 class="mb-4 font-[var(--font-serif)] text-2xl font-bold text-[var(--color-text)]">
-      Page not found
-    </h1>
-    <a href="/" class="text-sm text-[var(--color-accent)] hover:underline">
-      &larr; Back home
-    </a>
-  </div>
-</PageLayout>
+<SiteLayout title="Page not found · Ryan Saxe" description="This page does not exist.">
+  <section class="nf" aria-labelledby="nf-title">
+    <p class="code">404</p>
+    <h1 id="nf-title">This page does not exist.</h1>
+    <p class="lede">The link may be old, or the address may have a typo. These pages do exist:</p>
+    <ul class="dest">
+      {
+        destinations.map((d) => (
+          <li>
+            <a href={d.href}>
+              <span class="label">{d.label}</span>
+              <span class="note">{d.note}</span>
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+                <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</SiteLayout>
+
+<style>
+  .nf {
+    padding: 88px var(--g) 0;
+  }
+  .nf > * {
+    max-width: 560px;
+  }
+  .code {
+    margin: 0 0 14px;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 38px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+  }
+  .lede {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 25px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .dest {
+    margin: 28px 0 0;
+    padding: 4px 0;
+    list-style: none;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .dest li + li a {
+    border-top: 1px solid var(--line);
+  }
+  .dest li {
+    padding: 0 18px;
+  }
+  .dest a {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 12px;
+    padding: 14px 0;
+    text-decoration: none;
+  }
+  .dest a:focus-visible {
+    outline-offset: 2px;
+  }
+  .label {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 600;
+    letter-spacing: -0.011em;
+  }
+  .note {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dest svg {
+    align-self: center;
+    width: 12px;
+    height: 12px;
+    color: var(--ink-2);
+    transition: transform 0.2s var(--ease);
+  }
+  .dest a:hover svg {
+    transform: translateX(2px);
+  }
+  .dest a:hover .label {
+    color: var(--ink);
+  }
+  .dest a:hover .note {
+    color: var(--ink-2);
+  }
+  @media (max-width: 640px) {
+    .nf {
+      padding-top: 44px;
+    }
+    h1 {
+      font-size: 26px;
+      line-height: 32px;
+    }
+    .dest a {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .note {
+      grid-row: 2;
+      white-space: normal;
+    }
+  }
+</style>

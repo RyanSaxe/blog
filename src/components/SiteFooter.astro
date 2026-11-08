@@ -1,0 +1,57 @@
+---
+import { SOCIAL } from "@/data/site";
+---
+
+<footer class="site-footer">
+  <p>© 2026 Ryan Saxe</p>
+  <ul>
+    {
+      SOCIAL.map((s) => (
+        <li>
+          <a href={s.href} {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}>
+            {s.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>
+
+<style>
+  .site-footer {
+    margin: 104px var(--g) 0;
+    padding: 22px 0 34px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  p {
+    margin: 0;
+  }
+  ul {
+    display: flex;
+    gap: 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    text-decoration: none;
+    transition: color 0.15s var(--ease);
+  }
+  a:hover {
+    color: var(--ink);
+  }
+  @media (max-width: 640px) {
+    .site-footer {
+      margin-top: 72px;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+</style>

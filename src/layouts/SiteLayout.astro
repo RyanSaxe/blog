@@ -1,0 +1,40 @@
+---
+/*
+ * The one page shell: head, header, main, footer.
+ *   title, description, image?  page metadata (image is an absolute path for og:image)
+ *   section?                    "projects" | "ideas" | "about" marks the current nav item
+ * Slots: default (inside <main>), "head" (extra tags in <head>).
+ */
+import BaseHead from "@/components/BaseHead.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import type { Section } from "@/data/site";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  section?: Section;
+}
+
+const { title, description, image, section } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+    <slot name="head" />
+  </head>
+  <body>
+    <SiteHeader section={section} />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

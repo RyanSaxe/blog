@@ -1,0 +1,93 @@
+---
+import { NAV, type Section } from "@/data/site";
+
+interface Props {
+  section?: Section;
+}
+const { section } = Astro.props;
+---
+
+<header class="site-header" data-site-header>
+  <a class="home" href="/">Ryan Saxe</a>
+  <nav aria-label="Main">
+    {
+      NAV.map((item) => (
+        <a href={item.href} aria-current={item.section === section ? "page" : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector("[data-site-header]");
+  const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 4);
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: 64px;
+    padding: 0 var(--g);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+  .site-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--line);
+    opacity: 0;
+    transition: opacity 0.2s var(--ease);
+  }
+  .site-header:global(.scrolled)::after {
+    opacity: 1;
+  }
+  .home {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.011em;
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 28px;
+  }
+  nav a {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    text-decoration: none;
+    text-underline-offset: 7px;
+    text-decoration-thickness: 1.5px;
+    transition: color 0.15s var(--ease);
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  nav a[aria-current="page"] {
+    color: var(--ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--faint);
+  }
+  @media (max-width: 640px) {
+    .site-header {
+      height: 56px;
+    }
+    nav {
+      gap: 18px;
+    }
+    nav a {
+      font-size: 14px;
+    }
+  }
+</style>
