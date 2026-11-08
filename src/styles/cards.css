@@ -5,6 +5,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  /* Without this, WebKit sizes a card to its clamped text's full width and the card outgrows --cw. */
+  min-width: 0;
   border-radius: 16px;
   background: var(--card);
   box-shadow: var(--card-shadow);
@@ -20,6 +22,14 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--plate);
+}
+/* WebKit does not stretch a <picture> to its box, so its image's 100% height would not resolve. */
+.cover picture,
+.p-img picture,
+.thumbs picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .cover img,
 .p-img img,
@@ -41,6 +51,7 @@
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   padding: 14px 16px 16px;
 }
 .t {
@@ -56,6 +67,7 @@
   text-wrap: balance;
 }
 .t .tt {
+  min-width: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -91,6 +103,9 @@
   color: var(--faint);
 }
 .m .f {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--ink-2);
 }
 .t,
