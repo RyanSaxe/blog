@@ -1,0 +1,440 @@
+---
+/*
+ * Career as a time chart: one row per organization, oldest at the top, each role a bar placed by
+ * its dates on a shared year axis. The roles are tabs: hovering, focusing or tapping one shows it
+ * in the detail strip under the chart. On wide cards every role's detail sits in the same grid
+ * cell, so the strip is as tall as the longest one and the card never changes height. On narrow
+ * cards, where the longest role would leave a large empty gap, the strip fits the selected role.
+ */
+import { timeline } from "@/data/timeline";
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function toYear(date: string) {
+  const [month, year] = date.split(" ");
+  const m = MONTHS.indexOf(month);
+  if (m < 0 || !year) throw new Error(`Timeline date "${date}" is not "Mon YYYY"`);
+  return Number(year) + m / 12;
+}
+
+const today = new Date();
+const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+const now = today.getFullYear() + (today.getMonth() + (today.getDate() - 1) / daysInMonth) / 12;
+
+const roles = timeline.map((entry, i) => ({
+  ...entry,
+  i,
+  start: toYear(entry.startDate),
+  end: entry.endDate ? toYear(entry.endDate) : now,
+}));
+
+const first = Math.floor(Math.min(...roles.map((r) => r.start)));
+const span = now - first;
+const pct = (year: number) => `${(((year - first) / span) * 100).toFixed(3)}%`;
+const width = (from: number, to: number) => `${(((to - from) / span) * 100).toFixed(3)}%`;
+
+// Rows, oldest organization first; roles inside a row in date order.
+const orgs = [...new Set(roles.map((r) => r.organization))];
+const rows = orgs
+  .map((organization) => ({
+    organization,
+    roles: roles.filter((r) => r.organization === organization).sort((a, b) => a.start - b.start),
+  }))
+  .sort((a, b) => a.roles[0].start - b.roles[0].start);
+
+// Left and right arrows walk the roles in date order across every row.
+const order = [...roles].sort((a, b) => a.start - b.start || a.end - b.end).map((r) => r.i);
+const rowOf = new Map(rows.flatMap((row, r) => row.roles.map((role) => [role.i, r] as const)));
+
+const current = roles.find((r) => !r.endDate) ?? roles.at(-1)!;
+
+// One column per calendar year; the last one ends today.
+const years = Array.from({ length: Math.ceil(now) - first }, (_, k) => first + k);
+
+function linkLabel(url: string) {
+  if (url.includes("patents.google.com")) return `Patent ${url.split("/").filter(Boolean).at(-1)}`;
+  if (url.includes("arxiv.org")) return "Paper on arXiv";
+  return new URL(url).hostname.replace(/^www\./, "");
+}
+const dates = (r: (typeof roles)[number]) => `${r.startDate} – ${r.endDate ?? "Present"}`;
+---
+
+<section class="career" aria-labelledby="career-h" data-career data-order={order.join(",")}>
+  <h2 id="career-h" class="vh">Career</h2>
+
+  <div class="chart">
+    <div class="grid" aria-hidden="true">
+      {years.map((y) => <span class="line" style={`left: ${pct(y)}`} />)}
+    </div>
+
+    <div class="rows" role="tablist" aria-label="Roles, oldest first">
+      {
+        rows.map((row, r) => (
+          <div class="row" role="presentation">
+            <span class="org" aria-hidden="true" style={`left: ${pct(row.roles[0].start)}`}>
+              {row.organization}
+            </span>
+            <div class="track" role="presentation">
+              {row.roles.map((role, k) => (
+                <button
+                  type="button"
+                  role="tab"
+                  class:list={["seg", { reach: k === row.roles.length - 1 && role.end < now - 0.5 }]}
+                  id={`seg-${role.i}`}
+                  aria-controls={`role-${role.i}`}
+                  aria-selected={role.i === current.i ? "true" : "false"}
+                  tabindex={role.i === current.i ? 0 : -1}
+                  data-i={role.i}
+                  data-row={r}
+                  data-mid={((role.start + role.end) / 2).toFixed(3)}
+                  style={`left: ${pct(role.start)}; width: ${width(role.start, role.end)}`}
+                >
+                  <span class="bar" aria-hidden="true" />
+                  <span class="vh">
+                    {role.title}, {role.organization}, {dates(role)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="axis" aria-hidden="true">
+      {
+        years.map(
+          (y) =>
+            now - y > 0.75 && (
+              <span class:list={["year", { odd: y % 2 === 1 }]} style={`left: ${pct(y + 0.5)}`}>
+                {y}
+              </span>
+            )
+        )
+      }
+    </div>
+  </div>
+
+  <div class="detail">
+    {
+      roles.map((role) => (
+        <div
+          class:list={["pane", { on: role.i === current.i }]}
+          role="tabpanel"
+          id={`role-${role.i}`}
+          aria-labelledby={`seg-${role.i}`}
+          data-i={role.i}
+        >
+          <div class="head">
+            <h3 class="title">{role.title}</h3>
+            <p class="meta">
+              <span class="where">{role.organization}</span>
+              <span class="sep" aria-hidden="true">
+                ·
+              </span>
+              <span class="when">{dates(role)}</span>
+            </p>
+          </div>
+          {(role.description || role.link) && (
+            <div class="body">
+              {role.description && <p class="desc">{role.description}</p>}
+              {role.link && (
+                <a class="ext" href={role.link} target="_blank" rel="noopener">
+                  {linkLabel(role.link)}
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                    <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .career {
+    --pad: 24px;
+    --seg: color-mix(in srgb, var(--ink) 13%, var(--card));
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    padding: 22px var(--pad) 0;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* ---- Chart ---- */
+  .chart {
+    position: relative;
+  }
+  /* The year lines run through the rows and stop between the axis labels as ticks. */
+  .grid {
+    position: absolute;
+    inset: 0 0 12px;
+    pointer-events: none;
+  }
+  .line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  .rows {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .row {
+    position: relative;
+    height: 44px;
+  }
+  .org {
+    position: absolute;
+    top: 0;
+    /* The card colour hides the year lines behind the name. */
+    padding: 0 6px 0 1px;
+    background: var(--card);
+    font-size: 12.5px;
+    line-height: 16px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: color 0.15s var(--ease);
+  }
+  .row:has([aria-selected="true"]) .org {
+    color: var(--ink);
+  }
+  .track {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    height: 28px;
+  }
+  .seg {
+    position: absolute;
+    top: 0;
+    height: 28px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bar {
+    position: absolute;
+    /* 1px each side leaves the 2px gap between roles that follow each other. */
+    inset: 5px 1px;
+    border-radius: 4px;
+    background: var(--seg);
+    transition: background-color 0.15s var(--ease);
+  }
+  .seg[aria-selected="true"] .bar {
+    background: var(--ink);
+  }
+  .seg:focus-visible {
+    outline: none;
+  }
+  .seg:focus-visible .bar {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  /* A finger needs more than the few pixels a short role gets on a phone. The last role in a row
+     takes the empty space after it as extra hit area. */
+  @media (pointer: coarse) {
+    .seg.reach::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 100%;
+      width: 22px;
+    }
+  }
+
+  .axis {
+    position: relative;
+    height: 26px;
+    margin-top: 2px;
+  }
+  .year {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    font-size: 11.5px;
+    line-height: 16px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Detail strip ---- */
+  .detail {
+    display: grid;
+    margin: 18px calc(-1 * var(--pad)) 0;
+    padding: 18px var(--pad) 22px;
+    border-top: 1px solid var(--line);
+  }
+  .pane {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    align-content: start;
+    column-gap: 32px;
+    row-gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    /* The old role leaves faster than the new one arrives, so the two barely overlap. */
+    transition:
+      opacity 0.1s var(--ease),
+      visibility 0s linear 0.1s;
+  }
+  .pane.on {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.16s var(--ease) 0.04s;
+  }
+  .title {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 22px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .meta {
+    margin: 2px 0 0;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--muted);
+  }
+  /* Beside the description the organization and dates take a line each; stacked, they share one. */
+  .where,
+  .when {
+    display: block;
+  }
+  .where {
+    color: var(--ink-2);
+  }
+  .sep {
+    display: none;
+    margin: 0 5px;
+    color: var(--faint);
+  }
+  .when {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .ext {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ext:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ext svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  @container (max-width: 600px) {
+    .year.odd {
+      display: none;
+    }
+  }
+  @container (max-width: 560px) {
+    .pane {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .pane:not(.on) {
+      display: none;
+    }
+    @starting-style {
+      .pane.on {
+        opacity: 0;
+      }
+    }
+    .where,
+    .when,
+    .sep {
+      display: inline;
+    }
+  }
+  @media (max-width: 640px) {
+    .career {
+      --pad: 16px;
+      padding-top: 16px;
+    }
+    .detail {
+      padding-bottom: 18px;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>("[data-career]")) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panes = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    const byIndex = new Map(tabs.map((t) => [Number(t.dataset.i), t]));
+    const order = root.dataset.order!.split(",").map(Number);
+
+    const select = (i: number) => {
+      for (const t of tabs) {
+        const on = Number(t.dataset.i) === i;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+      }
+      for (const p of panes) p.classList.toggle("on", Number(p.dataset.i) === i);
+    };
+
+    // The role in the next row up or down whose middle is closest in time.
+    const nearestInRow = (from: HTMLButtonElement, row: number) => {
+      const mid = Number(from.dataset.mid);
+      let best: HTMLButtonElement | undefined;
+      for (const t of tabs) {
+        if (Number(t.dataset.row) !== row) continue;
+        if (!best || Math.abs(Number(t.dataset.mid) - mid) < Math.abs(Number(best.dataset.mid) - mid)) best = t;
+      }
+      return best;
+    };
+
+    for (const tab of tabs) {
+      const i = Number(tab.dataset.i);
+      tab.addEventListener("click", () => select(i));
+      tab.addEventListener("focus", () => select(i));
+      tab.addEventListener("pointerenter", (e) => {
+        if (e.pointerType !== "touch") select(i);
+      });
+      tab.addEventListener("keydown", (e) => {
+        const at = order.indexOf(i);
+        const row = Number(tab.dataset.row);
+        let next: HTMLButtonElement | undefined;
+        if (e.key === "ArrowRight") next = byIndex.get(order[at + 1]);
+        else if (e.key === "ArrowLeft") next = byIndex.get(order[at - 1]);
+        else if (e.key === "ArrowUp") next = nearestInRow(tab, row - 1);
+        else if (e.key === "ArrowDown") next = nearestInRow(tab, row + 1);
+        else if (e.key === "Home") next = byIndex.get(order[0]);
+        else if (e.key === "End") next = byIndex.get(order.at(-1)!);
+        else return;
+        e.preventDefault();
+        next?.focus();
+      });
+    }
+  }
+</script>
