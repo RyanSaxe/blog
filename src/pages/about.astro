@@ -9,35 +9,44 @@ import { TAGLINE } from "@/data/site";
   <Intro heading linkName={false} />
   <div class="about">
     <Career />
-    <section class="bio" aria-label="Introduction">
-      <div class="bio-text">
-        <p>
-          I’m the Global Director of Data &amp; Analytics at AB&nbsp;InBev, where I lead science and engineering for our
-          global analytics products. I’m responsible for the technology behind all of them.
-        </p>
-        <p>
-          I studied mathematics and computer science at New York University, then earned a master’s while researching
-          machine vision for gait recognition at NYU’s Courant Institute. At PepsiCo I worked on deep learning for
-          ecommerce, researched graph neural networks and transparent neural architectures, and was granted a patent on
-          contrastive loss and anomaly detection.
-        </p>
-        <p>
-          I joined AB&nbsp;InBev in 2021 to manage a team building machine learning for marketing efficacy and automated
-          spend allocation. From 2023 I was the technical lead for every commercial application of machine learning,
-          across sales, marketing and finance.
-        </p>
-        <p>
-          Outside work I build tools for working with AI agents. pair lets you work with a coding agent in the browser,
-          where it explains code and plans changes for you to approve. byor enforces the code rules a general linter
-          leaves out, in the editor, in CI and inside an agent’s loop. The Nightly Build turns a GitHub repository into a
-          personal newspaper that AI agents research and write.
-        </p>
-        <p>
-          Much of my writing and several of my projects are about Magic: The Gathering. I have written about drafting
-          for StarCityGames and Draftsim, and I co-hosted The 540, a Cube podcast. I also built a transformer that drafts
-          and builds decks, helped build the models behind CubeCobra’s card recommendations, and created Crucible, a
-          Magic format inspired by roguelikes and autobattlers.
-        </p>
+    <section class="bio" aria-labelledby="bio-h">
+      <h2 id="bio-h" class="vh">Introduction</h2>
+      <div class="parts">
+        <section>
+          <h3>Before AB&nbsp;InBev</h3>
+          <p>
+            I studied mathematics and computer science at New York University, then earned a master’s while researching
+            machine vision for gait recognition at NYU’s Courant Institute. At PepsiCo I worked on deep learning for
+            ecommerce, researched graph neural networks and transparent neural architectures, and was granted a patent on
+            contrastive loss and anomaly detection.
+          </p>
+        </section>
+        <section>
+          <h3>At AB&nbsp;InBev</h3>
+          <p>
+            I joined in 2021 to manage a team building machine learning for marketing efficacy and automated spend
+            allocation. From 2023 I was the technical lead for every commercial application of machine learning, across
+            sales, marketing and finance.
+          </p>
+        </section>
+        <section>
+          <h3>Outside work</h3>
+          <p>
+            I build tools for working with AI agents. pair lets you work with a coding agent in the browser, where it
+            explains code and plans changes for you to approve. byor enforces the code rules a general linter leaves out,
+            in the editor, in CI and inside an agent’s loop. The Nightly Build turns a GitHub repository into a personal
+            newspaper that AI agents research and write.
+          </p>
+        </section>
+        <section>
+          <h3>Magic: The Gathering</h3>
+          <p>
+            Much of my writing and several of my projects are about Magic. I have written about drafting for
+            StarCityGames and Draftsim, and I co-hosted The 540, a Cube podcast. I also built a transformer that drafts
+            and builds decks, helped build the models behind CubeCobra’s card recommendations, and created Crucible, a
+            Magic format inspired by roguelikes and autobattlers.
+          </p>
+        </section>
       </div>
     </section>
   </div>
@@ -49,36 +58,63 @@ import { TAGLINE } from "@/data/site";
     container: about / inline-size;
     padding: 0 var(--g);
   }
-  /* The introduction is one reading column under the card, on the page's left edge. */
+  /*
+   * The introduction is a second card under the profile, the same width: four short parts in a
+   * two-by-two grid split by hairlines, each under a small label. The profile above already says
+   * what Ryan does now, so the parts start with how he got there.
+   */
   .bio {
-    margin-top: 56px;
+    margin-top: 20px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
   }
-  .bio-text {
-    max-width: 680px;
+  .parts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .bio-text p {
+  .parts section {
+    padding: 30px 40px 34px;
+  }
+  .parts section:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+  .parts section:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+  .parts h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .parts p {
     margin: 0;
-    font-size: 16px;
-    line-height: 27px;
+    font-size: 15px;
+    line-height: 25px;
     color: var(--ink-2);
     text-wrap: pretty;
   }
-  .bio-text p:first-child {
-    color: var(--ink);
-  }
-  .bio-text p + p {
-    margin-top: 18px;
-  }
   @container about (max-width: 760px) {
     .bio {
-      margin-top: 40px;
+      margin-top: 14px;
     }
-    .bio-text p {
-      font-size: 15.5px;
-      line-height: 26px;
+    .parts {
+      grid-template-columns: minmax(0, 1fr);
     }
-    .bio-text p + p {
-      margin-top: 16px;
+    .parts section {
+      padding: 22px 20px 24px;
+    }
+    .parts section:nth-child(odd) {
+      border-right: 0;
+    }
+    .parts section + section {
+      border-top: 1px solid var(--line);
+    }
+    .parts p {
+      font-size: 14.5px;
+      line-height: 24px;
     }
   }
 </style>
