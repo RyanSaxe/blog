@@ -13,6 +13,8 @@ npm run dev
 
 Blog posts from notebooks are generated in CI and committed to the repo, so they're available locally without any extra steps.
 
+Links within the site swap pages in place through Astro's client router, so a script in a page or component runs once, not on every page. Start page scripts with `onPage` from `src/scripts/page.ts`, which runs them again after each swap and removes their listeners when the page leaves.
+
 ## Adding a New Post
 
 ### Markdown post

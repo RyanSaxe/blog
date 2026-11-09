@@ -30,26 +30,30 @@ const items = Astro.props.headings.filter((h) => h.depth <= 2 && !EXCLUDED.has(h
 }
 
 <script>
-  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
-  const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
-  let frame = 0;
-  function mark() {
-    frame = 0;
-    const line = innerHeight * 0.3;
-    let current = -1;
-    targets.forEach((t, i) => {
-      if (t && t.getBoundingClientRect().top < line) current = i;
-    });
-    links.forEach((a, i) => {
-      if (i === current) a.setAttribute("aria-current", "location");
-      else a.removeAttribute("aria-current");
-    });
-  }
-  if (links.length) {
-    addEventListener("scroll", () => (frame ||= requestAnimationFrame(mark)), { passive: true });
-    addEventListener("resize", () => (frame ||= requestAnimationFrame(mark)), { passive: true });
-    mark();
-  }
+  import { onPage } from "@/scripts/page";
+
+  onPage((signal) => {
+    const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+    const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    let frame = 0;
+    function mark() {
+      frame = 0;
+      const line = innerHeight * 0.3;
+      let current = -1;
+      targets.forEach((t, i) => {
+        if (t && t.getBoundingClientRect().top < line) current = i;
+      });
+      links.forEach((a, i) => {
+        if (i === current) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      });
+    }
+    if (links.length) {
+      addEventListener("scroll", () => (frame ||= requestAnimationFrame(mark)), { passive: true, signal });
+      addEventListener("resize", () => (frame ||= requestAnimationFrame(mark)), { passive: true, signal });
+      mark();
+    }
+  });
 </script>
 
 <style>

@@ -190,17 +190,20 @@ main:focus {
   padding: 0.75rem 0;
 }
 
-@view-transition {
-  navigation: auto;
-}
+/*
+ * Moving to another page crossfades: the client router (SiteLayout) swaps the page inside a view
+ * transition, and what both pages share, such as the header, stays perfectly still.
+ */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.2s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @view-transition {
-    navigation: none;
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
   *,
   *::before,

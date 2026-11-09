@@ -5,6 +5,7 @@
  *   section?                    "projects" | "writing" | "about" marks the current nav item
  * Slots: default (inside <main>), "head" (extra tags in <head>).
  */
+import { ClientRouter } from "astro:transitions";
 import BaseHead from "@/components/BaseHead.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
@@ -28,6 +29,11 @@ const { title, description, image, section } = Astro.props;
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} image={image} />
+    <!--
+      Links within the site swap the page in place with a crossfade instead of loading a new one, so a
+      browser never shows its own page switch; Chrome on iOS draws that switch out of place.
+    -->
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body>
@@ -37,5 +43,97 @@ const { title, description, image, section } = Astro.props;
       <slot />
     </main>
     <SiteFooter />
+    <!--
+      The landing page's rows ([data-fit]) are sized so the first screen always shows the Writing heading
+      and the top of its cards. Tall windows keep the designed sizes. On a shorter one the spacing tightens
+      first, by only as much as it needs, then the images crop from 3:2 toward 2:1, then the cards narrow;
+      on very short windows the cards drop their fact line and narrow further. A window far too short for
+      any of that, such as a phone on its side, keeps the designed sizes.
+      It runs before the first paint, when the router swaps in a page (before that page is drawn), once
+      the fonts load, whenever the window's size changes, and after a panel closes if it changed meanwhile.
+      It is the same on every page, so the router runs it once and the swap event carries it after that.
+    -->
+    <script is:inline>
+      (() => {
+        const PEEK = 36; // pixels of the Writing cards in view
+        const root = document.documentElement;
+        // 100svh ignores the iPhone toolbar collapsing, so scrolling never resizes the rows
+        const probe = document.createElement("div");
+        probe.style.cssText = "position:absolute;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
+
+        const fit = () => {
+          const shelves = [...document.querySelectorAll("[data-fit] .shelf")];
+          const target = document.querySelector("#writing .card");
+          if (!shelves.length || !target) return;
+          if (!probe.isConnected) document.body.append(probe);
+          const over = () => target.getBoundingClientRect().top + scrollY + PEEK - probe.offsetHeight;
+          // 0 keeps the designed spacing, 1 is the tightest; every spacing it changes is linear in it
+          const tighten = (t) => (t ? root.style.setProperty("--fit-t", t) : root.style.removeProperty("--fit-t"));
+          const set = (cw, coverH, compact = false) => {
+            for (const s of shelves) {
+              s.classList.toggle("compact", compact);
+              s.classList.toggle("fitted", !!coverH);
+              if (cw) s.style.setProperty("--cw", `${cw}px`);
+              else s.style.removeProperty("--cw");
+              if (coverH) s.style.setProperty("--cover-h", `${coverH}px`);
+              else s.style.removeProperty("--cover-h");
+            }
+          };
+          const shrink = (compact, minW) => {
+            // narrower cards can wrap their text onto another line, so measure again after each step
+            for (let i = 0; i < 3; i++) {
+              const d = over();
+              if (d <= 0) return;
+              const card = shelves[0].querySelector(".card");
+              const cw = card.offsetWidth;
+              const coverH = card.querySelector(".cover").offsetHeight - d;
+              if (coverH >= (cw - 16) / 2) set(cw, Math.floor(coverH), compact);
+              else {
+                const w = Math.max(minW, Math.floor(2 * coverH + 16));
+                set(w, (w - 16) / 2, compact);
+              }
+            }
+          };
+          tighten(0);
+          set(0, 0);
+          const d0 = over();
+          if (d0 <= 0) return;
+          tighten(1);
+          const d1 = over();
+          if (d1 <= 0) return tighten(d0 / (d0 - d1));
+          const phone = innerWidth <= 640;
+          shrink(false, phone ? 240 : 260);
+          if (over() <= 0) return;
+          const card = shelves[0].querySelector(".card");
+          set(card.offsetWidth, card.querySelector(".cover").offsetHeight, true);
+          shrink(true, phone ? 200 : 220);
+          // shrinking only costs quality when the row still ends up far out of view
+          if (over() > 60) {
+            tighten(0);
+            set(0, 0);
+          }
+        };
+
+        let size = "";
+        const refit = () => {
+          if (!probe.isConnected) document.body.append(probe);
+          const now = `${innerWidth}x${probe.offsetHeight}`;
+          // an open panel holds the card's position for its closing animation
+          const overlay = document.getElementById("overlay");
+          if (now === size || (overlay && !overlay.hidden)) return;
+          size = now;
+          fit();
+        };
+        const fresh = () => {
+          size = "";
+          refit();
+        };
+        fresh();
+        document.fonts?.ready.then(fresh);
+        addEventListener("resize", refit);
+        addEventListener("panel:closed", refit);
+        document.addEventListener("astro:after-swap", fresh);
+      })();
+    </script>
   </body>
 </html>

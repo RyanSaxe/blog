@@ -27,21 +27,31 @@ const { section } = Astro.props;
 </header>
 
 <script>
-  const header = document.querySelector("[data-site-header]");
-  const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 4);
-  addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  import { onPage } from "@/scripts/page";
 
-  const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
-  const root = document.documentElement;
-  const show = () => toggle.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-  show();
-  new MutationObserver(show).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-  toggle.addEventListener("click", () => {
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
-    const set = () => (window as any).setTheme(next);
-    if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(set);
-    else set();
+  onPage((signal) => {
+    const header = document.querySelector("[data-site-header]");
+    const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 4);
+    addEventListener("scroll", onScroll, { passive: true, signal });
+    onScroll();
+
+    const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
+    const root = document.documentElement;
+    const show = () => toggle.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
+    show();
+    const observer = new MutationObserver(show);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    signal.addEventListener("abort", () => observer.disconnect());
+    toggle.addEventListener(
+      "click",
+      () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        const set = () => (window as any).setTheme(next);
+        if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(set);
+        else set();
+      },
+      { signal },
+    );
   });
 </script>
 

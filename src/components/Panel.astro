@@ -17,11 +17,14 @@ import "@/styles/cards.css";
 </div>
 
 <script>
+  import { navigate } from "astro:transitions/client";
+  import { onPage } from "@/scripts/page";
+
   const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
   const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
 
-  const overlay = $("#overlay"), dim = $("#dim"), frame = $("#frame"), content = $("#content");
-  document.body.appendChild(overlay); // outside <main>, so the page behind can be made inert
+  // The panel's elements on the page in view; onPage finds them again after each page swap.
+  let overlay: HTMLElement, dim: HTMLElement, frame: HTMLElement, content: HTMLElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const narrow = matchMedia("(max-width: 900px), (max-height: 500px)"); // the sheet's media query in cards.css
   const isDark = () => document.documentElement.dataset.theme === "dark";
@@ -64,7 +67,7 @@ import "@/styles/cards.css";
   class Rail {
     el: HTMLElement; cards: HTMLElement[]; hits: HTMLButtonElement[]; prev: HTMLElement; next: HTMLElement; ticks: HTMLElement[];
     sp = new Spring(0, 15, 0.5); glideFn: Job | null = null; drag = false; raf = 0;
-    constructor(sec: HTMLElement) {
+    constructor(sec: HTMLElement, signal: AbortSignal) {
       this.el = $(".rail", sec); this.cards = $$(".card", this.el); this.hits = this.cards.map((c) => $<HTMLButtonElement>(".hit", c));
       this.prev = $(".prev", sec); this.next = $(".next", sec); this.ticks = $$(".ticks i", sec);
       this.setFocus(0);
@@ -74,8 +77,8 @@ import "@/styles/cards.css";
       for (const ev of ["wheel", "touchstart"]) this.el.addEventListener(ev, () => this.cancelGlide(), { passive: true });
       this.el.addEventListener("keydown", (e) => this.key(e));
       this.hits.forEach((h, i) => h.addEventListener("focus", () => this.setFocus(i)));
-      this.dragSetup();
-      addEventListener("resize", () => this.update());
+      this.dragSetup(signal);
+      addEventListener("resize", () => this.update(), { signal });
       this.update();
     }
     padL() { return px(getComputedStyle(this.el).paddingLeft); }
@@ -136,7 +139,7 @@ import "@/styles/cards.css";
       this.setFocus(j); this.hits[j].focus({ preventScroll: true }); this.reveal(j);
     }
     /* mouse drag; touch and trackpads use native scrolling */
-    dragSetup() {
+    dragSetup(signal: AbortSignal) {
       const el = this.el;
       let d: { x0: number; sl0: number; moved: boolean; s: [number, number][] } | null = null, suppress = false;
       el.addEventListener("pointerdown", (e) => {
@@ -153,7 +156,7 @@ import "@/styles/cards.css";
         }
         el.scrollLeft = d.sl0 - dx;
         d.s.push([e.timeStamp, el.scrollLeft]); if (d.s.length > 6) d.s.shift();
-      });
+      }, { signal });
       const end = () => {
         if (!d) return;
         const was = d; d = null;
@@ -170,11 +173,11 @@ import "@/styles/cards.css";
         const v0 = Math.sign(vs) === Math.sign(dist) ? Math.sign(vs) * Math.min(Math.abs(vs), Math.abs(dist) * this.sp.w) : 0;
         this.glide(target, v0);
       };
-      addEventListener("pointerup", end); addEventListener("pointercancel", end);
+      addEventListener("pointerup", end, { signal }); addEventListener("pointercancel", end, { signal });
       el.addEventListener("click", (e) => { if (suppress) { e.stopPropagation(); e.preventDefault(); } }, true);
     }
   }
-  const rails = $$("[data-rail]").map((s) => new Rail(s));
+  let rails: Rail[] = [];
   const railOf = (card: HTMLElement) => rails.find((r) => r.cards.includes(card));
 
   /* ---------- the panel ---------- */
@@ -188,8 +191,10 @@ import "@/styles/cards.css";
   let S: any = null;
   // An open panel has its own history entry, so Back closes it instead of leaving the page.
   let pushed = false;
+  // set while closing steps back over the panel's entry, so that step is not taken for a page change
+  let steppingBack = false;
   const unpush = () => {
-    if (pushed) { pushed = false; history.back(); }
+    if (pushed) { pushed = false; steppingBack = true; history.back(); }
   };
   const inertTargets = () => [...document.body.children].filter((el) => el !== overlay && el.tagName !== "SCRIPT") as HTMLElement[];
 
@@ -427,79 +432,17 @@ import "@/styles/cards.css";
     dispatchEvent(new Event("panel:closed"));
   }
 
-  $$(".card .hit").forEach((h) => {
-    const card = h.closest(".card") as HTMLElement;
-    h.addEventListener("click", () => openPanel(card, h, $<HTMLTemplateElement>("template", card)));
-  });
-  // The whole hook opens it for a pointer; the button is the keyboard's way in, and a click on it bubbles here.
-  const hook = $("[data-hook]"), intro = $<HTMLTemplateElement>("template[data-intro-panel]");
-  if (hook && intro) {
-    const plus = $(".plus", hook);
-    hook.addEventListener("click", () => openPanel(plus, plus, intro));
-  }
-  dim.addEventListener("click", closePanel);
-  addEventListener("popstate", () => {
-    pushed = false;
+  // Back while a panel is open closes it. The client router also acts on Back and would load this page
+  // again, so the panel claims its own steps (and a later step forward onto one) through the gate in BaseHead.
+  (window as any).claimBack = (e: PopStateEvent) => {
+    const ours = pushed || steppingBack || S || e.state?.panel;
+    pushed = steppingBack = false;
     if (S && !S.closing) closePanel();
-  });
-  // A link to another page replaces the panel's history entry, so Back from there returns to this page.
-  content.addEventListener("click", (e) => {
-    const a = (e.target as Element).closest("a[href]") as HTMLAnchorElement | null;
-    if (!a || a.target || a.origin !== location.origin || e.metaKey || e.ctrlKey || e.shiftKey) return;
-    e.preventDefault();
-    location.replace(a.href);
-  });
-  // Focus stays in the panel, even where Tab skips links and buttons, as in Safari by default.
-  document.addEventListener("focusin", (e) => {
-    if (S && !frame.contains(e.target as Node)) S.close.focus({ preventScroll: true });
-  });
-  // The edge and shadow are set per frame, so a theme change while open draws them again.
-  new MutationObserver(() => S && render()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  frame.addEventListener("dragstart", (e) => e.preventDefault());
-  // iOS resizes the window by a toolbar's height when the toolbar collapses during a scroll; only a
-  // larger change, such as a rotation or a resized window, closes the panel, since it no longer fits.
-  let last = { w: innerWidth, h: innerHeight };
-  addEventListener("resize", () => {
-    if (innerWidth === last.w && Math.abs(innerHeight - last.h) < 120) return;
-    last = { w: innerWidth, h: innerHeight };
-    if (S) finish(true);
-  });
-  addEventListener("keydown", (e) => {
-    if (!S) return;
-    if (e.key === "Escape") { e.preventDefault(); closePanel(); return; }
-    if (e.key === "Tab") {
-      const f = $$("button, a[href]", content).filter((x) => x.offsetParent);
-      if (!f.length) return;
-      const first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
-  });
+    return !!ours;
+  };
 
-  /* phone: drag the sheet down to close */
+  // the drag on a phone sheet in progress, if any
   let drag: any = null;
-  frame.addEventListener("pointerdown", (e) => {
-    if (!S || !S.phone || S.sp.target !== 1 || e.button > 0) return;
-    const onBar = (e.target as Element).closest(".p-bar, .p-media");
-    if (!onBar && (content.scrollTop > 0 || (e.target as Element).closest("a, button"))) return;
-    drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, active: false, samples: [[e.timeStamp, 0]], start: S.sd.x };
-  });
-  addEventListener("pointermove", (e) => {
-    if (!drag || e.pointerId !== drag.id || !S) return;
-    const dy = e.clientY - drag.y0 + drag.start;
-    if (!drag.active) {
-      if (Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0) + 2) { drag = null; return; }
-      if (dy - drag.start < 6) { if (drag.start - dy > 6) drag = null; return; }
-      drag.active = true;
-      try { frame.setPointerCapture(e.pointerId); } catch (_) {}
-      S.sd.jump(S.sd.x);
-    }
-    e.preventDefault();
-    S.sd.jump(Math.max(0, dy));
-    drag.samples.push([e.timeStamp, S.sd.x]);
-    if (drag.samples.length > 6) drag.samples.shift();
-    render();
-  });
   function endDrag(e: PointerEvent) {
     if (!drag || e.pointerId !== drag.id) return;
     const was = drag; drag = null;
@@ -509,8 +452,96 @@ import "@/styles/cards.css";
     if (S.sd.x > 120 || (v > 0.45 && S.sd.x > 24)) closePanel();
     else { S.sd.to(0, performance.now()); loop(); }
   }
-  addEventListener("pointerup", endDrag);
-  addEventListener("pointercancel", endDrag);
-  content.addEventListener("scroll", () => { content.style.touchAction = content.scrollTop > 0 ? "pan-y" : "pan-down"; }, { passive: true });
+
+  // Each page brings its own panel markup, cards and rows, so they are wired up again after every swap.
+  onPage((signal) => {
+    S = null;
+    pushed = steppingBack = false;
+    drag = null;
+    rails = [];
+    const el = document.getElementById("overlay");
+    if (!el) return;
+    overlay = el;
+    dim = $("#dim");
+    frame = $("#frame");
+    content = $("#content");
+    document.body.appendChild(overlay); // outside <main>, so the page behind can be made inert
+    rails = $$("[data-rail]").map((sec) => new Rail(sec, signal));
+
+    $$(".card .hit").forEach((h) => {
+      const card = h.closest(".card") as HTMLElement;
+      h.addEventListener("click", () => openPanel(card, h, $<HTMLTemplateElement>("template", card)));
+    });
+    // The whole hook opens it for a pointer; the button is the keyboard's way in, and a click on it bubbles here.
+    const hook = $("[data-hook]"), intro = $<HTMLTemplateElement>("template[data-intro-panel]");
+    if (hook && intro) {
+      const plus = $(".plus", hook);
+      hook.addEventListener("click", () => openPanel(plus, plus, intro));
+    }
+    dim.addEventListener("click", closePanel);
+    // A link to another page replaces the panel's history entry, so Back from there returns to this page.
+    content.addEventListener("click", (e) => {
+      const a = (e.target as Element).closest("a[href]") as HTMLAnchorElement | null;
+      if (!a || a.target || a.origin !== location.origin || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      pushed = false;
+      navigate(a.href, { history: "replace" });
+    });
+    // Focus stays in the panel, even where Tab skips links and buttons, as in Safari by default.
+    document.addEventListener("focusin", (e) => {
+      if (S && !frame.contains(e.target as Node)) S.close.focus({ preventScroll: true });
+    }, { signal });
+    // The edge and shadow are set per frame, so a theme change while open draws them again.
+    const themeWatch = new MutationObserver(() => S && render());
+    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    signal.addEventListener("abort", () => themeWatch.disconnect());
+    frame.addEventListener("dragstart", (e) => e.preventDefault());
+    // iOS resizes the window by a toolbar's height when the toolbar collapses during a scroll; only a
+    // larger change, such as a rotation or a resized window, closes the panel, since it no longer fits.
+    let last = { w: innerWidth, h: innerHeight };
+    addEventListener("resize", () => {
+      if (innerWidth === last.w && Math.abs(innerHeight - last.h) < 120) return;
+      last = { w: innerWidth, h: innerHeight };
+      if (S) finish(true);
+    }, { signal });
+    addEventListener("keydown", (e) => {
+      if (!S) return;
+      if (e.key === "Escape") { e.preventDefault(); closePanel(); return; }
+      if (e.key === "Tab") {
+        const f = $$("button, a[href]", content).filter((x) => x.offsetParent);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }, { signal });
+
+    /* phone: drag the sheet down to close */
+    frame.addEventListener("pointerdown", (e) => {
+      if (!S || !S.phone || S.sp.target !== 1 || e.button > 0) return;
+      const onBar = (e.target as Element).closest(".p-bar, .p-media");
+      if (!onBar && (content.scrollTop > 0 || (e.target as Element).closest("a, button"))) return;
+      drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, active: false, samples: [[e.timeStamp, 0]], start: S.sd.x };
+    });
+    addEventListener("pointermove", (e) => {
+      if (!drag || e.pointerId !== drag.id || !S) return;
+      const dy = e.clientY - drag.y0 + drag.start;
+      if (!drag.active) {
+        if (Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0) + 2) { drag = null; return; }
+        if (dy - drag.start < 6) { if (drag.start - dy > 6) drag = null; return; }
+        drag.active = true;
+        try { frame.setPointerCapture(e.pointerId); } catch (_) {}
+        S.sd.jump(S.sd.x);
+      }
+      e.preventDefault();
+      S.sd.jump(Math.max(0, dy));
+      drag.samples.push([e.timeStamp, S.sd.x]);
+      if (drag.samples.length > 6) drag.samples.shift();
+      render();
+    }, { signal });
+    addEventListener("pointerup", endDrag, { signal });
+    addEventListener("pointercancel", endDrag, { signal });
+    content.addEventListener("scroll", () => { content.style.touchAction = content.scrollTop > 0 ? "pan-y" : "pan-down"; }, { passive: true });
+  });
 
 </script>

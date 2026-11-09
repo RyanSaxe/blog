@@ -123,10 +123,12 @@ function linkLabel(url: string) {
 </section>
 
 <script>
-  const root = document.querySelector<HTMLElement>("[data-career]");
-  if (root) {
+  import { onPage } from "@/scripts/page";
+
+  onPage((signal) => {
+    const root = document.querySelector<HTMLElement>("[data-career]");
+    if (!root) return;
     const chart = root.querySelector<HTMLElement>(".chart")!;
-    const field = root.querySelector<HTMLElement>(".field")!;
     const hl = root.querySelector<HTMLElement>(".hl")!;
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
     const panes = [...root.querySelectorAll<HTMLElement>(".pane")];
@@ -181,8 +183,8 @@ function linkLabel(url: string) {
 
     // A click or tap focuses the row so the arrow keys work next, but the focus ring shows only once a key is pressed.
     chart.addEventListener("pointerdown", () => (chart.dataset.input = "pointer"));
-    document.addEventListener("keydown", () => (chart.dataset.input = "keys"), true);
-  }
+    document.addEventListener("keydown", () => (chart.dataset.input = "keys"), { capture: true, signal });
+  });
 </script>
 
 <style>

@@ -47,13 +47,13 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 <!--
   Sets data-theme on <html> before the page paints: the visitor's choice from the header toggle, or the
   device's setting until they make one. Dark image sources ([data-dark]) follow the theme rather than the
-  device, including ones the panel clones in later. window.setTheme is the toggle's way in.
+  device, including ones the panel clones in later. window.setTheme is the toggle's way in. The client
+  router replaces <html>'s attributes when it swaps in a page, so the theme is set again on each swap.
 -->
 <script is:inline>
   (() => {
     const root = document.documentElement;
     const device = matchMedia("(prefers-color-scheme: dark)");
-    const meta = document.querySelector('meta[name="theme-color"]');
     const stored = () => {
       try {
         const t = localStorage.getItem("theme");
@@ -71,16 +71,18 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     };
     const apply = (theme) => {
       root.dataset.theme = theme;
-      meta?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
       sync(document);
     };
-    apply(stored() ?? (device.matches ? "dark" : "light"));
+    const current = () => stored() ?? (device.matches ? "dark" : "light");
+    apply(current());
+    document.addEventListener("astro:after-swap", () => apply(current()));
     new MutationObserver((records) => {
       for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
     }).observe(root, { childList: true, subtree: true });
     // a template's content is parsed outside the document, so the observer cannot see it
     document.addEventListener("DOMContentLoaded", () => sync(document));
-    device.addEventListener("change", (e) => stored() || apply(e.matches ? "dark" : "light"));
+    device.addEventListener("change", () => stored() || apply(current()));
     window.setTheme = (theme) => {
       try {
         localStorage.setItem("theme", theme);
@@ -89,14 +91,20 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     };
   })();
 
+  // An open panel (Panel.astro) claims Back before the client router can load the page again. Chrome runs
+  // listeners on window in the order they were added, so this has to be added before the router's.
+  addEventListener("popstate", (e) => {
+    if (window.claimBack?.(e)) e.stopImmediatePropagation();
+  });
+
   // While a new page crossfades in, the browser sends every click to the page itself rather than the
   // link under the pointer. A press during the fade ends it, and its click goes to what is under it.
   (() => {
     let fade = null;
     let pressed = false;
-    addEventListener("pagereveal", (e) => {
+    document.addEventListener("astro:before-swap", (e) => {
       fade = e.viewTransition;
-      fade?.finished.finally(() => (fade = null));
+      fade.finished.finally(() => (fade = null));
     });
     addEventListener("pointerdown", () => {
       if (!fade) return;
