@@ -159,7 +159,7 @@ const neighbours = [
     --wide: 920px;
   }
   .essay-head {
-    width: min(var(--measure), 100% - 40px);
+    width: min(var(--measure), 100% - 2 * var(--g));
     margin: 0 auto;
     padding: 24px 0 52px;
   }
@@ -205,7 +205,7 @@ const neighbours = [
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
-    width: min(var(--measure), 100% - 40px);
+    width: min(var(--measure), 100% - 2 * var(--g));
     margin: 72px auto 0;
   }
   .pager.single {
@@ -308,11 +308,11 @@ const neighbours = [
   .essay-body {
     display: grid;
     grid-template-columns:
-      [full-start] minmax(20px, 1fr)
+      [full-start] minmax(var(--g), 1fr)
       [wide-start] minmax(0, calc((var(--wide) - var(--measure)) / 2))
-      [text-start] min(var(--measure), 100% - 40px)
+      [text-start] min(var(--measure), 100% - 2 * var(--g))
       [text-end] minmax(0, calc((var(--wide) - var(--measure)) / 2))
-      [wide-end] minmax(20px, 1fr)
+      [wide-end] minmax(var(--g), 1fr)
       [full-end];
     font-size: 18px;
     line-height: 30px;
@@ -595,14 +595,14 @@ const neighbours = [
       font-size: 19.5px;
       line-height: 26px;
     }
-    /* On a phone, figures and code use the full width of the screen. */
+    /* On a phone, figures and code use the full width of the screen, their contents in line with the text. */
     .essay-body > .fig,
     .essay-body > pre {
       grid-column: full;
       border-radius: 0;
     }
     .essay-body > .fig {
-      padding: 14px 20px;
+      padding: 14px var(--g);
     }
     .essay-body > .fig-pan {
       justify-content: flex-start;
@@ -619,7 +619,7 @@ const neighbours = [
       width: 720px;
     }
     .essay-body > pre {
-      padding: 14px 20px;
+      padding: 14px var(--g);
       font-size: 13px;
       line-height: 21px;
     }
