@@ -37,6 +37,8 @@ Your content here...
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
+Draw figures for a white page: dark text on a white or transparent background. The dark theme inverts them and keeps their hues. A figure drawn on black goes in `DRAWN_ON_BLACK` in `plugins/rehype-essay-figures.mjs`, so the light theme inverts it instead.
+
 ## Updating Site Content
 
 - Projects: `src/data/projects.ts`

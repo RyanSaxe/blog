@@ -321,19 +321,19 @@ const neighbours = [
   .essay-body > pre {
     grid-column: wide;
   }
+  /* With the contents rail in the left margin, figures and code reach into the right margin only. */
+  @media (min-width: 1240px) {
+    .essay-wrap:has(.toc) .essay-body > .fig,
+    .essay-wrap:has(.toc) .essay-body > pre {
+      grid-column: text-start / wide-end;
+    }
+  }
 
-  .essay-body h1,
   .essay-body h2,
   .essay-body h3 {
     font-weight: 600;
     color: var(--ink);
     text-wrap: balance;
-  }
-  .essay-body > h1 {
-    margin-top: 64px;
-    font-size: 26px;
-    line-height: 34px;
-    letter-spacing: -0.021em;
   }
   .essay-body > h2 {
     margin-top: 52px;
@@ -407,14 +407,16 @@ const neighbours = [
   .essay-body blockquote p {
     margin: 0;
   }
-  .essay-body blockquote + * {
+  .essay-body blockquote + :not(h2, h3) {
     margin-top: 28px;
   }
 
   /*
    * ---- Figures ----
-   * The PNGs are transparent and drawn in dark ink for a white page, so they sit on a light
-   * plate in both themes. In the dark theme the plate is a soft grey to cut the glare.
+   * The figures are drawn for a white page: plots on white, diagrams in dark ink on transparent.
+   * In the dark theme each one is inverted with its hues kept, so white turns into the card's
+   * dark grey and dark ink turns light. The few drawn on black (.fig-dark) are inverted in the
+   * light theme instead.
    */
   .essay-body > .fig {
     --fig-plate: #fff;
@@ -427,8 +429,11 @@ const neighbours = [
     box-shadow: var(--card-shadow);
   }
   [data-theme="dark"] .essay-body > .fig {
-    --fig-plate: #dcdce0;
-    box-shadow: none;
+    --fig-plate: var(--card);
+  }
+  [data-theme="dark"] .essay-body > .fig:not(.fig-dark) img,
+  [data-theme="light"] .essay-body > .fig-dark img {
+    filter: invert(0.9) hue-rotate(180deg);
   }
   .essay-body > .fig + * {
     margin-top: 36px;
@@ -439,9 +444,13 @@ const neighbours = [
   }
 
   /* ---- Code ---- */
+  .essay-body .math-nowrap {
+    white-space: nowrap;
+  }
   .essay-body code {
     font-family: var(--mono);
     font-size: 0.84em;
+    font-variant-ligatures: none;
   }
   .essay-body :not(pre) > code {
     padding: 0.14em 0.36em;
@@ -516,9 +525,11 @@ const neighbours = [
   .essay-body a[data-footnote-ref]::after {
     content: "]";
   }
-  .essay-body > h2#references,
   .essay-body .footnotes h2 {
     margin-top: 0;
+  }
+  .essay-body > h2#references,
+  .essay-body .footnotes h2 {
     font-size: 15px;
     line-height: 22px;
     letter-spacing: -0.011em;
@@ -568,11 +579,6 @@ const neighbours = [
     }
     .essay-body > * + * {
       margin-top: 20px;
-    }
-    .essay-body > h1 {
-      margin-top: 48px;
-      font-size: 23px;
-      line-height: 30px;
     }
     .essay-body > h2 {
       margin-top: 40px;

@@ -8,7 +8,10 @@ import { visit } from "unist-util-visit";
  * Images served from public/ get their intrinsic width and height (so the page
  * does not shift while they load), lazy loading, and async decoding. The notebook
  * export writes alt="png", which a screen reader would announce, so it is cleared.
+ * Figures drawn on black are marked .fig-dark, so the light theme can invert them.
  */
+const DRAWN_ON_BLACK = new Set(["/images/nam_exerpt.png"]);
+
 export default function rehypeEssayFigures() {
   const publicDir = join(process.cwd(), "public");
   const sizes = new Map();
@@ -40,12 +43,14 @@ export default function rehypeEssayFigures() {
       const children = node.children.filter((c) => !(c.type === "text" && !c.value.trim()));
       if (children.length !== 1 || children[0].tagName !== "img") return;
       // Very wide figures (a row of three plots) pan sideways on a phone instead of shrinking.
-      const size = sizeOf(String(children[0].properties.src ?? ""));
+      const src = String(children[0].properties.src ?? "");
+      const size = sizeOf(src);
       const wide = size && size.width / size.height > 2.4;
+      const className = ["fig", wide && "fig-pan", DRAWN_ON_BLACK.has(src) && "fig-dark"].filter(Boolean);
       parent.children[index] = {
         type: "element",
         tagName: "figure",
-        properties: { className: wide ? ["fig", "fig-pan"] : ["fig"] },
+        properties: { className },
         children,
       };
     });
