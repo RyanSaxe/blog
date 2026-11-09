@@ -158,10 +158,24 @@
 }
 
 /* ---------- Carousel ---------- */
+/*
+ * One card width for the landing's rows and the list pages' grids, so a card is the same size on both:
+ * three across the page on a laptop, two on a tablet. Phones override it below.
+ */
+.shelf,
+.card-grid {
+  --gap: 20px;
+  --cols: 3;
+  --cw: calc((min(1216px, 100vw - 2 * clamp(20px, 5vw, 48px)) - (var(--cols) - 1) * var(--gap)) / var(--cols));
+}
+@media (max-width: 1155px) {
+  .shelf,
+  .card-grid {
+    --cols: 2;
+  }
+}
 .shelf {
   position: relative;
-  --cw: 388px;
-  --gap: 20px;
 }
 .shelf + .shelf {
   margin-top: 64px;
@@ -302,10 +316,12 @@
 }
 
 /* ---------- Card grid (list pages) ---------- */
+/* Every row is as tall as the tallest card, as the landing's rows are. */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 24px 20px;
+  grid-template-columns: repeat(var(--cols), var(--cw));
+  grid-auto-rows: 1fr;
+  gap: 24px var(--gap);
   padding: 0 var(--g);
 }
 
@@ -630,11 +646,6 @@
 }
 
 /* ---------- Narrow screens ---------- */
-@media (max-width: 1199px) {
-  .shelf {
-    --cw: 340px;
-  }
-}
 /* The sheet. Its media query matches `narrow` in Panel.astro. */
 @media (max-width: 900px), (max-height: 500px) {
   .p-in {
@@ -764,6 +775,8 @@
     width: 12px;
   }
   .card-grid {
+    --cols: 1;
+    grid-auto-rows: auto;
     gap: 16px;
   }
   /* One card per row has room for the whole sentence. */
