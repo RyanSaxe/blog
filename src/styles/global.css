@@ -143,9 +143,11 @@ body > main {
   body > .site-header {
     grid-row: 1 / span 2;
   }
+  /* the page ends level with the bottom of the header's card, 16px above the window's edge */
   body > main {
     grid-column: 2;
     padding-top: 30px;
+    padding-bottom: 16px;
   }
 }
 img,

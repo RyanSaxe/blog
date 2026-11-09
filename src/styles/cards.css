@@ -294,6 +294,12 @@
 .rail::-webkit-scrollbar {
   display: none;
 }
+/* Beside the header's card, a row's cards are cut 16px from it, as the card sits 16px from the window, not against its edge. */
+@media (min-width: 1024px) {
+  .rail {
+    clip-path: inset(0 0 0 16px);
+  }
+}
 .rail > .card {
   flex: 0 0 var(--cw);
   scroll-snap-align: start;
