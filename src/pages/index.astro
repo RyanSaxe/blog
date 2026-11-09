@@ -115,10 +115,7 @@ import { TAGLINE, WRITING } from "@/data/site";
   [data-fit] .shelf.compact .m {
     display: none;
   }
-  /* Only the space below the opening line tightens, so it sits where it does on every other page. */
-  html[style*="--fit-t"] .intro {
-    padding-bottom: calc(52px - 24px * var(--fit-t));
-  }
+  /* The space below the opening line is not tightened here: Intro sets it from the window's height on every page. */
   html[style*="--fit-t"] [data-fit] .shelf + .shelf {
     margin-top: calc(64px - 28px * var(--fit-t));
   }
@@ -126,9 +123,6 @@ import { TAGLINE, WRITING } from "@/data/site";
     margin-top: calc(20px - 12px * var(--fit-t));
   }
   @media (max-width: 640px) {
-    html[style*="--fit-t"] .intro {
-      padding-bottom: calc(36px - 12px * var(--fit-t));
-    }
     html[style*="--fit-t"] [data-fit] .shelf + .shelf {
       margin-top: calc(48px - 16px * var(--fit-t));
     }

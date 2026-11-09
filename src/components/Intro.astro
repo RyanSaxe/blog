@@ -55,8 +55,9 @@ const name = heading ? `I’m Ryan Saxe. ${TAGLINE}` : undefined;
 </section>
 
 <style>
+  /* The space below tightens on short windows, the same on every page, so the rows under it line up across pages. */
   .intro {
-    padding: 36px var(--g) 52px;
+    padding: 36px var(--g) clamp(28px, 12svh - 56px, 52px);
   }
   .intro-text {
     margin: 0;
@@ -120,7 +121,7 @@ const name = heading ? `I’m Ryan Saxe. ${TAGLINE}` : undefined;
   }
   @media (max-width: 640px) {
     .intro {
-      padding: 24px var(--g) 36px;
+      padding: 24px var(--g) clamp(24px, 6svh - 16px, 36px);
     }
     .intro-text {
       font-size: 19px;
