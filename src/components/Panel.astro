@@ -292,7 +292,7 @@ import "@/styles/cards.css";
     const hi = $<HTMLImageElement>(".p-img .hi img", content);
     const showHi = () => hi.parentElement!.classList.add("on");
     if (hi.complete && hi.naturalWidth) showHi(); else hi.addEventListener("load", showHi, { once: true });
-    const caption = $(".cap", content), thumbs = $$<HTMLButtonElement>(".thumbs button", content);
+    const caption = $(".cap .now", content), thumbs = $$<HTMLButtonElement>(".thumbs button", content);
     // One picture shows at a time. A picture fading in sits above the one it replaces, which goes only once it
     // is covered, and the first picture is hidden under any other, so it never shows through a fade or along
     // the rounded corners' smoothed edge.

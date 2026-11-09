@@ -51,7 +51,15 @@ const panelSizes = "(max-width: 640px) 100vw, (max-width: 900px) 640px, 552px";
             </div>
           )
         }
-        {g[0].caption && <p class="cap rest" aria-live="polite">{g[0].caption}</p>}
+        {
+          g[0].caption && (
+            <p class="cap rest">
+              <span class="now" aria-live="polite">{g[0].caption}</span>
+              {/* every caption, unseen in the same place, so the box is always as tall as the longest and nothing below moves */}
+              {g.length > 1 && g.map((pic) => <span class="size" aria-hidden="true">{pic.caption ?? pic.alt}</span>)}
+            </p>
+          )
+        }
         {g.length > 1 && <div class="dots rest" aria-hidden="true">{g.map((_, i) => <i class={i === 0 ? "on" : undefined} />)}</div>}
       </div>
       <div class="p-txt">

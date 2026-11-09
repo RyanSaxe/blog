@@ -429,11 +429,18 @@
   outline-offset: 2px;
 }
 .cap {
+  display: grid;
   margin: 10px 2px 0;
   font-size: 12.5px;
   line-height: 18px;
   color: var(--muted);
   text-wrap: pretty;
+}
+.cap > span {
+  grid-area: 1 / 1;
+}
+.cap .size {
+  visibility: hidden;
 }
 .p-txt {
   padding: 10px 30px 12px 0;
