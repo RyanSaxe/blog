@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 /*
  * Site tokens. One light grey surface with white cards. BaseHead sets data-theme on <html> from the
