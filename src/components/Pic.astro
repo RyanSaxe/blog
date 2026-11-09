@@ -11,10 +11,7 @@ interface Props {
 const { pic, sizes, eager = false, class: cls, alt = pic.alt } = Astro.props;
 ---
 
-<picture
-  class:list={[cls, { fill: pic.fill }]}
-  style={pic.plate || pic.plateDark ? `--pic-plate: ${pic.plate ?? "var(--plate)"}; --pic-plate-dark: ${pic.plateDark ?? pic.plate ?? "var(--plate)"}` : undefined}
->
+<picture class:list={[cls, { fill: pic.fill }]}>
   {pic.dark && <source data-dark media="(prefers-color-scheme: dark)" srcset={imgSet(pic.name + "-dark")} sizes={sizes} />}
   <img
     src={imgSrc(pic.name, 800)}

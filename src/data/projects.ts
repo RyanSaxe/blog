@@ -11,8 +11,8 @@ export const projects: CardItem[] = [
     fact: "Health follows code quality",
     gallery: [
       { name: "gaia-world", fill: true, alt: "A sunlit village with a mill and a stone tower, rendered by Gaia from a codebase", caption: "A village Gaia built from a codebase" },
-      { name: "gaia-journal", fill: true, alt: "The journal page for buildSite: a painted dead tree beside its code and its health scores", caption: "The journal page for one function: its code, its scores and a painting of it" },
-      { name: "gaia-map", fill: true, alt: "An illustrated map with regions named Packages, Engine, Search, Apps and Extensions", caption: "The map of the whole land, colored by health" },
+      { name: "gaia-journal", dark: true, alt: "The journal page for buildSite: a painted dead tree beside its code and its health scores", caption: "The journal page for one function: its code, its scores and a painting of it" },
+      { name: "gaia-map", dark: true, alt: "An illustrated map with regions named Packages, Engine, Search, Apps and Extensions", caption: "The map of the whole land, colored by health" },
       { name: "gaia-dusk", fill: true, alt: "A field at dusk with half-timbered houses", caption: "A field at dusk" },
     ],
     paras: [
@@ -61,9 +61,9 @@ export const projects: CardItem[] = [
     year: "2026",
     fact: "11 releases on npm",
     gallery: [
-      { name: "pair-illus", dark: true, plateDark: "#0b0c10", alt: "pair: commands in a terminal, and a decision page with a comment thread in the browser", caption: "The agent publishes pages; you comment and choose in the browser" },
+      { name: "pair-illus", dark: true, alt: "pair: commands in a terminal, and a decision page with a comment thread in the browser", caption: "The agent publishes pages; you comment and choose in the browser" },
       { name: "pair-page", dark: true, alt: "A page with code, a three-way choice and a comment thread", caption: "A page with code, a choice and a thread" },
-      { name: "pair-work", dark: true, plateDark: "#0b0d10", alt: "Three phone screens: propose work, start it, and watch its progress", caption: "Proposing work and watching it run, on a phone" },
+      { name: "pair-work", dark: true, alt: "Three phone screens: propose work, start it, and watch its progress", caption: "Proposing work and watching it run, on a phone" },
       { name: "pair-flow", dark: true, alt: "Diagram: explain, decide, plan and build, over a loop of rounds", caption: "A session works in rounds" },
     ],
     paras: [
@@ -113,7 +113,7 @@ export const projects: CardItem[] = [
     fact: "Used by over 100k players",
     gallery: [
       { name: "cc-model", dark: true, alt: "Diagram: a set of cards goes into one shared encoder, which narrows from 512 to 256 to 128 numbers; four heads read those numbers for recommendations, draft picks, deck building and card correlations", caption: "One encoder sums up a set of cards in 128 numbers, and four heads read them" },
-      { name: "cc-search", fill: true, dark: true, alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube", caption: "Smart Search ranks a card search by how well each card fits the cube" },
+      { name: "cc-search", dark: true, alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube", caption: "Smart Search ranks a card search by how well each card fits the cube" },
       { name: "cc-home", dark: true, alt: "The CubeCobra home page", caption: "cubecobra.com" },
     ],
     paras: [
@@ -137,7 +137,7 @@ export const projects: CardItem[] = [
     year: "2021–2022",
     fact: "Mythic in 23 drafts",
     gallery: [
-      { name: "mtg-rank", plate: "#181819", alt: "Magic Arena profile of RyanSaxe AI: January 2022 season, Mythic limited rank #106", caption: "The account’s January 2022 season rank" },
+      { name: "mtg-rank", dark: true, alt: "Magic Arena profile of RyanSaxe AI: January 2022 season, Mythic limited rank #106", caption: "The account’s January 2022 season rank" },
       { name: "mtg-arch", dark: true, alt: "The README’s diagram of the model: a pack encoder and a pick decoder", caption: "The model: an encoder reads the pack, a decoder reads the picks so far" },
     ],
     paras: [
@@ -158,9 +158,9 @@ export const projects: CardItem[] = [
     year: "2026",
     fact: "Built with AI coding agents",
     gallery: [
-      { name: "cr-battle", fill: true, alt: "A battle in Goldfish mode: each player has two creatures, three lands, a Treasure and a poison counter on a green table", caption: "A battle in Goldfish mode, against a historically winning hand" },
-      { name: "cr-build", fill: true, alt: "The build phase: a hand of three cards above three basic lands, a Treasure and a poison counter", caption: "Building a hand and choosing lands before the battle" },
-      { name: "cr-home", fill: true, alt: "The cruciblemtg.com home page: a starting hand of three cards and three lands on a green table", caption: "cruciblemtg.com" },
+      { name: "cr-battle", dark: true, alt: "A battle in Goldfish mode: each player has two creatures, three lands, a Treasure and a poison counter on a green table", caption: "A battle in Goldfish mode, against a historically winning hand" },
+      { name: "cr-build", dark: true, alt: "The build phase: a hand of three cards above three basic lands, a Treasure and a poison counter", caption: "Building a hand and choosing lands before the battle" },
+      { name: "cr-home", dark: true, alt: "The cruciblemtg.com home page: a starting hand of three cards and three lands on a green table", caption: "cruciblemtg.com" },
     ],
     paras: [
       "Crucible is a Magic: The Gathering format inspired by roguelikes and autobattlers. Players alternate between drafting cards and short battles, the loser of each battle takes poison counters, and the game ends when one player is left.",

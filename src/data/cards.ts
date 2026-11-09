@@ -6,11 +6,11 @@ export interface Pic {
   alt: string;
   dark?: boolean;
   caption?: string;
-  /** A full-bleed picture: an open panel's image box can be taller than 3:2, and this fills it, cropped, rather than sitting whole on a plate. */
+  /**
+   * A painting whose edges can be lost: an open panel's image box can be taller than 3:2, and this fills it,
+   * cropped, rather than sitting whole on a plate. Never a screenshot, whose edges hold text and controls.
+   */
   fill?: boolean;
-  /** The color around a screenshot whose border is not the site's plate, light and dark, so the plate around it in a taller box matches. */
-  plate?: string;
-  plateDark?: string;
 }
 
 export interface Action {

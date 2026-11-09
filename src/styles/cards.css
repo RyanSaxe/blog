@@ -645,8 +645,9 @@
     padding-left: 36px;
   }
   /*
-   * The image grows to the text's height, so both columns start and end together. A screenshot
-   * stays whole on a plate of its own border color; a full-bleed picture (.fill) is cropped to fill.
+   * The image grows to the text's height, so both columns start and end together. A picture stays
+   * whole on the plate, which its own margin matches; a full-bleed painting (.fill) is cropped to fill.
+   * Each picture carries the plate, so the gallery's pictures stacked under it never show through.
    */
   .p-in {
     align-items: stretch;
@@ -659,10 +660,7 @@
     flex: 1 0 auto;
   }
   .p-img picture {
-    background: var(--pic-plate, var(--plate));
-  }
-  [data-theme="dark"] .p-img picture {
-    background: var(--pic-plate-dark, var(--plate));
+    background: var(--plate);
   }
   .p-img img {
     object-fit: contain;
