@@ -60,7 +60,8 @@ const items = Astro.props.headings.filter((h) => h.depth <= 2 && !EXCLUDED.has(h
   .toc {
     display: none;
   }
-  @media (min-width: 1240px) {
+  /* only where the page beside the header's card leaves the list about 150px */
+  @media (min-width: 1424px) {
     .toc {
       display: block;
       position: absolute;
@@ -73,7 +74,7 @@ const items = Astro.props.headings.filter((h) => h.depth <= 2 && !EXCLUDED.has(h
   }
   .toc-in {
     position: sticky;
-    top: 104px;
+    top: 40px;
   }
   .toc-title {
     margin: 0 0 10px;

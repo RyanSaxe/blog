@@ -166,15 +166,16 @@
 /* ---------- Carousel ---------- */
 /*
  * One card width for the landing's rows and the list pages' grids, so a card is the same size on both:
- * three across the page on a laptop, two on a tablet. Phones override it below.
+ * three across the page beside the header's card on a wide laptop, two on a smaller one or a tablet.
+ * Phones override it below.
  */
 .shelf,
 .card-grid {
   --gap: 20px;
   --cols: 3;
-  --cw: calc((min(1216px, 100vw - 2 * clamp(20px, 5vw, 48px)) - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  --cw: calc((min(1216px, 100vw - var(--side, 0px) - 2 * clamp(20px, 5vw, 48px)) - (var(--cols) - 1) * var(--gap)) / var(--cols));
 }
-@media (max-width: 1155px) {
+@media (max-width: 1339px) {
   .shelf,
   .card-grid {
     --cols: 2;

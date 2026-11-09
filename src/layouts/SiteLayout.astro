@@ -3,12 +3,14 @@
  * The one page shell: head, header, main, footer.
  *   title, description, image?  page metadata (image is an absolute path for og:image)
  *   section?                    "projects" | "writing" | "about" marks the current nav item
+ *   article?                    an essay, whose header drops the opening line below 1024px
  * Slots: default (inside <main>), "head" (extra tags in <head>).
  */
 import { ClientRouter } from "astro:transitions";
 import BaseHead from "@/components/BaseHead.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
+import Panel from "@/components/Panel.astro";
 import type { Section } from "@/data/site";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
@@ -20,9 +22,10 @@ interface Props {
   description: string;
   image?: string;
   section?: Section;
+  article?: boolean;
 }
 
-const { title, description, image, section } = Astro.props;
+const { title, description, image, section, article } = Astro.props;
 ---
 
 <!doctype html>
@@ -38,11 +41,13 @@ const { title, description, image, section } = Astro.props;
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <SiteHeader section={section} />
+    <SiteHeader section={section} article={article} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />
+    <!-- every page's header has the opening line, whose button opens a panel -->
+    <Panel />
     <!--
       The landing page's rows ([data-fit]) are sized so the first screen always shows the Writing heading
       and the top of its cards. Tall windows keep the designed sizes. On a shorter one the spacing tightens

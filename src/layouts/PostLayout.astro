@@ -39,7 +39,7 @@ const neighbours = [
 ].filter((n) => !!n);
 ---
 
-<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="writing">
+<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="writing" article>
   <article class="essay">
     <header class="essay-head">
       <h1>{title}</h1>
@@ -139,8 +139,7 @@ const neighbours = [
       const el = document.getElementById(id);
       if (!el) return;
       e.preventDefault();
-      const header = document.querySelector("[data-site-header]")?.getBoundingClientRect().height ?? 64;
-      glideTo(el.getBoundingClientRect().top + scrollY - header - 28);
+      glideTo(el.getBoundingClientRect().top + scrollY - 28);
       history.pushState(null, "", `#${id}`);
       if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
       el.focus({ preventScroll: true });
@@ -162,8 +161,13 @@ const neighbours = [
   .essay-head {
     width: min(var(--measure), 100% - 40px);
     margin: 0 auto;
-    /* Same distance below the header as the Intro on every other page. */
-    padding: 36px 0 52px;
+    padding: 24px 0 52px;
+  }
+  /* beside the header's card, the title starts level with the card's contents */
+  @media (min-width: 1024px) {
+    .essay-head {
+      padding-top: 6px;
+    }
   }
   .essay-head h1 {
     margin: 0;
@@ -297,7 +301,7 @@ const neighbours = [
 
 <style is:global>
   :root:has(.essay) {
-    scroll-padding-top: 92px;
+    scroll-padding-top: 28px;
   }
 
   /* ---- Reading column ---- */

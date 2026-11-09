@@ -125,6 +125,28 @@ body {
 }
 body > main {
   flex: 1 0 auto;
+  padding-top: 10px;
+}
+/*
+ * On a laptop the header is a card down the left side (SiteHeader) and the page sits beside it. --side is
+ * the card's column with its 16px margin; the card widths in cards.css subtract it.
+ */
+@media (min-width: 1024px) {
+  :root {
+    --side: 280px;
+  }
+  body {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+  }
+  body > .site-header {
+    grid-row: 1 / span 2;
+  }
+  body > main {
+    grid-column: 2;
+    padding-top: 30px;
+  }
 }
 img,
 svg,

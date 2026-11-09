@@ -47,6 +47,7 @@ Draw figures for a white page: dark text on a white or transparent background. T
 - Writing (essays, articles and podcasts): `src/data/writing.ts`
 - About page career: `src/data/timeline.ts`
 - The opening line on every page, the paragraph it opens into, section names and social links: `src/data/site.ts`
+- The icon for each social link: `src/components/SocialLinks.astro`, keyed by the link's label
 - About page introduction: `src/pages/about.astro`
 
 Images for cards live in `public/images/site/`.

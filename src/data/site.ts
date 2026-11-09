@@ -5,7 +5,7 @@ export const WRITING = {
   subtitle: "Essays, articles and podcasts",
 };
 
-/** The opening line of the landing, Projects, Writing and About pages, after "I’m Ryan Saxe." */
+/** The opening line, under your name in the header on every page. */
 export const TAGLINE = "I design interpretable machine learning and AI systems, and I build tools for working with AI agents.";
 
 /** The short paragraph the opening line opens into when a visitor clicks it. */

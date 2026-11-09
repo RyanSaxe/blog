@@ -1,15 +1,11 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import Intro from "@/components/Intro.astro";
 import CardGrid from "@/components/CardGrid.astro";
-import Panel from "@/components/Panel.astro";
 import { projects } from "@/data/projects";
 
 const description = "Tools for working with AI agents, and machine learning and games built around Magic: The Gathering.";
 ---
 
 <SiteLayout title="Projects · Ryan Saxe" description={description} section="projects">
-  <Intro />
   <CardGrid items={projects} label="Projects" />
-  <Panel />
 </SiteLayout>

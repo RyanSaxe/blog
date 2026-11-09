@@ -1,22 +1,16 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Rail from "@/components/Rail.astro";
-import Panel from "@/components/Panel.astro";
-import Intro from "@/components/Intro.astro";
 import { projects } from "@/data/projects";
 import { writing } from "@/data/writing";
 import { TAGLINE, WRITING } from "@/data/site";
 ---
 
 <SiteLayout title="Ryan Saxe" description={TAGLINE}>
-  <Intro />
-
   <div data-fit>
     <Rail id="projects" title="Projects" items={projects} allHref="/projects/" allLabel="All projects" eager />
     <Rail id="writing" title={WRITING.name} items={writing} allHref={WRITING.path} allLabel="All writing" eager />
   </div>
-
-  <Panel />
 </SiteLayout>
 
 <style is:global>
@@ -27,7 +21,6 @@ import { TAGLINE, WRITING } from "@/data/site";
   [data-fit] .shelf.compact .m {
     display: none;
   }
-  /* The space below the opening line is not tightened here: Intro sets it from the window's height on every page. */
   html[style*="--fit-t"] [data-fit] .shelf + .shelf {
     margin-top: calc(64px - 28px * var(--fit-t));
   }

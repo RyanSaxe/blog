@@ -1,26 +1,17 @@
 ---
-import { SOCIAL } from "@/data/site";
+// Below 1024px only; on a laptop the header's card carries the icons.
+import SocialLinks from "@/components/SocialLinks.astro";
 ---
 
 <footer class="site-footer">
   <p>© 2026 Ryan Saxe</p>
-  <ul>
-    {
-      SOCIAL.map((s) => (
-        <li>
-          <a href={s.href} {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}>
-            {s.label}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+  <div class="icons"><SocialLinks /></div>
 </footer>
 
 <style>
   .site-footer {
     margin: 104px var(--g) 0;
-    padding: 22px 0 34px;
+    padding: 16px 0 28px;
     border-top: 1px solid var(--line);
     display: flex;
     align-items: center;
@@ -32,29 +23,23 @@ import { SOCIAL } from "@/data/site";
   p {
     margin: 0;
   }
-  ul {
-    display: flex;
-    gap: 22px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  a {
-    /* the padding only enlarges what a finger can hit */
-    padding: 12px 4px;
-    margin: 0 -4px;
-    text-decoration: none;
-    transition: color 0.15s var(--ease);
-  }
-  a:hover {
-    color: var(--ink);
+  .icons {
+    margin-right: -9px;
   }
   @media (max-width: 640px) {
     .site-footer {
       margin-top: 72px;
       flex-direction: column-reverse;
       align-items: flex-start;
-      gap: 10px;
+      gap: 6px;
+    }
+    .icons {
+      margin: 0 0 0 -9px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .site-footer {
+      display: none;
     }
   }
 </style>
