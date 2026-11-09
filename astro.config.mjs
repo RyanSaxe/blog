@@ -19,6 +19,11 @@ export default defineConfig({
   devToolbar: { enabled: false },
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Inter's three weights are inlined into the stylesheet, so a page always paints in Inter. Loaded as
+      // files, a font could arrive just after a new page's first frame, and the text re-wrapped when it did.
+      assetsInlineLimit: (file) => (/inter-latin-\d00-normal\.woff2$/.test(file) ? true : undefined),
+    },
   },
   markdown: {
     remarkPlugins: [remarkMath],

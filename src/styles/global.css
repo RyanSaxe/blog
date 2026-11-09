@@ -6,6 +6,20 @@
  * header's toggle, or from the device until the visitor uses it.
  * Use these variables in every page and component instead of raw colors.
  */
+/*
+ * Arial sized to Inter's measurements. If a page paints before Inter is ready, its text already
+ * wraps as it will in Inter, so nothing moves when Inter arrives; the system font wraps the opening
+ * line onto one fewer line on a phone, which moved everything below it by a line.
+ */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica");
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+  size-adjust: 107.06%;
+}
+
 :root {
   color-scheme: light;
   --bg: #fafafa;
@@ -27,7 +41,7 @@
   --code-bg: #f4f4f5;
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* page gutter: 112px at 1440 wide, never under 20px; use it as padding so % resolves to the page width */
