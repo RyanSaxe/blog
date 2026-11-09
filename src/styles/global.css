@@ -156,10 +156,6 @@ main:focus {
   padding: 0.75rem 0;
 }
 
-/*
- * Moving to another page crossfades. The browser holds the old page until the new one is ready, so a
- * page never shows half loaded, and what both pages share, such as the header, stays perfectly still.
- */
 @view-transition {
   navigation: auto;
 }

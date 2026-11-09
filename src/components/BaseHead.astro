@@ -91,4 +91,27 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
       apply(theme);
     };
   })();
+
+  // While a new page crossfades in, the browser sends every click to the page itself rather than the
+  // link under the pointer. A press during the fade ends it, and its click goes to what is under it.
+  (() => {
+    let fade = null;
+    let pressed = false;
+    addEventListener("pagereveal", (e) => {
+      fade = e.viewTransition;
+      fade?.finished.finally(() => (fade = null));
+    });
+    addEventListener("pointerdown", () => {
+      if (!fade) return;
+      pressed = true;
+      fade.skipTransition();
+    }, true);
+    addEventListener("click", (e) => {
+      if (!pressed) return;
+      pressed = false;
+      if (e.target !== document.documentElement) return;
+      const target = document.elementFromPoint(e.clientX, e.clientY)?.closest("a[href], button, [role=tab]");
+      if (target) target.click();
+    }, true);
+  })();
 </script>
