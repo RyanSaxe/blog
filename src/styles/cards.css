@@ -638,11 +638,37 @@
   position: absolute;
   inset: -7px;
 }
-/* The opening line's panel is text alone, in one column. */
 @media (min-width: 901px) and (min-height: 501px) {
+  /* The opening line's panel is text alone, in one column. */
   .p-in.solo {
     display: block;
     padding-left: 36px;
+  }
+  /*
+   * The image grows to the text's height, so both columns start and end together. A screenshot
+   * stays whole on a plate of its own border color; a full-bleed picture (.fill) is cropped to fill.
+   */
+  .p-in {
+    align-items: stretch;
+  }
+  .p-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .p-media {
+    flex: 1 0 auto;
+  }
+  .p-img picture {
+    background: var(--pic-plate, var(--plate));
+  }
+  [data-theme="dark"] .p-img picture {
+    background: var(--pic-plate-dark, var(--plate));
+  }
+  .p-img img {
+    object-fit: contain;
+  }
+  .p-img .fill img {
+    object-fit: cover;
   }
 }
 .p-bar,
