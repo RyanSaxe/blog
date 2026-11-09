@@ -108,6 +108,8 @@
 html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
+  /* where scrollbars always show, opening a panel, which stops the page scrolling, doesn't move the page sideways */
+  scrollbar-gutter: stable;
 }
 body {
   margin: 0;

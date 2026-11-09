@@ -579,11 +579,13 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+/* on the first line, with the date, when a title takes two */
 .list .row svg {
   width: 11px;
   height: 11px;
+  margin-top: 4.5px;
   color: var(--muted);
-  align-self: center;
+  align-self: start;
 }
 .list .note {
   margin: 10px 0 0;
@@ -811,7 +813,9 @@
     display: none;
   }
   .all {
-    margin-right: 0;
+    /* the padding only enlarges what a finger can hit */
+    padding: 12px 0;
+    margin: -12px 0;
     font-size: 13.5px;
   }
   .s {
