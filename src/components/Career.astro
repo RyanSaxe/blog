@@ -1,10 +1,12 @@
 ---
 /*
- * The About page's profile card: the portrait on the left, and on the right the selected role above
- * a ledger of every role, newest first, with its organization, years and a bar on a shared time
- * scale. The rows are tabs: pointing at, clicking or focusing one shows its role above, and a soft
- * highlight glides to it. On a laptop every role's text sits in the same grid cell, so the card is
- * as tall as the longest role and never changes height; on a phone the text fits the selected role.
+ * The About page's profile card: the portrait, the selected role, and a ledger of every role, newest
+ * first, with its organization, years and a bar on a shared time scale. On a laptop the role and the
+ * ledger sit beside the portrait; on a tablet the ledger runs the card's full width below them; on a
+ * phone everything stacks, the role above the ledger. The rows are tabs: resting the pointer on one,
+ * clicking or focusing it shows its role, and a soft highlight glides to it. Except on a phone, every
+ * role's text sits in the same grid cell, so the card never changes height; on a phone the text fits
+ * the selected role, and the page scrolls by the difference so the tapped row stays under the finger.
  */
 import { timeline } from "@/data/timeline";
 
@@ -131,28 +133,18 @@ function linkLabel(url: string) {
     const order = root.dataset.order!.split(",").map(Number);
     const tabOf = (i: number) => tabs.find((t) => Number(t.dataset.i) === i);
 
-    // Pointing at a row selects it. A pointer that crosses other rows on its way to the selected
-    // role's text or link leaves behind the role that stayed selected for HOLD ms, or that was
-    // clicked, tapped or reached with the keys.
-    const HOLD = 300;
-    let selected = Number(tabs.find((t) => t.getAttribute("aria-selected") === "true")!.dataset.i);
-    let held = selected;
-    let since = 0;
-    const select = (i: number, pin = false) => {
-      const now = performance.now();
-      if (i !== selected) {
-        if (now - since >= HOLD) held = selected;
-        since = now;
-      }
-      if (pin) held = i;
-      selected = i;
+    const select = (i: number) => {
+      const tab = tabOf(i)!;
+      const before = tab.getBoundingClientRect().top;
       tabs.forEach((t, k) => {
-        const on = Number(t.dataset.i) === i;
+        const on = t === tab;
         t.setAttribute("aria-selected", String(on));
         t.tabIndex = on ? 0 : -1;
         if (on) hl.style.setProperty("--k", String(k));
       });
       for (const p of panes) p.classList.toggle("on", Number(p.dataset.i) === i);
+      const moved = tab.getBoundingClientRect().top - before;
+      if (moved) scrollBy({ top: moved, behavior: "instant" });
     };
 
     const keyTarget = (i: number, key: string) => {
@@ -166,11 +158,19 @@ function linkLabel(url: string) {
       if (key === "End") return tabs.at(-1);
     };
 
+    // A row selects once the pointer rests on it, so a pointer crossing rows on its way elsewhere
+    // changes nothing, and the selection stays when the pointer leaves.
+    const REST = 100;
+    let resting = 0;
     for (const t of tabs) {
       const i = Number(t.dataset.i);
-      t.addEventListener("pointerenter", (e) => e.pointerType === "mouse" && select(i));
-      t.addEventListener("click", () => select(i, true));
-      t.addEventListener("focus", () => select(i, true));
+      t.addEventListener("pointerenter", (e) => {
+        clearTimeout(resting);
+        if (e.pointerType === "mouse") resting = setTimeout(() => select(i), REST);
+      });
+      t.addEventListener("pointerleave", () => clearTimeout(resting));
+      t.addEventListener("click", () => select(i));
+      t.addEventListener("focus", () => select(i));
       t.addEventListener("keydown", (e) => {
         const next = keyTarget(i, e.key);
         if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
@@ -178,9 +178,6 @@ function linkLabel(url: string) {
         next?.focus();
       });
     }
-    field.addEventListener("pointerleave", (e) => {
-      if (e.pointerType === "mouse" && performance.now() - since < HOLD && held !== selected) select(held);
-    });
 
     // A click or tap focuses the row so the arrow keys work next, but the focus ring shows only once a key is pressed.
     chart.addEventListener("pointerdown", () => (chart.dataset.input = "pointer"));
@@ -369,9 +366,11 @@ function linkLabel(url: string) {
     outline: none;
   }
   .org {
+    overflow: hidden;
     color: var(--ink-2);
     font-weight: 500;
     white-space: nowrap;
+    text-overflow: ellipsis;
     transition: color 0.2s var(--ease);
   }
   /* A name repeated from the row above is fainter, so the rows read as groups by organization. */
@@ -398,6 +397,14 @@ function linkLabel(url: string) {
     border-radius: 99px;
     background: var(--seg);
     transition: background-color 0.2s var(--ease);
+  }
+  @media (hover: hover) {
+    .row:hover .org {
+      color: var(--ink);
+    }
+    .row:hover .bar {
+      background: color-mix(in srgb, var(--ink) 45%, var(--card));
+    }
   }
   .row[aria-selected="true"] .org {
     color: var(--ink);
@@ -435,30 +442,64 @@ function linkLabel(url: string) {
     }
   }
 
-  /* ---- Narrow: portrait on top, then the ledger, then the role it selects ---- */
-  @container about (max-width: 760px) {
+  /* ---- Tablet: the portrait beside the role, and the ledger across the card's full width below ---- */
+  @container about (max-width: 999px) {
+    .profile {
+      grid-template-columns: 208px minmax(0, 1fr);
+      grid-template-areas: "pf detail" "chart chart";
+      min-height: 0;
+    }
+    .side {
+      display: contents;
+    }
+    .pf {
+      grid-area: pf;
+      min-height: 232px;
+      margin: 8px 0 0 8px;
+    }
+    .detail {
+      grid-area: detail;
+      padding: 28px 32px 24px;
+    }
+    .chart {
+      grid-area: chart;
+      margin: 8px 28px 0;
+      padding: 18px 0 14px;
+    }
+    /* A hairline across the whole card sets the ledger apart from the portrait and role above it. */
+    .chart::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -28px;
+      right: -28px;
+      height: 1px;
+      background: var(--line);
+    }
+    .grid {
+      top: 18px;
+      bottom: 18px;
+    }
+  }
+
+  /* ---- Phone: the portrait, then the role, then the ledger that picks it ---- */
+  @container about (max-width: 639px) {
     .profile {
       grid-template-columns: minmax(0, 1fr);
-      min-height: 0;
+      grid-template-areas: "pf" "detail" "chart";
     }
     .pf {
       aspect-ratio: 4 / 3;
+      min-height: 0;
+      max-height: 360px;
       margin: 8px 8px 0;
     }
     .pf img {
       object-position: 50% 26%;
     }
-    .side {
-      gap: 0;
-      padding: 18px 16px 0;
-    }
     .detail {
-      order: 1;
-      margin: 14px -16px 0;
-      padding: 16px 16px 18px;
-      border-top: 1px solid var(--line);
+      padding: 18px 16px;
     }
-    /* The text fits the selected role, so a short role leaves no gap. */
     .pane:not(.on) {
       display: none;
     }
@@ -488,9 +529,23 @@ function linkLabel(url: string) {
     .chart {
       --rh: 40px;
       --cg: 10px;
+      margin: 0 16px;
+      padding: 4px 0 6px;
+    }
+    .chart::before {
+      left: -16px;
+      right: -16px;
+    }
+    /* The bars get 64px on a phone and grow on anything wider. The highlight lines up with the portrait. */
+    .hl {
+      left: -8px;
+      right: -8px;
     }
     .row {
-      grid-template-columns: minmax(0, 1fr) 88px 64px;
+      grid-template-columns: minmax(0, 1fr) 96px max(64px, 100% - 348px);
+      width: calc(100% + 16px);
+      margin: 0 -8px;
+      padding: 0 8px;
       font-size: 13px;
     }
     .grid,
@@ -500,6 +555,21 @@ function linkLabel(url: string) {
     .track {
       border-radius: 99px;
       background: color-mix(in srgb, var(--ink) 5%, var(--card));
+    }
+    /* The selected row's track stays visible on its highlight. */
+    .row[aria-selected="true"] .track {
+      background: color-mix(in srgb, var(--ink) 11%, var(--card));
+    }
+  }
+
+  /* The narrowest phones: smaller type and columns, so every name fits from 360px wide. */
+  @container about (max-width: 340px) {
+    .chart {
+      --cg: 8px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr) 88px 52px;
+      font-size: 12px;
     }
   }
 </style>
