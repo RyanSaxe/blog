@@ -12,5 +12,5 @@ const { items, label } = Astro.props;
 
 <h1 class="grid-head">{label}<span class="n">{items.length}</span></h1>
 <div class="card-grid" role="list" aria-label={label} data-grid>
-  {items.map((item, i) => <div role="listitem" style="display:contents"><Card item={item} eager={i < 3} sizes="(max-width: 640px) 100vw, (max-width: 1199px) 50vw, 400px" /></div>)}
+  {items.map((item, i) => <div role="listitem" style="display:contents"><Card item={item} eager={i < 6} sizes="(max-width: 640px) 100vw, (max-width: 1199px) 50vw, 400px" /></div>)}
 </div>

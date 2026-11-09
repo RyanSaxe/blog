@@ -1,4 +1,8 @@
 ---
+import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2?url";
+import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2?url";
+import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2?url";
+
 interface Props {
   title: string;
   description: string;
@@ -12,6 +16,8 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Every page's text is in these three; preloading them keeps a new page from painting in a fallback font first. -->
+{[inter400, inter500, inter600].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="canonical" href={canonicalURL} />
 <link rel="sitemap" href="/sitemap-index.xml" />

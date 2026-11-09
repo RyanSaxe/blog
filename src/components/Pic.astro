@@ -21,7 +21,7 @@ const { pic, sizes, eager = false, class: cls, alt = pic.alt } = Astro.props;
     height="800"
     alt={alt}
     loading={eager ? "eager" : "lazy"}
-    decoding="async"
+    decoding={eager ? "sync" : "async"}
     draggable="false"
   />
 </picture>
