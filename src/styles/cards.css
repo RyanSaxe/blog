@@ -398,6 +398,10 @@
 .p-img.noanim picture {
   transition: none;
 }
+.p-img.covered .base,
+.p-img.covered .hi {
+  visibility: hidden;
+}
 .thumbs {
   display: flex;
   gap: 8px;

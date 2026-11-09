@@ -293,11 +293,27 @@ import "@/styles/cards.css";
     const showHi = () => hi.parentElement!.classList.add("on");
     if (hi.complete && hi.naturalWidth) showHi(); else hi.addEventListener("load", showHi, { once: true });
     const caption = $(".cap", content), thumbs = $$<HTMLButtonElement>(".thumbs button", content);
+    // One picture shows at a time. A picture fading in sits above the one it replaces, which goes only once it
+    // is covered, and the first picture is hidden under any other, so it never shows through a fade or along
+    // the rounded corners' smoothed edge.
+    const s = S;
+    let z = 0;
+    const settleLayers = () => {
+      if (S !== s || s.closing) return;
+      s.layers.forEach((l: HTMLElement | null, j: number) => j !== s.gi && l?.classList.remove("on"));
+      s.pimg.classList.toggle("covered", s.gi > 0);
+    };
     thumbs.forEach((b, i) => b.addEventListener("click", () => {
       thumbs.forEach((x, j) => x.setAttribute("aria-current", String(i === j)));
-      S.gi = i;
-      S.layers.forEach((l: HTMLElement | null, j: number) => l?.classList.toggle("on", j === i));
-      if (S.layers[i]) $<HTMLImageElement>("img", S.layers[i]).loading = "eager";
+      s.gi = i;
+      const to = s.layers[i];
+      if (to) {
+        $<HTMLImageElement>("img", to).loading = "eager";
+        to.style.zIndex = String(++z);
+        to.classList.add("on");
+      } else s.pimg.classList.remove("covered");
+      if (to && getComputedStyle(to).opacity !== "1") to.addEventListener("transitionend", settleLayers, { once: true });
+      else settleLayers();
       if (caption) caption.textContent = b.getAttribute("aria-label")!.replace(/^Show image \d+: /, "");
     }));
     if (S.gal) S.gal.addEventListener("scroll", () => {
@@ -400,6 +416,9 @@ import "@/styles/cards.css";
       if (S.gi > 0) S.layers[S.gi].classList.add("on");
       S.gal.classList.remove("on"); S.pimg.style.visibility = "";
     }
+    // only the picture showing stays, over the first picture it fades back to
+    S.layers.forEach((l: HTMLElement | null, j: number) => j !== S.gi && l?.classList.remove("on"));
+    S.pimg?.classList.remove("covered");
     S.pimg?.classList.add("noanim");
     S.closing = true;
     if (S.sp.done && S.sp.x === 1) {
