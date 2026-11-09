@@ -228,20 +228,20 @@ function linkLabel(url: string) {
   .detail {
     display: grid;
   }
+  /* The old role and the new one crossfade in place. */
   .pane {
     grid-area: 1 / 1;
     align-content: start;
     opacity: 0;
     visibility: hidden;
-    /* The old role leaves faster than the new one arrives, so the two barely overlap. */
     transition:
-      opacity 0.1s var(--ease),
-      visibility 0s linear 0.1s;
+      opacity 0.24s ease,
+      visibility 0s linear 0.24s;
   }
   .pane.on {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.18s var(--ease) 0.04s;
+    transition: opacity 0.24s ease;
   }
   .title {
     margin: 0;
