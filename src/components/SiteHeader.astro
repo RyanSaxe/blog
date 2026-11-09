@@ -82,6 +82,8 @@ const { section } = Astro.props;
     gap: 28px;
   }
   nav a {
+    /* the padding only enlarges what a finger can hit */
+    padding: 12px 0;
     font-size: 14.5px;
     color: var(--ink-2);
     text-decoration: none;
@@ -141,9 +143,13 @@ const { section } = Astro.props;
       margin-left: 9px;
     }
   }
+  /* The name keeps clearly more space before the links than the links keep between them. */
   @media (max-width: 340px) {
     nav {
-      gap: 12px;
+      gap: 10px;
+    }
+    nav a {
+      font-size: 13.5px;
     }
     .theme {
       margin-left: 5px;

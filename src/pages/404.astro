@@ -6,6 +6,7 @@ const destinations = [
   { label: "Home", href: "/", note: "Projects, writing and a short introduction" },
   { label: "Projects", href: "/projects/", note: "Software I have built" },
   { label: WRITING.name, href: WRITING.path, note: WRITING.subtitle },
+  { label: "About", href: "/about/", note: "My career and an introduction" },
 ];
 ---
 
@@ -53,6 +54,7 @@ const destinations = [
     line-height: 38px;
     font-weight: 600;
     letter-spacing: -0.022em;
+    text-wrap: balance;
   }
   .lede {
     margin: 10px 0 0;
@@ -94,6 +96,7 @@ const destinations = [
   }
   .note {
     font-size: 14px;
+    text-wrap: pretty;
     line-height: 21px;
     color: var(--muted);
     overflow: hidden;

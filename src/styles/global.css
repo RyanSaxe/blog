@@ -13,7 +13,7 @@
   --plate: #f3f4f6;
   --ink: #111113;
   --ink-2: #4a4a50;
-  --muted: #76767d;
+  --muted: #707077;
   --faint: #b4b4ba;
   --line: rgba(0, 0, 0, 0.07);
   --edge: rgba(0, 0, 0, 0.065);
@@ -125,6 +125,28 @@ button {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* The first stop for the Tab key, hidden until it has focus. */
+.skip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus {
+  transform: none;
+}
+main:focus {
+  outline: none;
 }
 
 /* ---- KaTeX ---- */

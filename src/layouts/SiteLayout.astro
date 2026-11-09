@@ -31,8 +31,9 @@ const { title, description, image, section } = Astro.props;
     <slot name="head" />
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <SiteHeader section={section} />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />
