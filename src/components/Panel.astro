@@ -195,7 +195,8 @@ import "@/styles/cards.css";
 
   // `from` is a card, or the opening line's round button, which grows into a panel of text alone
   function openPanel(from: HTMLElement, trigger: HTMLElement, tpl: HTMLTemplateElement) {
-    if (S) return;
+    if (S && !S.closing) return;
+    if (S) finish(true);
     const card = from.classList.contains("card") ? from : null;
     const phone = narrow.matches;
     const head = phone ? 56 : 64;
@@ -378,6 +379,9 @@ import "@/styles/cards.css";
   function closePanel() {
     if (!S || (S.sp.target === 0 && !S.sp.done)) return;
     unpush();
+    // the page takes clicks again as soon as the panel starts to close
+    overlay.style.pointerEvents = "none";
+    for (const el of inertTargets()) el.inert = false;
     const sc = content.scrollTop;
     content.style.overflowY = "";
     if (sc) { content.scrollTop = 0; $(".p-in", content).style.transform = `translateY(${-sc}px)`; }
@@ -411,6 +415,7 @@ import "@/styles/cards.css";
     trigger.setAttribute("aria-expanded", "false");
     for (const el of inertTargets()) el.inert = false;
     overlay.hidden = true;
+    overlay.style.pointerEvents = "";
     content.replaceChildren();
     frame.removeAttribute("style");
     content.removeAttribute("style");
