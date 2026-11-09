@@ -13,11 +13,31 @@
  */
 @font-face {
   font-family: "Inter Fallback";
+  font-weight: 400;
   src: local("Arial"), local("Helvetica");
   ascent-override: 90.49%;
   descent-override: 22.56%;
   line-gap-override: 0%;
   size-adjust: 107.06%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 500;
+  src: local("Arial"), local("Helvetica");
+  ascent-override: 89.59%;
+  descent-override: 22.33%;
+  line-gap-override: 0%;
+  size-adjust: 108.13%;
+}
+/* Without a bold face the browser thickens the regular one, which runs wider than Inter's semibold. */
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 600 700;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Helvetica-Bold");
+  ascent-override: 95.9%;
+  descent-override: 23.91%;
+  line-gap-override: 0%;
+  size-adjust: 101.01%;
 }
 
 :root {
