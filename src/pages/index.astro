@@ -20,9 +20,10 @@ import { TAGLINE, WRITING } from "@/data/site";
     Sizes the rows so the first screen always shows the Writing heading and the top of its cards.
     Tall windows keep the designed sizes. On a shorter one the spacing tightens first, by only as
     much as it needs, then the images crop from 3:2 toward 2:1, then the cards narrow; on very short windows the cards drop their
-    fact line and narrow further.
+    fact line and narrow further. A window far too short for any of that, such as a phone on its side, keeps the designed sizes.
     It runs before
-    the first paint, again once the fonts load, and whenever the window's width or height changes.
+    the first paint, again once the fonts load, and whenever the window's width or height changes,
+    or after a panel closes if the window changed while it was open.
   -->
   <script is:inline>
     (() => {
@@ -77,6 +78,11 @@ import { TAGLINE, WRITING } from "@/data/site";
         const card = shelves[0].querySelector(".card");
         set(card.offsetWidth, card.querySelector(".cover").offsetHeight, true);
         shrink(true, phone ? 200 : 220);
+        // shrinking only costs quality when the row still ends up far out of view
+        if (over() > 60) {
+          tighten(0);
+          set(0, 0);
+        }
       };
 
       let size = "";
@@ -94,6 +100,7 @@ import { TAGLINE, WRITING } from "@/data/site";
         refit();
       });
       addEventListener("resize", refit);
+      addEventListener("panel:closed", refit);
     })();
   </script>
 

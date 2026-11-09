@@ -17,7 +17,7 @@ const { item, eager = false, sizes = "(max-width: 640px) 86vw, 372px" } = Astro.
 const g = item.gallery;
 const ext = (h: string) => (h.startsWith("http") ? { target: "_blank", rel: "noopener" } : {});
 const isExt = (h: string) => h.startsWith("http");
-const panelSizes = "(max-width: 760px) 100vw, 552px";
+const panelSizes = "(max-width: 640px) 100vw, (max-width: 900px) 640px, 552px";
 ---
 
 <article class="card" data-id={item.id}>

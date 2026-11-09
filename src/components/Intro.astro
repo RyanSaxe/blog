@@ -1,7 +1,8 @@
 ---
 // The opening of the landing, Projects, Writing and About pages: the same line everywhere, at the
 // same distance below the header. The muted part is a hook: clicking it, or the round button after
-// its last word, opens a short paragraph beneath it.
+// its last word, opens a short paragraph in a panel that grows out of the button, the way a card
+// opens. The page includes Panel, which opens it.
 import { TAGLINE, TAGLINE_MORE } from "@/data/site";
 
 interface Props {
@@ -14,30 +15,44 @@ const { heading = false, linkName = true } = Astro.props;
 const Text = heading ? "h1" : "p";
 // The last word and the button share a line, so the button never sits alone.
 const cut = TAGLINE.lastIndexOf(" ") + 1;
+// As a heading, its name is the line alone, without the button's label.
+const name = heading ? `I’m Ryan Saxe. ${TAGLINE}` : undefined;
 ---
 
 <section class="intro" aria-label={heading ? undefined : "Introduction"}>
-  <Text class="intro-text">
+  <Text class="intro-text" aria-label={name}>
     I’m {linkName ? <a class="me" href="/about/">Ryan Saxe</a> : "Ryan Saxe"}.
-    <span class="rest hook" data-hook>{TAGLINE.slice(0, cut)}<span class="tail">{TAGLINE.slice(cut)}<button class="chev" type="button" aria-expanded="false" aria-controls="intro-more" aria-label="More about me"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.75l3 3 3-3"></path></svg></button></span></span>
+    <span class="rest hook" data-hook>{TAGLINE.slice(0, cut)}<span class="tail">{TAGLINE.slice(cut)}<button class="plus" type="button" aria-expanded="false" aria-haspopup="dialog" aria-label="More about me"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 2.75v6.5M2.75 6h6.5"></path></svg></button></span></span>
   </Text>
-  <div class="more" id="intro-more" inert>
-    <div class="more-in"><p>{TAGLINE_MORE}</p></div>
-  </div>
+  <template data-intro-panel>
+    <div class="p-in solo">
+      <div class="p-bar"><span class="grab"></span></div>
+      <div class="p-txt">
+        <h2 class="t p-t" id="pTitle">Ryan Saxe</h2>
+        <p class="s p-s">{TAGLINE}</p>
+        <div class="rest">
+          <hr />
+          <p>{TAGLINE_MORE}</p>
+          {
+            linkName && (
+              <div class="actions">
+                <a class="btn" href="/about/">
+                  More about me
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                    <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                  </svg>
+                </a>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      <button class="x p-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"></path></svg>
+      </button>
+    </div>
+  </template>
 </section>
-
-<script>
-  const hook = document.querySelector<HTMLElement>("[data-hook]");
-  const button = hook?.querySelector<HTMLButtonElement>(".chev");
-  const more = document.getElementById("intro-more");
-  // The whole hook opens it for a pointer; the button is the keyboard's way in, and a click on it bubbles here.
-  hook?.addEventListener("click", () => {
-    const open = button!.getAttribute("aria-expanded") !== "true";
-    button!.setAttribute("aria-expanded", String(open));
-    more!.classList.toggle("open", open);
-    more!.inert = !open;
-  });
-</script>
 
 <style>
   .intro {
@@ -76,7 +91,7 @@ const cut = TAGLINE.lastIndexOf(" ") + 1;
   .tail {
     white-space: nowrap;
   }
-  .chev {
+  .plus {
     display: inline-grid;
     place-items: center;
     width: 26px;
@@ -91,60 +106,17 @@ const cut = TAGLINE.lastIndexOf(" ") + 1;
       background-color 0.2s var(--ease),
       color 0.2s var(--ease);
   }
-  .chev svg {
+  .plus svg {
     width: 12px;
     height: 12px;
-    transition: transform 0.42s var(--ease);
   }
-  .hook:hover .chev {
+  .hook:hover .plus {
     background: var(--card);
     color: var(--ink);
   }
-  .chev:focus-visible {
+  .plus:focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
-  }
-  .chev[aria-expanded="true"] svg {
-    transform: rotate(180deg);
-  }
-  /* The row animates from 0fr to 1fr, so the paragraph opens to its own height. */
-  .more {
-    display: grid;
-    grid-template-rows: 0fr;
-    max-width: 640px;
-    transition: grid-template-rows 0.42s var(--ease);
-  }
-  .more:global(.open) {
-    grid-template-rows: 1fr;
-  }
-  .more-in {
-    min-height: 0;
-    overflow: hidden;
-  }
-  .more p {
-    margin: 0;
-    padding-top: 14px;
-    font-size: 17px;
-    line-height: 27px;
-    color: var(--ink-2);
-    text-wrap: pretty;
-    opacity: 0;
-    transform: translateY(-4px);
-    transition:
-      opacity 0.3s var(--ease),
-      transform 0.42s var(--ease);
-  }
-  .more:global(.open) p {
-    opacity: 1;
-    transform: none;
-    transition-delay: 0.06s;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .more,
-    .more p,
-    .chev svg {
-      transition: none;
-    }
   }
   @media (max-width: 640px) {
     .intro {
@@ -155,16 +127,11 @@ const cut = TAGLINE.lastIndexOf(" ") + 1;
       line-height: 27px;
       letter-spacing: -0.014em;
     }
-    .chev {
+    .plus {
       width: 24px;
       height: 24px;
       margin-left: 8px;
       vertical-align: 1px;
-    }
-    .more p {
-      padding-top: 12px;
-      font-size: 16px;
-      line-height: 25px;
     }
   }
 </style>

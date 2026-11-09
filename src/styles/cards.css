@@ -413,8 +413,13 @@
   overscroll-behavior: contain;
   scrollbar-width: thin;
 }
+/* The scrolling column runs from the panel's top edge to its bottom edge, so text scrolls cleanly under
+   both, and the last links keep their space below them at the end. */
 .p-txt.scrolls {
   overflow-y: auto;
+  margin: -14px 0;
+  padding-top: 24px;
+  padding-bottom: 28px;
 }
 .p-t {
   margin: 0;
@@ -472,6 +477,7 @@
 }
 .kv .v {
   color: var(--ink);
+  text-wrap: pretty;
 }
 .kv code {
   font-family: var(--mono);
@@ -604,6 +610,19 @@
   right: 16px;
   z-index: 3;
 }
+/* A finger can hit a little beyond the drawn circle. */
+.p-close::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+/* The opening line's panel is text alone, in one column. */
+@media (min-width: 901px) and (min-height: 501px) {
+  .p-in.solo {
+    display: block;
+    padding-left: 36px;
+  }
+}
 .p-bar,
 .gal,
 .dots {
@@ -616,9 +635,12 @@
     --cw: 340px;
   }
 }
-@media (max-width: 760px) {
+/* The sheet. Its media query matches `narrow` in Panel.astro. */
+@media (max-width: 900px), (max-height: 500px) {
   .p-in {
     display: block;
+    max-width: 640px;
+    margin: 0 auto;
     padding: 30px 10px 0;
   }
   .p-txt {
@@ -743,5 +765,10 @@
   }
   .card-grid {
     gap: 16px;
+  }
+  /* One card per row has room for the whole sentence. */
+  .card-grid .s {
+    display: block;
+    overflow: visible;
   }
 }
