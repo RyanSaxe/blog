@@ -378,7 +378,12 @@ import "@/styles/cards.css";
       content.style.transform = "";
       for (const el of S.rest) el.style.transform = "";
       if (S.phone) content.style.overflowY = "auto";
-      if (S.gal) { S.gal.classList.add("on"); S.pimg.style.visibility = "hidden"; }
+      if (S.gal) {
+        // the gallery takes over from the image only once its own copy is decoded; shown before that, it paints blank for a moment
+        const s = S;
+        const show = () => { if (S === s && !s.closing) { s.gal.classList.add("on"); s.pimg.style.visibility = "hidden"; } };
+        $<HTMLImageElement>("img", s.gal).decode().then(show, show);
+      }
     } else finish(false);
   }
   function closePanel() {
