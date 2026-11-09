@@ -82,7 +82,8 @@
   color: var(--ink-2);
   text-wrap: pretty;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  /* three lines, so a sentence that fits two on a wide card isn't cut on the narrowest */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
