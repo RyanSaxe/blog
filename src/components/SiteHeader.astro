@@ -177,10 +177,20 @@ const { section, article = false } = Astro.props;
     }
   }
   /* The name keeps clearly more space before the links than the links keep between them. */
-  @media (max-width: 380px) {
+  @media (max-width: 430px) {
+    nav {
+      gap: 16px;
+    }
+    .theme {
+      margin-left: 16px;
+    }
+  }
+  @media (max-width: 386px) {
     .face {
       display: none;
     }
+  }
+  @media (max-width: 380px) {
     nav {
       gap: 14px;
     }
