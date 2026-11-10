@@ -10,8 +10,8 @@ export const writing: CardItem[] = [
     year: "Mar 2021",
     fact: "Essay",
     gallery: [
-      { name: "w-transparent", dark: true, alt: "Figure: linear models nested inside GLMs, GAMs and neural networks", caption: "Linear models sit inside GLMs, GAMs and neural networks" },
-      { name: "w-splines", dark: true, alt: "Figure: a spline fit to a periodic function, and 24 cubic B-splines", caption: "A spline fit and the 24 cubic B-splines behind it" },
+      { name: "w-transparent", dark: true, alt: "Figure: linear models nested inside GLMs, GAMs and neural networks", caption: "Where does a linear model end and a neural network begin?" },
+      { name: "w-splines", dark: true, alt: "Figure: a spline fit to a periodic function, and 24 cubic B-splines", caption: "How does a GAM fit a curve?" },
     ],
     paras: [
       "Generalized linear and additive models are well-established, interpretable approaches to supervised learning.",
@@ -29,7 +29,7 @@ export const writing: CardItem[] = [
     sentence: "How neural networks work, explained with only the math of linear models.",
     year: "Mar 2021",
     fact: "Essay",
-    gallery: [{ name: "w-linear", dark: true, alt: "Figure: a small neural network with inputs x1 to xN", caption: "A small neural network" }],
+    gallery: [{ name: "w-linear", dark: true, alt: "Figure: a small neural network with inputs x1 to xN", caption: "A neural network with one hidden layer" }],
     paras: [
       "Neural networks are a popular machine learning algorithm, and notorious for being difficult to interpret.",
       "It is possible to understand how they work with only the math background of linear models.",
@@ -45,7 +45,7 @@ export const writing: CardItem[] = [
     title: "StarCityGames",
     sentence: "Over 400 articles about Magic: The Gathering, written from 2016 to 2022.",
     year: "2016–2022",
-    fact: "400+ articles",
+    fact: "Columnist",
     gallery: [
       { name: "w-scg", dark: true, alt: "Draft Navigation: From Picks To Paths, on StarCityGames", caption: "Draft Navigation: From Picks To Paths" },
       { name: "w-scg-fund", dark: true, alt: "Limited Fundamentals: Maximizing For Your Own Preferences, on StarCityGames", caption: "Limited Fundamentals: Maximizing For Your Own Preferences" },
@@ -74,14 +74,13 @@ export const writing: CardItem[] = [
     title: "The 540",
     sentence: "I co-hosted 14 episodes of StarCityGames’ Cube podcast with Ryan Overturf.",
     year: "2021–2022",
-    fact: "Co-host, 14 episodes",
+    fact: "Co-host",
     gallery: [
       { name: "w-540", dark: true, alt: "The 540 podcast logo", caption: "The 540, StarCityGames’ Cube podcast" },
       { name: "w-540-og", dark: true, alt: "The card for the episode The Art Of Joyful Drafting", caption: "The Art Of Joyful Drafting" },
     ],
     paras: [
-      "I co-hosted The 540 with Ryan Overturf for 14 episodes, from November 18, 2021 to February 25, 2022.",
-      "The episodes include Breaking Singleton, the 2021 Cube Year In Review and a three-part Kamigawa: Neon Dynasty Cube review.",
+      "The 540 is StarCityGames’ podcast about Cube. Ryan Overturf and I hosted it together for 14 episodes, from November 2021 to February 2022.",
     ],
     facts: [
       ["Co-host", "Nov 2021 to Feb 2022"],
@@ -98,10 +97,10 @@ export const writing: CardItem[] = [
     title: "Lords of Limited",
     sentence: "Three guest episodes: drafting with preferences, drafting aggro and bot design.",
     year: "2017–2019",
-    fact: "3 episodes",
+    fact: "First repeat guest",
     gallery: [{ name: "w-lol", dark: true, alt: "The Lords of Limited podcast cover", caption: "Lords of Limited" }],
     paras: [
-      "I was a guest on Lords of Limited three times. On episode 77 I became the show’s first repeat guest, in an episode that brought the StarCityGames Limited creators together to talk about drafting aggro.",
+      "I was a guest on Lords of Limited three times. On episode 77 I became the show’s first repeat guest, in an episode about drafting aggro.",
       "In episode 129, I talk about my own Magic bot and how it approaches drafting.",
     ],
     facts: [
@@ -121,13 +120,13 @@ export const writing: CardItem[] = [
   {
     id: "limited-level-ups",
     title: "Limited Level-Ups",
-    sentence: "Guest episodes with host Alex Nikolic, including one on the art of forcing.",
+    sentence: "Why “forcing” in draft gets a bad name, and the art of doing it well.",
     year: "2020–2024",
     fact: "5 episodes",
     gallery: [{ name: "w-llu", dark: true, alt: "The Limited Level-Ups podcast cover", caption: "Limited Level-Ups" }],
     paras: [
-      "I was a guest on Limited Level-Ups five times, from 2020 to 2024.",
-      "Episode 81 is about the art of forcing in draft, and the negative connotations behind the term “forcing”. Episode 31 is a conversation about Draft Navigation.",
+      "Episode 81 is about the art of forcing in draft, and why the word “forcing” carries such a negative connotation.",
+      "My Lucky Paper Radio episode, In Defense of Forcing, comes back to the same topic.",
     ],
     facts: [
       ["Years", "2020 to 2024"],
@@ -139,20 +138,20 @@ export const writing: CardItem[] = [
         { label: "81 · The Art of Forcing", meta: "Mar 12, 2022", href: "https://limitedlevelups.libsyn.com/limited-level-ups-81-the-art-of-forcing-with-ryan-saxe" },
         { label: "31 · From Picks to Paths, a Conversation", meta: "Jul 31, 2020" },
       ],
-      note: "Three more guest episodes, from 2021 to 2024.",
+      note: "And three more, from 2021 to 2024.",
     },
     actions: [],
   },
   {
     id: "lucky-paper-radio",
     title: "Lucky Paper Radio",
-    sentence: "Three guest episodes on cube design, forcing, and an auto battler inspired format.",
+    sentence: "What low-powered cubes can learn from how Limited sets are designed.",
     year: "2023–2024",
-    fact: "3 episodes",
+    fact: "Cube design",
     gallery: [{ name: "w-lpr", dark: true, alt: "The Lucky Paper Radio podcast cover", caption: "Lucky Paper Radio" }],
     paras: [
-      "In episode 140, hosts Andy Mangold and Anthony Mattox talk with me about the design of low-powered cubes and what can be learned from the design of Limited sets.",
-      "In episode 153, I explain an approach to Cube drafting, and Limited at large, that may seem to run contrary to conventional wisdom.",
+      "My most recent visit, episode 221, is about a Magic format I designed, inspired by auto battlers.",
+      "Earlier episodes covered low-powered cube design and forcing.",
     ],
     facts: [
       ["Years", "2023 to 2024"],
@@ -173,7 +172,7 @@ export const writing: CardItem[] = [
     title: "Bot Drafting the Hard Way",
     sentence: "A bot, built from over 80,000 drafts, that understands archetypes and stays open.",
     year: "Jan 2020",
-    fact: "Draftsim",
+    fact: "Bot design",
     gallery: [{ name: "w-draftsim", dark: true, alt: "Draftsim’s title card for Bot Drafting the Hard Way, by Ryan Saxe", caption: "Draftsim’s title card for the article" }],
     paras: [
       "The full title is “Bot Drafting the Hard Way: A New Drafting Model for Archetypes and Staying Open”.",
