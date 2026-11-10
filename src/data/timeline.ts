@@ -12,14 +12,14 @@ export const timeline: TimelineEntry[] = [
     title: "Global Director, Data & Analytics",
     organization: "AB InBev",
     description:
-      "Head of Science and Engineering. Responsible for the technology behind all global analytics products.",
+      "Chief Data Scientist for Global Analytics, responsible for the science and engineering behind its products, from marketing and pricing models to demand forecasting.",
     startDate: "Nov 2024",
   },
   {
     title: "Principal Machine Learning Engineer",
     organization: "AB InBev",
     description:
-      "Tech lead for all commercial applications of machine learning (sales, marketing, and finance).",
+      "Architected an interpretable model that learns jointly across every brand, region and channel, and created a fast framework for hierarchical regression.",
     startDate: "Jan 2023",
     endDate: "Nov 2024",
   },
@@ -27,7 +27,7 @@ export const timeline: TimelineEntry[] = [
     title: "Senior Engineering Manager",
     organization: "AB InBev",
     description:
-      "Tech lead Manager for a team dedicated to ML solutions for marketing efficacy and automated spend allocation.",
+      "Led the team that built in-house marketing mix models as custom differentiable programs in TensorFlow.",
     startDate: "Mar 2021",
     endDate: "Jan 2023",
   },
@@ -35,7 +35,7 @@ export const timeline: TimelineEntry[] = [
     title: "Senior Machine Learning Research Scientist, Ecommerce",
     organization: "PepsiCo",
     description:
-      "Research in Graph Neural Networks for product introduction, embedding regularization techniques, and transparent neural architectures. Granted a patent at the intersection of contrastive loss and anomaly detection.",
+      "Invented similarity regularization, granted as a US patent, which makes similar products behave alike across pricing and marketing models.",
     startDate: "Oct 2020",
     endDate: "Mar 2021",
     link: "https://patents.google.com/patent/US12333399B2",
@@ -44,7 +44,7 @@ export const timeline: TimelineEntry[] = [
     title: "Data Scientist, Ecommerce",
     organization: "PepsiCo",
     description:
-      "Built an internal API for training deep learning systems with economic priors. Designed a multi-modal Graph Embedding model for product similarity.",
+      "Built a marketing attribution model on a generalized additive neural network with economic priors, and product embeddings adapted from DeepWalk.",
     startDate: "Jul 2019",
     endDate: "Oct 2020",
   },
@@ -52,7 +52,7 @@ export const timeline: TimelineEntry[] = [
     title: "Technical Research Assistant, RiskEcon Lab",
     organization: "NYU Courant Institute",
     description:
-      "Research in Machine Vision for Gait Recognition and Classification of Pathological Disorders.",
+      "Researched machine vision for gait and movement quality, and wrote a survey on gait classification.",
     startDate: "Sep 2017",
     endDate: "Jul 2019",
     link: "https://arxiv.org/pdf/2012.14465.pdf",
