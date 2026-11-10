@@ -220,6 +220,7 @@ export const projects: CardItem[] = [
     ],
     paras: [
       "One shared encoder maps a set of cards into a 128-dimensional space, and four heads read it: cube recommendations, draft picks, deck building and card correlations.",
+      "The model runs as its own service, apart from the main site, and each feature asks it for one head. Smart Search filters the catalog by your query and has the cube head rank what’s left by fit, and the draft bots call the draft and deck heads for every pick and every deck.",
     ],
     facts: [
       ["Years", "2020 to 2026"],
