@@ -6,11 +6,11 @@ export const WRITING = {
 };
 
 /** The opening line, under your name in the header on every page. */
-export const TAGLINE = "I design interpretable machine learning and AI systems, and I build tools for working with AI agents.";
+export const TAGLINE = "I’m obsessed with how people work with AI, and I build things to find out.";
 
 /** The short paragraph the opening line opens into when a visitor clicks it. */
 export const TAGLINE_MORE =
-  "I’ve spent my career building machine learning that has to work at scale and still make sense to the people who rely on it. These days I’m obsessed with how people work with agents, and how agents work with each other, so I build tools to find out. I write to understand what I build, which is how I ended up with over 400 articles about Magic: The Gathering.";
+  "My day job is machine learning that has to work at scale and still make sense to the people who rely on it. The rest of my time goes to whatever I’m obsessed with. Lately that’s AI agents: how people work with them, and how they work with each other. For much longer it’s been Magic: The Gathering, which is how I ended up with over 400 articles, a drafting bot that reached Mythic, and a format of my own.";
 
 export const SOCIAL = [
   { label: "GitHub", href: "https://github.com/RyanSaxe" },
