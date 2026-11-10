@@ -5,6 +5,7 @@ export const WRITING = {
   subtitle: "Essays, articles and podcasts",
 };
 
+// TODO(ryan): rewrite the sidebar's opening line and the paragraph it opens into by hand.
 /** The opening line, under your name in the header on every page. */
 export const TAGLINE = "I’m obsessed with how people work with AI, and I build things to find out.";
 
