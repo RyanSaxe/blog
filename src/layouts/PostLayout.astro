@@ -34,8 +34,8 @@ const formattedDate = date.toLocaleDateString("en-US", {
   timeZone: "UTC",
 });
 const neighbours = [
-  prev && { ...prev, label: "Previous essay", dir: "prev" },
-  next && { ...next, label: "Next essay", dir: "next" },
+  prev && { ...prev, label: "Previous", dir: "prev" },
+  next && { ...next, label: "Next", dir: "next" },
 ].filter((n) => !!n);
 ---
 
