@@ -57,10 +57,12 @@ import { TAGLINE } from "@/data/site";
     container: about / inline-size;
     padding: 0 var(--g);
   }
-  /* beside the header's card, the profile card's top lines up with it */
+  /* beside the header's card, the profile card's top lines up with it, and the cards grow no wider than 1216px */
   @media (min-width: 1024px) {
     .about {
       margin-top: -14px;
+      padding-left: var(--g-left);
+      max-width: calc(var(--g-left) + 1216px + var(--g));
     }
   }
   /*

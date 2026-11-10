@@ -158,6 +158,15 @@ const neighbours = [
     --measure: 620px;
     --wide: 920px;
   }
+  /*
+   * Beside the header's card the essay stops widening once its contents list reaches its full 240px, so on
+   * a wide window it sits at the page's left gutter rather than drifting to the middle.
+   */
+  @media (min-width: 1024px) {
+    .essay {
+      max-width: calc(2 * (var(--g-left) + 240px + 64px) + var(--measure));
+    }
+  }
   .essay-head {
     width: min(var(--measure), 100% - 2 * var(--g));
     margin: 0 auto;

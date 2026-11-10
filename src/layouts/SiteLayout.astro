@@ -51,9 +51,10 @@ const { title, description, image, section, article } = Astro.props;
     <!--
       The landing page's rows ([data-fit]) are sized so the first screen always shows the Writing heading
       and the top of its cards. Tall windows keep the designed sizes. On a shorter one the spacing tightens
-      first, by only as much as it needs, then the images crop from 3:2 toward 2:1, then the cards narrow;
-      on very short windows the cards drop their fact line and narrow further. A window far too short for
-      any of that, such as a phone on its side, keeps the designed sizes.
+      first, by only as much as it needs (above the tick marks, and below 1024px between the rows too), then
+      the images crop from 3:2 toward 2:1, then the cards narrow; on very short windows the cards drop their
+      fact line and narrow further. A window far too short for any of that, such as a phone on its side,
+      keeps the designed sizes.
       It runs before the first paint, when the router swaps in a page (before that page is drawn), once
       the fonts load, whenever the window's size changes, and after a panel closes if it changed meanwhile.
       It is the same on every page, so the router runs it once and the swap event carries it after that.

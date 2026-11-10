@@ -67,8 +67,8 @@ const items = Astro.props.headings.filter((h) => h.depth <= 2 && !EXCLUDED.has(h
       position: absolute;
       top: 0;
       bottom: 0;
-      left: var(--g);
-      width: calc(50% - var(--measure) / 2 - 64px - var(--g));
+      left: var(--g-left);
+      width: calc(50% - var(--measure) / 2 - 64px - var(--g-left));
       max-width: 240px;
     }
   }

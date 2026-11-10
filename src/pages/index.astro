@@ -21,8 +21,11 @@ import { TAGLINE, WRITING } from "@/data/site";
   [data-fit] .shelf.compact .m {
     display: none;
   }
-  html[style*="--fit-t"] [data-fit] .shelf + .shelf {
-    margin-top: calc(64px - 28px * var(--fit-t));
+  /* beside the header's card the gap between the rows stays put: it is also the gap beside that card */
+  @media (max-width: 1023px) {
+    html[style*="--fit-t"] [data-fit] .shelf + .shelf {
+      margin-top: calc(64px - 28px * var(--fit-t));
+    }
   }
   html[style*="--fit-t"] [data-fit] .ticks {
     margin-top: calc(20px - 12px * var(--fit-t));

@@ -168,18 +168,50 @@
 /*
  * One card width for the landing's rows and the list pages' grids, so a card is the same size on both:
  * three across the page beside the header's card on a wide laptop, two on a smaller one or a tablet.
- * Phones override it below.
+ * A wider window adds a column whenever another card of about 300px fits, so cards stay 300 to 410px
+ * wide instead of stretching. Phones override it below.
  */
 .shelf,
 .card-grid {
   --gap: 20px;
   --cols: 3;
-  --cw: calc((min(1216px, 100vw - var(--side, 0px) - 2 * clamp(20px, 5vw, 48px)) - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  /* % is the row's or the grid's width inside its gutters, which, unlike 100vw, never counts the scrollbar */
+  --cw: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
 }
 @media (max-width: 1339px) {
   .shelf,
   .card-grid {
     --cols: 2;
+  }
+}
+@media (min-width: 1652px) {
+  .shelf,
+  .card-grid {
+    --cols: 4;
+  }
+}
+@media (min-width: 1972px) {
+  .shelf,
+  .card-grid {
+    --cols: 5;
+  }
+}
+@media (min-width: 2292px) {
+  .shelf,
+  .card-grid {
+    --cols: 6;
+  }
+}
+@media (min-width: 2612px) {
+  .shelf,
+  .card-grid {
+    --cols: 7;
+  }
+}
+@media (min-width: 2932px) {
+  .shelf,
+  .card-grid {
+    --cols: 8;
   }
 }
 .shelf {
@@ -193,7 +225,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 var(--g);
+  padding: 0 var(--g) 0 var(--g-left);
   margin-bottom: 16px;
   height: 34px;
 }
@@ -213,7 +245,7 @@
   align-items: baseline;
   gap: 8px;
   margin: 0 0 16px;
-  padding: 7px var(--g);
+  padding: 7px var(--g) 7px var(--g-left);
   font-size: 15px;
   line-height: 20px;
   font-weight: 600;
@@ -285,8 +317,8 @@
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--g);
-  padding: 10px var(--g) 14px;
+  scroll-padding-inline: var(--g-left) var(--g);
+  padding: 10px var(--g) 14px var(--g-left);
   margin: -10px 0 -14px;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
@@ -314,7 +346,7 @@
 .ticks {
   display: flex;
   gap: 4px;
-  padding: 0 var(--g);
+  padding: 0 var(--g) 0 var(--g-left);
   margin-top: 20px;
   height: 2px;
 }
@@ -336,7 +368,7 @@
   grid-template-columns: repeat(var(--cols), var(--cw));
   grid-auto-rows: 1fr;
   gap: 24px var(--gap);
-  padding: 0 var(--g);
+  padding: 0 var(--g) 0 var(--g-left);
 }
 
 /* ---------- Panel and phone sheet ---------- */

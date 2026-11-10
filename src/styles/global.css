@@ -63,8 +63,9 @@
   --sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* page gutter: 112px at 1440 wide, never under 20px; use it as padding so % resolves to the page width */
-  --g: max(clamp(20px, 5vw, 48px), calc((100% - 1216px) / 2));
+  /* page gutter: 48px from 960px wide, never under 20px; --g-left is the left one, wider beside the header's card */
+  --g: clamp(20px, 5vw, 48px);
+  --g-left: var(--g);
 
   /* legacy names, kept so older pages render with the new palette */
   --color-bg: var(--bg);
@@ -131,10 +132,14 @@ body > main {
 /*
  * On a laptop the header is a card down the left side (SiteHeader) and the page sits beside it. --side is
  * the card's column with its 16px margin; the card widths in cards.css subtract it.
+ * Every page starts as far from that card as the landing page's rows are from each other (.shelf + .shelf
+ * in cards.css), so the content's left edge stays put as the router swaps pages, and runs to the window's
+ * right edge however wide the window is.
  */
 @media (min-width: 1024px) {
   :root {
     --side: 280px;
+    --g-left: 64px;
   }
   body {
     display: grid;
