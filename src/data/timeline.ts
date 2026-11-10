@@ -19,7 +19,7 @@ export const timeline: TimelineEntry[] = [
     title: "Principal Machine Learning Engineer",
     organization: "AB InBev",
     description:
-      "Architected an interpretable model that learns jointly across every brand, region and channel, and created a fast framework for hierarchical regression.",
+      "Designed the framework that trains hierarchical models at global scale, used by products across the company, from forecasting to marketing.",
     startDate: "Jan 2023",
     endDate: "Nov 2024",
   },
