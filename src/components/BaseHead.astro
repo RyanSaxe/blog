@@ -49,6 +49,8 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
   device's setting until they make one. Dark image sources ([data-dark]) follow the theme rather than the
   device, including ones the panel clones in later. window.setTheme is the toggle's way in. The client
   router replaces <html>'s attributes when it swaps in a page, so the theme is set again on each swap.
+  It also sets data-scrollbars="classic" when the computer draws scrollbars that take up space, so the
+  site's designed bar (global.css) replaces only those; a Mac showing bars only while scrolling keeps its own.
 -->
 <script is:inline>
   (() => {
@@ -77,6 +79,15 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     const current = () => stored() ?? (device.matches ? "dark" : "light");
     apply(current());
     document.addEventListener("astro:after-swap", () => apply(current()));
+    const scrollbars = () => {
+      const probe = document.createElement("div");
+      probe.style.cssText = "position:absolute;top:-200px;width:100px;height:100px;overflow:scroll;visibility:hidden";
+      root.append(probe);
+      if (probe.offsetWidth > probe.clientWidth) root.dataset.scrollbars = "classic";
+      probe.remove();
+    };
+    scrollbars();
+    document.addEventListener("astro:after-swap", scrollbars);
     new MutationObserver((records) => {
       for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
     }).observe(root, { childList: true, subtree: true });

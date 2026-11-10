@@ -215,42 +215,47 @@ main:focus {
 
 /*
  * ---- Scrollbars ----
- * A thin rounded thumb on a clear track, so the page shows through the gutter, wherever a mouse or trackpad
- * scrolls; touch screens keep their own bars. Chrome and Safari draw ::-webkit-scrollbar, and Firefox, which
- * has no such selector, takes scrollbar-color. Chrome drops ::-webkit-scrollbar on any element with
- * scrollbar-width or scrollbar-color, so those stay in the Firefox block. The rows and the header's card
- * hide their bars and keep doing so.
+ * A thin rounded thumb on a clear track, so the page shows through the gutter. It replaces only scrollbars
+ * that take up space: BaseHead sets data-scrollbars="classic" on <html> when the computer draws those, and
+ * a Mac that shows bars only while scrolling, or a touch screen, keeps its own. Chrome and Safari draw
+ * ::-webkit-scrollbar, and Firefox, which has no such selector, takes scrollbar-color. Chrome drops
+ * ::-webkit-scrollbar on any element with scrollbar-width or scrollbar-color, so those stay in the Firefox
+ * block. The rows and the header's card hide their bars and keep doing so.
  */
-@media (hover: hover) and (pointer: fine) {
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-    background: transparent;
+[data-scrollbars="classic"]::-webkit-scrollbar,
+[data-scrollbars="classic"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-track,
+[data-scrollbars="classic"] ::-webkit-scrollbar-track,
+[data-scrollbars="classic"]::-webkit-scrollbar-corner,
+[data-scrollbars="classic"] ::-webkit-scrollbar-corner {
+  background: transparent;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb {
+  min-height: 40px;
+  min-width: 40px;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: var(--faint) padding-box;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb:hover,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--faint), var(--muted));
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb:active,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb:active {
+  background-color: var(--muted);
+}
+@supports not selector(::-webkit-scrollbar) {
+  :root[data-scrollbars="classic"] {
+    scrollbar-color: var(--faint) transparent;
   }
-  ::-webkit-scrollbar-track,
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    min-height: 40px;
-    min-width: 40px;
-    border: 3px solid transparent;
-    border-radius: 999px;
-    background: var(--faint) padding-box;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: color-mix(in srgb, var(--faint), var(--muted));
-  }
-  ::-webkit-scrollbar-thumb:active {
-    background-color: var(--muted);
-  }
-  @supports not selector(::-webkit-scrollbar) {
-    :root {
-      scrollbar-color: var(--faint) transparent;
-    }
-    * {
-      scrollbar-width: thin;
-    }
+  [data-scrollbars="classic"] * {
+    scrollbar-width: thin;
   }
 }
 
