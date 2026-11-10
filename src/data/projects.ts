@@ -219,7 +219,6 @@ export const projects: CardItem[] = [
       },
     ],
     paras: [
-      "The machine learning system behind CubeCobra’s card recommendations, Smart Search, draft bots and deck building.",
       "One shared encoder maps a set of cards into a 128-dimensional space, and four heads read it: cube recommendations, draft picks, deck building and card correlations.",
     ],
     facts: [
