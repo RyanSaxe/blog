@@ -1,14 +1,14 @@
 ---
 title: "Designing Transparent Neural Networks"
-description: "Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it's possible to design Neural Networks that are just as transparent."
+description: "Generalized Linear and Additive Models are well-established interpretable approaches to supervised learning. This post connects these approaches to the building blocks of Neural Networks, and demonstrates that it’s possible to design Neural Networks that are just as transparent."
 date: 2021-03-04
 heroImage: "/images/nam.png"
 categories: ["interpretability"]
 ---
 
-Most systems we interact with are part of some pipeline that integrates Machine Learning (ML). Sometimes we interact with an ML model directly, like Spotify's recommender system for songs. Other times, this interaction is more detatched; we post a comment on Twitter or Facebook, and this comment is used to train some language model at the respective company. As ML models become more and more prevalent, interpreting and explaining the decisions these models make become increasingly important.
+Most systems we interact with are part of some pipeline that integrates Machine Learning (ML). Sometimes we interact with an ML model directly, like Spotify's recommender system for songs. Other times, this interaction is more detached; we post a comment on Twitter or Facebook, and this comment is used to train some language model at the respective company. As ML models become more and more prevalent, interpreting and explaining the decisions these models make become increasingly important.
 
-Neural networks (NNs) are a popular class of machine learning algorithms, which are notorious for being difficult to interpret. They are often referred to as "black boxes" or "opaque". Linear Models, Generalized Linear Models (GLMs), and Generalized Additive Models (GAMs) are examples of popular machine learning algorithms that are not "opaque", but instead "transparent". This transparency often leads linear and additive models to be favorable choices over classic neural networks even though the functions neural networks can learn are a superset of the functions these other models can learn. The goal of this blog post is to demonstrate that, with a particular asterix over the architecture of neural networks, they can be just as transparent. 
+Neural networks (NNs) are a popular class of machine learning algorithms, which are notorious for being difficult to interpret. They are often referred to as "black boxes" or "opaque". Linear Models, Generalized Linear Models (GLMs), and Generalized Additive Models (GAMs) are examples of popular machine learning algorithms that are not "opaque", but instead "transparent". This transparency often leads linear and additive models to be favorable choices over classic neural networks even though the functions neural networks can learn are a superset of the functions these other models can learn. The goal of this blog post is to demonstrate that, with a particular asterisk over the architecture of neural networks, they can be just as transparent. 
 
 ![](/images/transparent_summary.png)
 
@@ -95,7 +95,7 @@ The trick is to use a different neural network for each individual feature, and 
 
 GANNs are simply a linear combination of neural networks, where each network only observes a single input feature[^fn-3]. Because each of these networks take a single input feature, and provide a single output feature, it becomes possible to plot a two-dimensional graph where the x-axis is the input feature and the y-axis is the output feature for each network. This graph is hence a fully transparent function describing how the neural network learned to transform the input feature as it contributes, additively, to the prediction. Hence this type of neural architecture is sufficient for creating a model as transparent as classic linear and additive models described in this blog post so far.
 
-Below is code for creating a GANN using [Keras](https://www.keras.io). As you can see, this model is capable of solving the regression problem while maintaining feature-wise transparency on piecewise continous functions!
+Below is code for creating a GANN using [PyTorch](https://pytorch.org). As you can see, this model is capable of solving the regression problem while maintaining feature-wise transparency on piecewise continuous functions!
 
 
 ```python
@@ -177,7 +177,7 @@ for epoch in range(50):
 
 At first glance, these results look good, but not perfect. The first plot demonstrates this model achieved a near perfect fit of the actual task, while the last two plots look like the GANN was capable of learning the general shapes of the functions, but is off on the intercepts for all of them. This should not discount the validity of the model. The corresponding math demonstrates perfectly fitting intercepts of an additive model cannot be guaranteed.
 
-Let $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ that dependent on $X_i$, and $\alpha_i$ represents the intercept.
+Let $h_i(X_i) = \alpha_i + f(X_i)$ where $f(X_i)$ represents all of the aspects of $h(X_i)$ that depend on $X_i$, and $\alpha_i$ represents the intercept.
 
 $$
 \begin{aligned}
@@ -204,7 +204,7 @@ The plots below are what happens when we simply adjust the learned intercepts fo
 
 This is a clear demonstration that Generalized Additive Neural Networks are capable of overfitting to piecewise continuous functions while maintaining transparency! 
 
-The next section provides a brief overview of Neural Additive Models (NAMs), which are a special variant of GANNs that are designed to be able to fit "jumpy functions", as this is more reminiscient of real-world data.
+The next section provides a brief overview of Neural Additive Models (NAMs), which are a special variant of GANNs that are designed to be able to fit "jumpy functions", as this is more reminiscent of real-world data.
 
 ## Neural Additive Models
 
@@ -214,7 +214,7 @@ Let $w$ and $b$ be the respective weight and bias parameters on a node with acti
 
 ![](/images/nam_exerpt.png)
 
-While this clearly demonstrates ExU's ability to overfit to jumpy functions, this isn't ideal. Overfitting isn't a good thing. Hence, the rest of this paper demonstrates ExU can be regularized to learn functions that are relatively smooth, yet "jumpy" at very specific junctions. This is more reminiscient of real-world solutions, and the paper shows that this can outperform current state-of-the-art GAMs while maintaining feature transparency. Their regularization strategies are:
+While this clearly demonstrates ExU's ability to overfit to jumpy functions, this isn't ideal. Overfitting isn't a good thing. Hence, the rest of this paper demonstrates ExU can be regularized to learn functions that are relatively smooth, yet "jumpy" at very specific junctions. This is more reminiscent of real-world solutions, and the paper shows that this can outperform current state-of-the-art GAMs while maintaining feature transparency. Their regularization strategies are:
 
 1. **Dropout**: randomly zero-out nodes inside each NN.
 2. **Weight Decay**: add a penalty corresponding to the L2 norm of weights inside each NN.
@@ -257,9 +257,9 @@ $$
 
 Specifically, the purpose of $f_1$ is to learn some binary feature to determine how the model handles the other features. if $f_1(x_1, x_2) = 0$, then the model will use $f_3$, otherwise it will use $f_2$. You can solve this problem with three neural networks, one for each function. Then, rather than having the prediction be a normal linear combination of those three functions like a GANN, you set the prediction to correspond to the equation above.
 
-I have simulated a dataset that defines $f_1$ as whether $x_1,x_2$ are inside the unit circle, and defines $f_2$ and $f_3$ as basic linear models[^fn-4]. The code below defines a a neural network that learns these three functions to make a prediction. And below I show the results to demonstrate that we learn the correct circle boundaries and linear models, which maintains full transparency!
+I have simulated a dataset that defines $f_1$ as whether $x_1,x_2$ are inside the unit circle, and defines $f_2$ and $f_3$ as basic linear models[^fn-4]. The code below defines a neural network that learns these three functions to make a prediction. And below I show the results to demonstrate that we learn the correct circle boundaries and linear models, which maintains full transparency!
 
-Additional Note: this specific example requires learning a conditional function $f_1$, which is not continuous and hence requires some tricks to learn via neural networks. You can see my code below for the BinaryNN, which learns a continuous function, modifies it to be binary, but applies backpropigation as if that modification was the identity function. This is called the Straight-Through estimator, and was introduced by Hinton in his 2012 Coursera lectures. Refer to <cite id="cite-conditional_nn"><a href="#ref-conditional_nn">(Bengio et al., 2013)</a></cite> If you'd like further reading on conditional computation.  
+Additional Note: this specific example requires learning a conditional function $f_1$, which is not continuous and hence requires some tricks to learn via neural networks. You can see my code below for the BinaryNN, which learns a continuous function, modifies it to be binary, but applies backpropagation as if that modification was the identity function. This is called the Straight-Through estimator, and was introduced by Hinton in his 2012 Coursera lectures. Refer to <cite id="cite-conditional_nn"><a href="#ref-conditional_nn">(Bengio et al., 2013)</a></cite> If you'd like further reading on conditional computation.  
 
 
 ```python
@@ -349,7 +349,7 @@ for epoch in range(5):
         optimizer.step()
         epoch_loss += loss.item()
     if (epoch + 1) % 1 == 0:
-        print(f'Epoch {epoch+1}/50, Loss: {epoch_loss/len(loader):.4f}')
+        print(f'Epoch {epoch+1}/5, Loss: {epoch_loss/len(loader):.4f}')
 
 ```
 

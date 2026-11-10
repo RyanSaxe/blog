@@ -1,0 +1,46 @@
+---
+// Below 1024px only; on a laptop the header's card carries the icons.
+import SocialLinks from "@/components/SocialLinks.astro";
+---
+
+<footer class="site-footer">
+  <p>© 2026 Ryan Saxe</p>
+  <div class="icons"><SocialLinks /></div>
+</footer>
+
+<style>
+  /* The space above the footer is the space between the landing page's rows. */
+  .site-footer {
+    margin: 64px var(--g) 0;
+    padding: 16px 0 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  p {
+    margin: 0;
+  }
+  .icons {
+    margin-right: -9px;
+  }
+  @media (max-width: 640px) {
+    .site-footer {
+      margin-top: 48px;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .icons {
+      margin: 0 0 0 -9px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .site-footer {
+      display: none;
+    }
+  }
+</style>

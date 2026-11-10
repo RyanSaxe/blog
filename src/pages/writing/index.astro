@@ -1,0 +1,12 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import CardGrid from "@/components/CardGrid.astro";
+import { writing } from "@/data/writing";
+import { WRITING } from "@/data/site";
+
+const description = "Essays, articles and podcast episodes, with links to read or listen.";
+---
+
+<SiteLayout title={`${WRITING.name} · Ryan Saxe`} description={description} section="writing">
+  <CardGrid items={writing} label={WRITING.name} />
+</SiteLayout>

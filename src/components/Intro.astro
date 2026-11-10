@@ -1,0 +1,99 @@
+---
+// The opening line, under the name in the header on every page. The line is a hook: clicking it, or the
+// round button after its last word, opens a short paragraph in a panel that grows out of the button, the
+// way a card opens. The layout includes Panel, which opens it.
+import { TAGLINE, TAGLINE_MORE } from "@/data/site";
+
+interface Props {
+  /** The panel ends with a link to About everywhere except on About itself. */
+  aboutLink?: boolean;
+}
+const { aboutLink = true } = Astro.props;
+// The last word and the button share a line, so the button never sits alone.
+const cut = TAGLINE.lastIndexOf(" ") + 1;
+---
+
+<p class="line">
+  <span class="hook" data-hook>{TAGLINE.slice(0, cut)}<span class="tail">{TAGLINE.slice(cut)}<button class="plus" type="button" aria-expanded="false" aria-haspopup="dialog" aria-label="More about me"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 2.75v6.5M2.75 6h6.5"></path></svg></button></span></span>
+</p>
+<template data-intro-panel>
+  <div class="p-in solo">
+    <div class="p-bar"><span class="grab"></span></div>
+    <div class="p-txt">
+      <h2 class="t p-t" id="pTitle">Ryan Saxe</h2>
+      <p class="s p-s">{TAGLINE}</p>
+      <div class="rest">
+        <hr />
+        <p>{TAGLINE_MORE}</p>
+        {
+          aboutLink && (
+            <div class="actions">
+              <a class="btn" href="/about/">
+                More about me
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                  <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                </svg>
+              </a>
+            </div>
+          )
+        }
+      </div>
+    </div>
+    <button class="x p-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"></path></svg>
+    </button>
+  </div>
+</template>
+
+<style>
+  .line {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--muted);
+  }
+  .hook {
+    cursor: pointer;
+    transition: color 0.2s var(--ease);
+  }
+  .hook:hover,
+  .hook:has([aria-expanded="true"]) {
+    color: var(--ink-2);
+  }
+  .tail {
+    white-space: nowrap;
+  }
+  .plus {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    vertical-align: -1px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--edge-2);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+  .plus svg {
+    width: 10px;
+    height: 10px;
+  }
+  .hook:hover .plus {
+    background: var(--plate);
+    color: var(--ink);
+  }
+  .plus:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  @media (min-width: 1024px) {
+    .line {
+      font-size: 14.5px;
+      line-height: 22px;
+    }
+  }
+</style>

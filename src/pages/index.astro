@@ -1,31 +1,41 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import PostCard from "@/components/PostCard.astro";
-import { getCollection } from "astro:content";
-
-const posts = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Rail from "@/components/Rail.astro";
+import { projects } from "@/data/projects";
+import { writing } from "@/data/writing";
+import { TAGLINE, WRITING } from "@/data/site";
 ---
 
-<BaseLayout title="Ryan Saxe's Blog" description="ML, engineering, and whatever else.">
-  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
-    {
-      posts.length === 0 ? (
-        <p class="text-[var(--color-text-muted)]">No posts yet.</p>
-      ) : (
-        <div class="flex flex-col gap-6">
-          {posts.map((post) => (
-            <PostCard
-              title={post.data.title}
-              description={post.data.description}
-              date={post.data.date}
-              slug={post.id}
-              categories={post.data.categories}
-            />
-          ))}
-        </div>
-      )
-    }
+<SiteLayout title="Ryan Saxe" description={TAGLINE}>
+  <div data-fit>
+    <Rail id="projects" title="Projects" items={projects} allHref="/projects/" allLabel="All projects" eager />
+    <Rail id="writing" title={WRITING.name} items={writing} allHref={WRITING.path} allLabel="All writing" eager />
   </div>
-</BaseLayout>
+</SiteLayout>
+
+<style is:global>
+  [data-fit] .shelf.fitted .cover {
+    aspect-ratio: auto;
+    height: var(--cover-h);
+  }
+  [data-fit] .shelf.compact .m {
+    display: none;
+  }
+  /* beside the header's card the gap between the rows stays put: it is also the gap beside that card */
+  @media (max-width: 1023px) {
+    html[style*="--fit-t"] [data-fit] .shelf + .shelf {
+      margin-top: calc(64px - 28px * var(--fit-t));
+    }
+  }
+  html[style*="--fit-t"] [data-fit] .ticks {
+    margin-top: calc(20px - 12px * var(--fit-t));
+  }
+  @media (max-width: 640px) {
+    html[style*="--fit-t"] [data-fit] .shelf + .shelf {
+      margin-top: calc(48px - 16px * var(--fit-t));
+    }
+    html[style*="--fit-t"] [data-fit] .ticks {
+      margin-top: calc(18px - 8px * var(--fit-t));
+    }
+  }
+</style>

@@ -35,7 +35,8 @@ export default function rehypeSplitFootnotes() {
           tagName: "section",
           properties: { className: ["footnotes"] },
           children: [
-            { type: "element", tagName: "h2", properties: {}, children: [{ type: "text", value: "Footnotes" }] },
+            // GFM's footnote references are described by this heading
+            { type: "element", tagName: "h2", properties: { id: "footnote-label" }, children: [{ type: "text", value: "Footnotes" }] },
             { type: "element", tagName: "ol", properties: {}, children: fnItems },
           ],
         });

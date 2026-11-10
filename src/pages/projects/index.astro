@@ -1,0 +1,11 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import CardGrid from "@/components/CardGrid.astro";
+import { projects } from "@/data/projects";
+
+const description = "Things I’ve built, each with screenshots, details and links.";
+---
+
+<SiteLayout title="Projects · Ryan Saxe" description={description} section="projects">
+  <CardGrid items={projects} label="Projects" />
+</SiteLayout>

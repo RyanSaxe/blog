@@ -1,50 +1,262 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
-@theme {
-  /* Light palette (primary) */
-  --color-bg: #fafafa;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
-  --color-text: #1e293b;
-  --color-text-muted: #475569;
-  --color-text-faint: #94a3b8;
-  --color-border: #e2e8f0;
-  --color-accent: #2563eb;
-  --color-accent-muted: #2563eb1a;
-  --color-accent-glow: #2563eb0d;
+/*
+ * Site tokens. One light grey surface with white cards. BaseHead sets data-theme on <html> from the
+ * header's toggle, or from the device until the visitor uses it.
+ * Use these variables in every page and component instead of raw colors.
+ */
+/*
+ * Arial sized to Inter's measurements. If a page paints before Inter is ready, its text already
+ * wraps as it will in Inter, so nothing moves when Inter arrives; the system font wraps the opening
+ * line onto one fewer line on a phone, which moved everything below it by a line.
+ */
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 400;
+  src: local("Arial"), local("Helvetica");
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+  size-adjust: 107.06%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 500;
+  src: local("Arial"), local("Helvetica");
+  ascent-override: 89.59%;
+  descent-override: 22.33%;
+  line-gap-override: 0%;
+  size-adjust: 108.13%;
+}
+/* Without a bold face the browser thickens the regular one, which runs wider than Inter's semibold. */
+@font-face {
+  font-family: "Inter Fallback";
+  font-weight: 600 700;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Helvetica-Bold");
+  ascent-override: 95.9%;
+  descent-override: 23.91%;
+  line-gap-override: 0%;
+  size-adjust: 101.01%;
+}
 
-  /* Typography */
-  --font-serif: "Lora", "Georgia", serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+:root {
+  color-scheme: light;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --plate: #f3f4f6;
+  --ink: #111113;
+  --ink-2: #4a4a50;
+  --muted: #707077;
+  --faint: #b4b4ba;
+  --line: rgba(0, 0, 0, 0.07);
+  --edge: rgba(0, 0, 0, 0.065);
+  --edge-2: rgba(0, 0, 0, 0.12);
+  --accent: #2457e6;
+  --focus: #2457e6;
+  --dim: rgba(20, 20, 22, 0.28);
+  --card-shadow: 0 0 0 1px var(--edge), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --card-shadow-hover: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 6px 18px -8px rgba(0, 0, 0, 0.14);
+  --panel-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04), 0 30px 80px -24px rgba(0, 0, 0, 0.3);
+  --code-bg: #f4f4f5;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* page gutter: 48px from 960px wide, never under 20px; --g-left is the left one, wider beside the header's card */
+  --g: clamp(20px, 5vw, 48px);
+  --g-left: var(--g);
+
+  /* legacy names, kept so older pages render with the new palette */
+  --color-bg: var(--bg);
+  --color-surface: var(--card);
+  --color-surface-hover: var(--plate);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-2);
+  --color-text-faint: var(--muted);
+  --color-border: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-muted: color-mix(in srgb, var(--accent) 12%, transparent);
+  --color-accent-glow: transparent;
+  --font-sans: var(--sans);
+  --font-serif: var(--sans);
+  --font-mono: var(--mono);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121214;
+  --card: #1a1a1d;
+  --plate: #232327;
+  --ink: #ededef;
+  --ink-2: #b2b2b9;
+  --muted: #898990;
+  --faint: #56565c;
+  --line: rgba(255, 255, 255, 0.08);
+  --edge: rgba(255, 255, 255, 0.075);
+  --edge-2: rgba(255, 255, 255, 0.15);
+  --accent: #84a8ff;
+  --focus: #84a8ff;
+  --dim: rgba(0, 0, 0, 0.55);
+  --card-shadow: 0 0 0 1px var(--edge);
+  --card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 18px -8px rgba(0, 0, 0, 0.6);
+  --panel-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 30px 80px -24px rgba(0, 0, 0, 0.7);
+  --code-bg: #1f1f23;
 }
 
 /* ---- Base ---- */
 html {
-  color-scheme: light;
-  background-color: var(--color-bg);
-  scroll-behavior: smooth;
-  overflow-y: scroll;
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  /* where scrollbars always show, opening a panel, which stops the page scrolling, doesn't move the page sideways */
+  scrollbar-gutter: stable;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body > main {
+  flex: 1 0 auto;
+  padding-top: 10px;
+}
+/*
+ * On a laptop the header is a card down the left side (SiteHeader) and the page sits beside it. --side is
+ * the card's column with its 16px margin; the card widths in cards.css subtract it.
+ * Every page starts as far from that card as the landing page's rows are from each other (.shelf + .shelf
+ * in cards.css), so the content's left edge stays put as the router swaps pages, and runs to the window's
+ * right edge however wide the window is.
+ */
+@media (min-width: 1024px) {
+  :root {
+    --side: 280px;
+    --g-left: 64px;
+  }
+  body {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+  }
+  body > .site-header {
+    grid-row: 1 / span 2;
+  }
+  /* the page ends level with the bottom of the header's card, 16px above the window's edge */
+  body > main {
+    grid-column: 2;
+    padding-top: 30px;
+    padding-bottom: 16px;
+  }
+}
+img,
+svg,
+picture {
+  display: block;
+}
+a {
+  color: inherit;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  text-align: inherit;
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.vh {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-html.dark {
-  color-scheme: dark;
-  --color-bg: #0a0e17;
-  --color-surface: #111827;
-  --color-surface-hover: #1a2332;
-  --color-text: #e2e8f0;
-  --color-text-muted: #94a3b8;
-  --color-text-faint: #64748b;
-  --color-border: #1e293b;
-  --color-accent: #60a5fa;
-  --color-accent-muted: #60a5fa26;
-  --color-accent-glow: #60a5fa1a;
-  background-color: var(--color-bg);
+/* The first stop for the Tab key, hidden until it has focus. */
+.skip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus {
+  transform: none;
+}
+main:focus {
+  outline: none;
 }
 
-html, body {
-  transition: background-color 0.3s ease;
+/*
+ * ---- Scrollbars ----
+ * A thin rounded thumb on a clear track, so the page shows through the gutter. It replaces only scrollbars
+ * that take up space: BaseHead sets data-scrollbars="classic" on <html> when the computer draws those, and
+ * a Mac that shows bars only while scrolling, or a touch screen, keeps its own. Chrome and Safari draw
+ * ::-webkit-scrollbar, and Firefox, which has no such selector, takes scrollbar-color. Chrome drops
+ * ::-webkit-scrollbar on any element with scrollbar-width or scrollbar-color, so those stay in the Firefox
+ * block. The rows and the header's card hide their bars and keep doing so.
+ */
+[data-scrollbars="classic"]::-webkit-scrollbar,
+[data-scrollbars="classic"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-track,
+[data-scrollbars="classic"] ::-webkit-scrollbar-track,
+[data-scrollbars="classic"]::-webkit-scrollbar-corner,
+[data-scrollbars="classic"] ::-webkit-scrollbar-corner {
+  background: transparent;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb {
+  min-height: 40px;
+  min-width: 40px;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: var(--faint) padding-box;
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb:hover,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--faint), var(--muted));
+}
+[data-scrollbars="classic"]::-webkit-scrollbar-thumb:active,
+[data-scrollbars="classic"] ::-webkit-scrollbar-thumb:active {
+  background-color: var(--muted);
+}
+@supports not selector(::-webkit-scrollbar) {
+  :root[data-scrollbars="classic"] {
+    scrollbar-color: var(--faint) transparent;
+  }
+  [data-scrollbars="classic"] * {
+    scrollbar-width: thin;
+  }
 }
 
 /* ---- KaTeX ---- */
@@ -54,121 +266,26 @@ html, body {
   padding: 0.75rem 0;
 }
 
-/* ---- Prose (blog post content) ---- */
-.prose {
-  --tw-prose-body: var(--color-text);
-  --tw-prose-headings: var(--color-text);
-  --tw-prose-links: var(--color-accent);
-  --tw-prose-bold: var(--color-text);
-  --tw-prose-code: var(--color-text);
-  --tw-prose-pre-bg: var(--color-surface);
-  --tw-prose-pre-code: var(--color-text);
-  --tw-prose-quotes: var(--color-text-muted);
-  --tw-prose-quote-borders: var(--color-accent);
-  --tw-prose-counters: var(--color-text-muted);
-  --tw-prose-bullets: var(--color-text-faint);
-  --tw-prose-hr: var(--color-border);
-  --tw-prose-th-borders: var(--color-border);
-  --tw-prose-td-borders: var(--color-border);
+/*
+ * Moving to another page crossfades: the client router (SiteLayout) swaps the page inside a view
+ * transition, and what both pages share, such as the header, stays perfectly still.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-}
-
-.prose a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--color-accent);
-  text-decoration-thickness: 1px;
-  transition: text-decoration-color 0.2s;
-}
-
-.prose a:hover {
-  text-decoration-thickness: 2px;
-}
-
-.prose pre {
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-}
-
-.prose img {
-  border-radius: 0.75rem;
-}
-
-.prose blockquote {
-  border-left-width: 3px;
-  font-style: normal;
-}
-
-.prose cite a {
-  text-decoration: none;
-  font-style: normal;
-}
-
-/* ---- Reading progress bar ---- */
-#reading-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: var(--color-accent);
-  box-shadow: 0 0 6px var(--color-accent);
-  z-index: 100;
-  transition: width 50ms linear;
-}
-
-/* ---- Back to top button ---- */
-#back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 50;
-  opacity: 0;
-  transform: translateY(1rem);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-
-#back-to-top.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* ---- Card hover glow ---- */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--color-accent-glow);
-  border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-/* ---- About page tabs ---- */
-.tab-button {
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text-faint);
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  cursor: pointer;
-  background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-
-.tab-button:hover {
-  color: var(--color-text-muted);
-}
-
-.tab-button[aria-selected="true"] {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
 }

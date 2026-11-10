@@ -12,7 +12,10 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<!-- The SVG follows the browser's light or dark theme; the .ico is for browsers without SVG icons. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="canonical" href={canonicalURL} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -39,8 +42,92 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
 <meta property="twitter:description" content={description} />
 {ogImage && <meta property="twitter:image" content={ogImage} />}
 
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
-  crossorigin="anonymous"
-/>
+<meta name="theme-color" content="#fafafa" />
+
+<!--
+  Sets data-theme on <html> before the page paints: the visitor's choice from the header toggle, or the
+  device's setting until they make one. Dark image sources ([data-dark]) follow the theme rather than the
+  device, including ones the panel clones in later. window.setTheme is the toggle's way in. The client
+  router replaces <html>'s attributes when it swaps in a page, so the theme is set again on each swap.
+  It also sets data-scrollbars="classic" when the computer draws scrollbars that take up space, so the
+  site's designed bar (global.css) replaces only those; a Mac showing bars only while scrolling keeps its own.
+-->
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const device = matchMedia("(prefers-color-scheme: dark)");
+    const stored = () => {
+      try {
+        const t = localStorage.getItem("theme");
+        return t === "light" || t === "dark" ? t : null;
+      } catch {
+        return null;
+      }
+    };
+    const sync = (node) => {
+      const media = root.dataset.theme === "dark" ? "all" : "not all";
+      const fix = (s) => s.media !== media && (s.media = media);
+      if (node.matches?.("source[data-dark]")) fix(node);
+      node.querySelectorAll?.("source[data-dark]").forEach(fix);
+      node.querySelectorAll?.("template").forEach((t) => sync(t.content));
+    };
+    const apply = (theme) => {
+      root.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
+      sync(document);
+    };
+    const current = () => stored() ?? (device.matches ? "dark" : "light");
+    apply(current());
+    document.addEventListener("astro:after-swap", () => apply(current()));
+    const scrollbars = () => {
+      const probe = document.createElement("div");
+      probe.style.cssText = "position:absolute;top:-200px;width:100px;height:100px;overflow:scroll;visibility:hidden";
+      root.append(probe);
+      if (probe.offsetWidth > probe.clientWidth) root.dataset.scrollbars = "classic";
+      probe.remove();
+    };
+    scrollbars();
+    document.addEventListener("astro:after-swap", scrollbars);
+    new MutationObserver((records) => {
+      for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
+    }).observe(root, { childList: true, subtree: true });
+    // a template's content is parsed outside the document, so the observer cannot see it
+    document.addEventListener("DOMContentLoaded", () => sync(document));
+    device.addEventListener("change", () => stored() || apply(current()));
+    window.setTheme = (theme) => {
+      try {
+        localStorage.setItem("theme", theme);
+      } catch {}
+      apply(theme);
+    };
+  })();
+
+  // An open panel (Panel.astro) claims Back before the client router can load the page again. Chrome runs
+  // listeners on window in the order they were added, so this has to be added before the router's.
+  addEventListener("popstate", (e) => {
+    if (window.claimBack?.(e)) e.stopImmediatePropagation();
+  });
+
+  // While a new page crossfades in, the browser sends every click to the page itself rather than the
+  // link under the pointer. A press during the fade ends it, and its click goes to what is under it.
+  (() => {
+    let fade = null;
+    let pressed = false;
+    document.addEventListener("astro:before-swap", (e) => {
+      fade = e.viewTransition;
+      fade.finished.finally(() => (fade = null));
+    });
+    addEventListener("pointerdown", () => {
+      if (!fade) return;
+      pressed = true;
+      fade.skipTransition();
+    }, true);
+    addEventListener("click", (e) => {
+      if (!pressed) return;
+      pressed = false;
+      if (e.target !== document.documentElement) return;
+      const target = document.elementFromPoint(e.clientX, e.clientY)?.closest("a[href], button, [role=tab]");
+      if (target) target.click();
+    }, true);
+  })();
+</script>

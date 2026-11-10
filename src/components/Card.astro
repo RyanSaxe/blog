@@ -1,0 +1,138 @@
+---
+/*
+ * A card that opens a panel. The whole card is one button; the panel's content is rendered
+ * here into a <template> so it is real HTML, and Panel.astro clones it on open.
+ */
+import type { CardItem } from "@/data/cards";
+import Pic from "./Pic.astro";
+import CardTitle from "./CardTitle.astro";
+import "@/styles/cards.css";
+
+interface Props {
+  item: CardItem;
+  eager?: boolean;
+  sizes?: string;
+}
+const { item, eager = false, sizes = "(max-width: 640px) 86vw, 372px" } = Astro.props;
+const g = item.gallery;
+const ext = (h: string) => (h.startsWith("http") ? { target: "_blank", rel: "noopener" } : {});
+const isExt = (h: string) => h.startsWith("http");
+const panelSizes = "(max-width: 640px) 100vw, (max-width: 900px) 640px, 552px";
+---
+
+<article class="card" data-id={item.id}>
+  <div class="cover"><Pic pic={g[0]} sizes={sizes} eager={eager} /></div>
+  <div class="txt">
+    <h3 class="t" id={`t-${item.id}`}><CardTitle item={item} /></h3>
+    <p class="s">{item.sentence}</p>
+    <p class="m"><span class="y">{item.year}</span><span class="f">{item.fact}</span></p>
+  </div>
+  <button class="hit" type="button" aria-labelledby={`t-${item.id}`} aria-haspopup="dialog"></button>
+  <template>
+    <div class="p-in">
+      <div class="p-bar"><span class="grab"></span></div>
+      <div class="p-left">
+        <div class="p-media">
+          <div class="p-img">
+            <Pic pic={g[0]} sizes={sizes} eager class="base" />
+            <Pic pic={g[0]} sizes={panelSizes} eager class="hi" alt="" />
+            {g.slice(1).map((pic) => <Pic pic={pic} sizes={panelSizes} class="layer" alt="" />)}
+          </div>
+          {g.length > 1 && <div class="gal" aria-label="Images">{g.map((pic) => <Pic pic={pic} sizes="100vw" />)}</div>}
+        </div>
+        {
+          g.length > 1 && (
+            <div class="thumbs rest" role="group" aria-label="Images">
+              {g.map((pic, i) => (
+                <button type="button" aria-label={`Show image ${i + 1}: ${pic.caption ?? pic.alt}`} aria-current={i === 0 ? "true" : "false"}>
+                  <Pic pic={pic} sizes="72px" alt="" />
+                </button>
+              ))}
+            </div>
+          )
+        }
+        {
+          g[0].caption && (
+            <p class="cap rest">
+              <span class="now" aria-live="polite">{g[0].caption}</span>
+              {/* every caption, unseen in the same place, so the box is always as tall as the longest and nothing below moves */}
+              {g.length > 1 && g.map((pic) => <span class="size" aria-hidden="true">{pic.caption ?? pic.alt}</span>)}
+            </p>
+          )
+        }
+        {g.length > 1 && <div class="dots rest" aria-hidden="true">{g.map((_, i) => <i class={i === 0 ? "on" : undefined} />)}</div>}
+      </div>
+      <div class="p-txt">
+        <h2 class="t p-t" id="pTitle"><CardTitle item={item} /></h2>
+        <p class="s p-s">{item.sentence}</p>
+        <p class="m p-m"><span class="y">{item.year}</span><span class="f">{item.fact}</span></p>
+        <div class="rest">
+          <hr />
+          {item.paras.map((p) => <p>{p}</p>)}
+          <ul class="kv">
+            {
+              item.facts.map(([k, v]) => (
+                <li>
+                  <span class="k">{k}</span>
+                  <span class="v">{v.startsWith("npm ") ? <code>{v}</code> : v}</span>
+                </li>
+              ))
+            }
+          </ul>
+          {
+            item.list && (
+              <div class="list">
+                <h3>{item.list.title}</h3>
+                <ol>
+                  {item.list.items.map((li) => (
+                    <li>
+                      {li.href ? (
+                        <a class="row" href={li.href} {...ext(li.href)}>
+                          <span class="lbl">{li.label}</span>
+                          <span class="meta">{li.meta}</span>
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                            <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <span class="row">
+                          <span>{li.label}</span>
+                          <span class="meta">{li.meta}</span>
+                          <span />
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+                {item.list.note && <p class="note">{item.list.note}</p>}
+              </div>
+            )
+          }
+          {
+            item.actions.length > 0 && (
+              <div class="actions">
+                {item.actions.map((a, i) => (
+                  <a class:list={["btn", { primary: i === 0 }]} href={a.href} {...ext(a.href)}>
+                    {a.label}
+                    {isExt(a.href) ? (
+                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                        <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                      </svg>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </div>
+      <button class="x p-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"></path></svg>
+      </button>
+    </div>
+  </template>
+</article>

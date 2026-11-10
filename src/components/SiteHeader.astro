@@ -1,0 +1,297 @@
+---
+/*
+ * The same header on every page. On a laptop it is a card down the left side that stays in view: your
+ * portrait and name, the opening line, the links, then the social icons and the theme toggle. Below
+ * 1024px it is a row at the top that scrolls away with the page: the name and the links, with the line
+ * under them, except on an essay. Only the current page's link changes from page to page.
+ */
+import { NAV, type Section } from "@/data/site";
+import Intro from "@/components/Intro.astro";
+import SocialLinks from "@/components/SocialLinks.astro";
+
+interface Props {
+  section?: Section;
+  /** An essay drops the line below 1024px, where the header sits above the text. */
+  article?: boolean;
+}
+const { section, article = false } = Astro.props;
+---
+
+<header class:list={["site-header", { article }]}>
+  <a class="home" href="/">
+    <img
+      class="face"
+      src="/images/about/ryan-saxe-face-112.webp"
+      srcset="/images/about/ryan-saxe-face-112.webp 2x, /images/about/ryan-saxe-face-168.webp 3x"
+      width="56"
+      height="56"
+      alt=""
+    />
+    <span>Ryan Saxe</span>
+  </a>
+  <div class="intro">
+    <Intro aboutLink={section !== "about"} />
+  </div>
+  <nav aria-label="Main">
+    {
+      NAV.map((item) => (
+        <a href={item.href} aria-current={item.section === section ? "page" : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="foot">
+    <div class="icons"><SocialLinks /></div>
+    <button class="theme" type="button" aria-label="Dark theme" aria-pressed="false" data-theme-toggle>
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        <path class="half" d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  import { onPage } from "@/scripts/page";
+
+  onPage((signal) => {
+    const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
+    const root = document.documentElement;
+    const show = () => toggle.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
+    show();
+    const observer = new MutationObserver(show);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    signal.addEventListener("abort", () => observer.disconnect());
+    toggle.addEventListener(
+      "click",
+      () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        const set = () => (window as any).setTheme(next);
+        if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(set);
+        else set();
+      },
+      { signal },
+    );
+  });
+</script>
+
+<style>
+  /* ---------- below 1024px: a row at the top ---------- */
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px var(--g) 4px;
+  }
+  .home {
+    order: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.011em;
+    text-decoration: none;
+  }
+  .face {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--edge);
+  }
+  nav {
+    order: 2;
+    display: flex;
+    gap: 28px;
+  }
+  nav a {
+    /* the padding only enlarges what a finger can hit */
+    padding: 12px 0;
+    font-size: 14.5px;
+    color: var(--ink-2);
+    text-decoration: none;
+    text-underline-offset: 7px;
+    text-decoration-thickness: 1.5px;
+    transition:
+      color 0.15s var(--ease),
+      background-color 0.15s var(--ease);
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  nav a[aria-current="page"] {
+    color: var(--ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--faint);
+  }
+  .foot {
+    display: contents;
+  }
+  /* the footer carries the icons below 1024px */
+  .icons {
+    display: none;
+  }
+  .theme {
+    order: 3;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin: 0 -7px 0 21px;
+    border-radius: 50%;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: color 0.15s var(--ease);
+  }
+  .theme:hover {
+    color: var(--ink);
+  }
+  .theme svg {
+    width: 16px;
+    height: 16px;
+  }
+  .theme .half {
+    transform-origin: 8px 8px;
+    transition: transform 0.45s var(--ease);
+  }
+  .theme[aria-pressed="true"] .half {
+    transform: rotate(180deg);
+  }
+  .intro {
+    order: 4;
+    flex-basis: 100%;
+    margin-bottom: 4px;
+  }
+  .article .intro {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    nav {
+      gap: 18px;
+    }
+    nav a {
+      font-size: 14px;
+    }
+  }
+  /* The name keeps clearly more space before the links than the links keep between them. */
+  @media (max-width: 430px) {
+    nav {
+      gap: 16px;
+    }
+    .theme {
+      margin-left: 16px;
+    }
+  }
+  @media (max-width: 386px) {
+    .face {
+      display: none;
+    }
+  }
+  @media (max-width: 380px) {
+    nav {
+      gap: 14px;
+    }
+    .theme {
+      margin-left: 9px;
+    }
+  }
+  @media (max-width: 340px) {
+    nav {
+      gap: 10px;
+    }
+    nav a {
+      font-size: 13.5px;
+    }
+    .theme {
+      margin-left: 5px;
+    }
+  }
+
+  /* ---------- a laptop: a card down the left side ---------- */
+  @media (min-width: 1024px) {
+    .site-header {
+      position: sticky;
+      top: 16px;
+      z-index: 30;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      height: calc(100vh - 32px);
+      height: calc(100svh - 32px);
+      margin: 16px 0 16px 16px;
+      padding: 24px 22px 12px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      border-radius: 16px;
+      background: var(--card);
+      box-shadow: var(--card-shadow);
+    }
+    .site-header::-webkit-scrollbar {
+      display: none;
+    }
+    .home,
+    .intro,
+    nav,
+    .theme {
+      order: 0;
+    }
+    .home {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      height: auto;
+      margin: 0;
+      font-size: 18px;
+      line-height: 24px;
+    }
+    .face {
+      width: 56px;
+      height: 56px;
+    }
+    .intro,
+    .article .intro {
+      display: block;
+      flex-basis: auto;
+      margin: 8px 0 0;
+    }
+    nav {
+      flex-direction: column;
+      gap: 0;
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    /* the current page's link sits on a grey pill, which also follows the pointer */
+    nav a,
+    nav a[aria-current="page"] {
+      margin: 0 -10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 15px;
+      text-decoration-line: none;
+    }
+    nav a:hover,
+    nav a[aria-current="page"] {
+      background: var(--plate);
+      color: var(--ink);
+    }
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .icons {
+      display: block;
+      margin-left: -9px;
+    }
+    .theme {
+      margin: 0 -7px 0 0;
+    }
+  }
+</style>

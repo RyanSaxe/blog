@@ -13,6 +13,8 @@ npm run dev
 
 Blog posts from notebooks are generated in CI and committed to the repo, so they're available locally without any extra steps.
 
+Links within the site swap pages in place through Astro's client router, so a script in a page or component runs once, not on every page. Start page scripts with `onPage` from `src/scripts/page.ts`, which runs them again after each swap and removes their listeners when the page leaves.
+
 ## Adding a New Post
 
 ### Markdown post
@@ -32,14 +34,23 @@ Your content here...
 
 ### Notebook post
 
-1. Create a directory in `notebooks/` with a `pyproject.toml` and `notebook.ipynb`
-2. Push to `main` — CI will execute the notebook, generate the markdown, and commit the output
+1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `#hide`, `#hide_input` or `#hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
+2. Run `npm run build:notebooks` to see it locally, or push to `main` — CI will execute the notebook, generate the markdown, and commit the output
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
-## Updating the About Page
+Draw figures for a white page: dark text on a white or transparent background. The dark theme inverts them and keeps their hues. A figure drawn on black goes in `DRAWN_ON_BLACK` in `plugins/rehype-essay-figures.mjs`, so the light theme inverts it instead.
 
-Edit `src/data/timeline.ts` and `src/data/projects.ts`.
+## Updating Site Content
+
+- Projects: `src/data/projects.ts`
+- Writing (essays, articles and podcasts): `src/data/writing.ts`
+- About page career: `src/data/timeline.ts`
+- The opening line on every page, the paragraph it opens into, section names and social links: `src/data/site.ts`
+- The icon for each social link: `src/components/SocialLinks.astro`, keyed by the link's label
+- About page introduction: `src/pages/about.astro`
+
+Images for cards live in `public/images/site/`.
 
 ## Notebook Reproducibility
 

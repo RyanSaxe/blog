@@ -1,0 +1,35 @@
+---
+import type { CardItem } from "@/data/cards";
+import Card from "./Card.astro";
+
+interface Props {
+  id: string;
+  title: string;
+  items: CardItem[];
+  allHref: string;
+  allLabel: string;
+  eager?: boolean;
+}
+const { id, title, items, allHref, allLabel, eager = false } = Astro.props;
+---
+
+<section class="shelf" id={id} aria-labelledby={`h-${id}`} data-rail>
+  <div class="shelf-head">
+    <h2 id={`h-${id}`}>{title}<span class="n">{items.length}</span></h2>
+    <div class="tools">
+      <a class="all" href={allHref}
+        >{allLabel}<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M2 6h7.5M6.5 3l3 3-3 3"></path></svg></a
+      >
+      <button class="arrow prev" type="button" aria-label={`Previous ${title.toLowerCase()}`} aria-controls={`rail-${id}`}>
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3L4.5 7l4 4"></path></svg>
+      </button>
+      <button class="arrow next" type="button" aria-label={`Next ${title.toLowerCase()}`} aria-controls={`rail-${id}`}>
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 3l4 4-4 4"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="rail" id={`rail-${id}`} role="group" aria-label={title}>
+    {items.map((item, i) => <Card item={item} eager={eager && i < 4} />)}
+  </div>
+  <div class="ticks" aria-hidden="true">{items.map(() => <i />)}</div>
+</section>

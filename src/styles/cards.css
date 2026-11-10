@@ -1,0 +1,871 @@
+/* Cards, carousels and the panel a card opens. Imported by Card.astro. */
+
+/* ---------- Cards ---------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Without this, WebKit sizes a card to its clamped text's full width and the card outgrows --cw. */
+  min-width: 0;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.2s var(--ease);
+}
+.card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+.cover {
+  position: relative;
+  margin: 8px 8px 0;
+  /* WebKit sizes a stretched item's aspect ratio from the card's width, ignoring the margins, so the cover came out 11px too tall. */
+  width: calc(100% - 16px);
+  aspect-ratio: 3 / 2;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--plate);
+}
+/* WebKit does not stretch a <picture> to its box, so its image's 100% height would not resolve. */
+.cover picture,
+.p-img picture,
+.thumbs picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cover img,
+.p-img img,
+.gal img,
+.thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.cover img {
+  transition: transform 0.5s var(--ease);
+}
+.card:hover .cover img {
+  transform: scale(1.015);
+}
+.txt {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 14px 16px 16px;
+}
+.t {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.t .tt {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.s {
+  margin: 5px 0 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-2);
+  text-wrap: pretty;
+  display: -webkit-box;
+  /* three lines, so a sentence that fits two on a wide card isn't cut on the narrowest */
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.m {
+  margin: auto 0 0;
+  padding-top: 12px;
+  display: flex;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.m .y {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.m .y::after {
+  content: "·";
+  margin-left: 7px;
+  color: var(--faint);
+}
+.m .f {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--ink-2);
+}
+.t,
+.s,
+.m .y,
+.m .f {
+  transform-origin: 0 0;
+}
+.m .y,
+.m .f {
+  display: block;
+}
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.hit:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 18px;
+}
+
+/* brand marks */
+/* byor's mark stands about as tall as its name, so the two read as one wordmark. */
+.mark {
+  flex: none;
+  width: 39px;
+  height: 20px;
+}
+.mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.wordmark {
+  flex: none;
+}
+.wordmark img {
+  width: 37px;
+  height: 28px;
+  margin: -5px 0 -2px;
+}
+.p-t .mark {
+  width: 59px;
+  height: 30px;
+}
+.p-t .wordmark img {
+  width: 46px;
+  height: 35px;
+  margin: -4px 0 -2px;
+}
+
+/* ---------- Carousel ---------- */
+/*
+ * One card width for the landing's rows and the list pages' grids, so a card is the same size on both:
+ * three across the page beside the header's card on a wide laptop, two on a smaller one or a tablet.
+ * A wider window adds a column whenever another card of about 300px fits, so cards stay 300 to 410px
+ * wide instead of stretching. Phones override it below.
+ */
+.shelf,
+.card-grid {
+  --gap: 20px;
+  --cols: 3;
+  /* % is the row's or the grid's width inside its gutters, which, unlike 100vw, never counts the scrollbar */
+  --cw: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+}
+@media (max-width: 1339px) {
+  .shelf,
+  .card-grid {
+    --cols: 2;
+  }
+}
+@media (min-width: 1652px) {
+  .shelf,
+  .card-grid {
+    --cols: 4;
+  }
+}
+@media (min-width: 1972px) {
+  .shelf,
+  .card-grid {
+    --cols: 5;
+  }
+}
+@media (min-width: 2292px) {
+  .shelf,
+  .card-grid {
+    --cols: 6;
+  }
+}
+@media (min-width: 2612px) {
+  .shelf,
+  .card-grid {
+    --cols: 7;
+  }
+}
+@media (min-width: 2932px) {
+  .shelf,
+  .card-grid {
+    --cols: 8;
+  }
+}
+.shelf {
+  position: relative;
+}
+.shelf + .shelf {
+  margin-top: 64px;
+}
+.shelf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 var(--g) 0 var(--g-left);
+  margin-bottom: 16px;
+  height: 34px;
+}
+.shelf-head h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+/* A list page's h1 above its grid, set like a landing row's title. */
+.grid-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 7px var(--g) 7px var(--g-left);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+}
+.grid-head .n,
+.shelf-head .n {
+  font-weight: 400;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.all {
+  font-size: 14px;
+  color: var(--ink-2);
+  text-decoration: none;
+  margin-right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: color 0.15s var(--ease);
+}
+.all svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s var(--ease);
+}
+.all:hover {
+  color: var(--ink);
+}
+.all:hover svg {
+  transform: translateX(2px);
+}
+.arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--edge-2);
+  transition: background-color 0.15s var(--ease), opacity 0.2s var(--ease), box-shadow 0.15s var(--ease);
+}
+.arrow svg {
+  width: 14px;
+  height: 14px;
+}
+.arrow:hover {
+  background: var(--card);
+}
+.arrow[aria-disabled="true"] {
+  opacity: 0.32;
+  cursor: default;
+  background: none;
+}
+.arrow:focus-visible {
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+.rail {
+  position: relative;
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--g-left) var(--g);
+  padding: 10px var(--g) 14px var(--g-left);
+  margin: -10px 0 -14px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+/* Beside the header's card, a row's cards are cut 16px from it, as the card sits 16px from the window, not against its edge. */
+@media (min-width: 1024px) {
+  .rail {
+    clip-path: inset(0 0 0 16px);
+  }
+}
+.rail > .card {
+  flex: 0 0 var(--cw);
+  scroll-snap-align: start;
+}
+.rail.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+.rail.dragging .card {
+  pointer-events: none;
+}
+.ticks {
+  display: flex;
+  gap: 4px;
+  padding: 0 var(--g) 0 var(--g-left);
+  margin-top: 20px;
+  height: 2px;
+}
+.ticks i {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--line);
+  transition: background-color 0.25s var(--ease);
+}
+.ticks i.on {
+  background: var(--ink);
+}
+
+/* ---------- Card grid (list pages) ---------- */
+/* Every row is as tall as the tallest card, as the landing's rows are. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cw));
+  grid-auto-rows: 1fr;
+  gap: 24px var(--gap);
+  padding: 0 var(--g) 0 var(--g-left);
+}
+
+/* ---------- Panel and phone sheet ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+.overlay[hidden] {
+  display: none;
+}
+.dim {
+  position: absolute;
+  inset: 0;
+  background: var(--dim);
+  opacity: 0;
+}
+.frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  background: var(--card);
+  border-radius: 16px;
+}
+.content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  overscroll-behavior: contain;
+}
+.p-in {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 552fr) minmax(0, 490fr);
+  column-gap: 36px;
+  padding: 14px 0 14px 14px;
+  align-items: start;
+}
+.p-media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+}
+.p-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--plate);
+}
+.p-img picture {
+  position: absolute;
+  inset: 0;
+}
+.p-img .hi,
+.p-img .layer {
+  opacity: 0;
+  transition: opacity 0.22s var(--ease);
+}
+.p-img picture.on {
+  opacity: 1;
+}
+.p-img.noanim picture {
+  transition: none;
+}
+.p-img.covered .base,
+.p-img.covered .hi {
+  visibility: hidden;
+}
+.thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.thumbs button {
+  width: 72px;
+  aspect-ratio: 3 / 2;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--plate);
+  box-shadow: 0 0 0 1px var(--edge);
+  transition: box-shadow 0.15s var(--ease), opacity 0.15s var(--ease);
+  opacity: 0.7;
+}
+.thumbs button:hover {
+  opacity: 1;
+}
+.thumbs button[aria-current="true"] {
+  opacity: 1;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+.thumbs button:focus-visible {
+  outline-offset: 2px;
+}
+.cap {
+  display: grid;
+  margin: 10px 2px 0;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.cap > span {
+  grid-area: 1 / 1;
+}
+.cap .size {
+  visibility: hidden;
+}
+.p-txt {
+  padding: 10px 30px 12px 0;
+  overscroll-behavior: contain;
+}
+/* The scrolling column runs from the panel's top edge to its bottom edge, so text scrolls cleanly under
+   both, and the last links keep their space below them at the end. */
+.p-txt.scrolls {
+  overflow-y: auto;
+  margin: -14px 0;
+  padding-top: 24px;
+  padding-bottom: 28px;
+}
+.p-t {
+  margin: 0;
+  font-size: 24px;
+  line-height: 31px;
+  letter-spacing: -0.02em;
+  padding-right: 40px;
+}
+.p-s {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+.p-m {
+  padding-top: 12px;
+}
+.rest hr {
+  border: 0;
+  height: 1px;
+  background: var(--line);
+  margin: 20px 0 18px;
+}
+.rest p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 23px;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.rest p + p {
+  margin-top: 10px;
+}
+.kv {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.kv li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  column-gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+  line-height: 19px;
+}
+.kv li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.kv .k {
+  color: var(--muted);
+}
+.kv .v {
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.kv code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+.list {
+  margin-top: 20px;
+}
+.list h3 {
+  margin: 0 0 6px;
+  font-size: 12.5px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.list ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list li {
+  border-top: 1px solid var(--line);
+}
+.list li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.list .row {
+  display: grid;
+  grid-template-columns: 1fr auto 14px;
+  align-items: baseline;
+  column-gap: 12px;
+  padding: 9px 8px;
+  margin: 0 -8px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.list a.row {
+  transition: background-color 0.15s var(--ease);
+}
+.list a.row:hover {
+  background: var(--plate);
+}
+.list a.row .lbl {
+  text-decoration: underline;
+  text-decoration-color: var(--faint);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.list a.row:hover .lbl {
+  text-decoration-color: var(--ink);
+}
+.list .meta {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* on the first line, with the date, when a title takes two */
+.list .row svg {
+  width: 11px;
+  height: 11px;
+  margin-top: 4.5px;
+  color: var(--muted);
+  align-self: start;
+}
+.list .note {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--muted);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 15px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--edge-2);
+  transition: background-color 0.15s var(--ease), box-shadow 0.15s var(--ease), color 0.15s var(--ease);
+}
+.btn svg {
+  width: 11px;
+  height: 11px;
+}
+.btn:hover {
+  background: var(--plate);
+}
+.btn.primary {
+  background: var(--ink);
+  color: var(--card);
+  box-shadow: none;
+}
+.btn.primary:hover {
+  background: color-mix(in srgb, var(--ink) 86%, var(--card));
+}
+.x {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--edge-2);
+  transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.x:hover {
+  color: var(--ink);
+  background: var(--plate);
+}
+.x svg {
+  width: 11px;
+  height: 11px;
+}
+.p-close {
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+}
+/* A finger can hit a little beyond the drawn circle. */
+.p-close::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+}
+@media (min-width: 901px) and (min-height: 501px) {
+  /* The opening line's panel is text alone, in one column. */
+  .p-in.solo {
+    display: block;
+    padding-left: 36px;
+  }
+  /*
+   * The image grows to the text's height, so both columns start and end together. A picture stays
+   * whole on the plate, which its own margin matches; a full-bleed painting (.fill) is cropped to fill.
+   * Each picture carries the plate, so the gallery's pictures stacked under it never show through.
+   */
+  .p-in {
+    align-items: stretch;
+  }
+  .p-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .p-media {
+    flex: 1 0 auto;
+  }
+  .p-img picture {
+    background: var(--plate);
+  }
+  .p-img img {
+    object-fit: contain;
+  }
+  .p-img .fill img {
+    object-fit: cover;
+  }
+}
+.p-bar,
+.gal,
+.dots {
+  display: none;
+}
+
+/* ---------- Narrow screens ---------- */
+/* The sheet. Its media query matches `narrow` in Panel.astro. */
+@media (max-width: 900px), (max-height: 500px) {
+  .p-in {
+    display: block;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 30px 10px 0;
+  }
+  .p-txt {
+    padding: 16px 6px 44px;
+  }
+  .p-t {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .p-close {
+    top: 40px;
+    right: 20px;
+  }
+  .p-bar {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    touch-action: none;
+    cursor: grab;
+    z-index: 3;
+  }
+  .p-bar .grab {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    width: 36px;
+    height: 5px;
+    margin-left: -18px;
+    border-radius: 3px;
+    background: var(--faint);
+  }
+  .thumbs {
+    display: none;
+  }
+  .cap {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .gal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: 10px;
+    visibility: hidden;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+  }
+  .gal::-webkit-scrollbar {
+    display: none;
+  }
+  .gal picture {
+    flex: 0 0 100%;
+    height: 100%;
+    scroll-snap-align: start;
+  }
+  .gal.on {
+    visibility: visible;
+  }
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    height: 6px;
+    margin-top: 10px;
+  }
+  .dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: background-color 0.2s var(--ease);
+  }
+  .dots i.on {
+    background: var(--ink);
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    justify-content: center;
+    height: 42px;
+  }
+}
+@media (max-width: 640px) {
+  .shelf {
+    --cw: calc(100vw * 0.86);
+    --gap: 12px;
+  }
+  .shelf + .shelf {
+    margin-top: 48px;
+  }
+  .shelf-head {
+    margin-bottom: 12px;
+    height: 28px;
+  }
+  .grid-head {
+    margin-bottom: 12px;
+    padding: 4px var(--g);
+  }
+  .arrow {
+    display: none;
+  }
+  .all {
+    /* the padding only enlarges what a finger can hit */
+    padding: 12px 0;
+    margin: -12px 0;
+    font-size: 13.5px;
+  }
+  .s {
+    font-size: 14.5px;
+  }
+  .ticks {
+    margin-top: 18px;
+  }
+  .ticks i {
+    width: 12px;
+  }
+  .card-grid {
+    --cols: 1;
+    grid-auto-rows: auto;
+    gap: 16px;
+  }
+  /* One card per row has room for the whole sentence. */
+  .card-grid .s {
+    display: block;
+    overflow: visible;
+  }
+}

@@ -1,103 +1,128 @@
 ---
-import PageLayout from "@/layouts/PageLayout.astro";
-import Timeline from "@/components/Timeline.astro";
-import SocialIcons from "@/components/SocialIcons.astro";
-import { projects } from "@/data/projects";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import Career from "@/components/Career.astro";
+import { TAGLINE } from "@/data/site";
 ---
 
-<PageLayout title="About — Ryan Saxe" description="Build to learn. Write to understand.">
-  <div class="mx-auto max-w-3xl px-6 pt-8 pb-16">
-    <!-- Hero -->
-    <section class="mb-12 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
-      <div class="flex flex-col sm:flex-row">
-        <div class="sm:w-44 sm:flex-shrink-0">
-          <img
-            src="/images/headshot.jpg"
-            alt="Ryan Saxe"
-            class="h-48 w-full object-cover sm:h-full"
-          />
-        </div>
-        <div class="p-6 sm:p-8">
-          <h1 class="mb-1 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Build to learn.</h1>
-          <h1 class="mb-4 font-[var(--font-serif)] text-3xl font-bold text-[var(--color-text)]">Write to understand.</h1>
-          <p class="mb-3 leading-relaxed text-[var(--color-text-muted)]">
-          I design large and interpretable ML/AI systems. I find an odd amount of joy in explaining complex concepts in simple ways.
+<SiteLayout title="About · Ryan Saxe" description={TAGLINE} section="about">
+  <h1 class="vh">About</h1>
+  <div class="about">
+    <Career />
+    <section class="bio" aria-labelledby="bio-h">
+      <h2 id="bio-h" class="vh">Introduction</h2>
+      <div class="parts">
+        <section>
+          <h3>Leading</h3>
+          <p>
+            Being a builder is central to how I lead. I still write code, design
+            models, and spend time in the details. Knowing the work deeply helps
+            me see where to take it, make difficult calls, and earn the confidence
+            of the people doing it with me.
           </p>
-          <SocialIcons class="mt-4" iconSize="h-5 w-5" />
-        </div>
-      </div>
-    </section>
-
-    <!-- Tabs -->
-    <div class="mb-8 flex gap-6 border-b border-[var(--color-border)]" role="tablist">
-      <button class="tab-button" role="tab" aria-selected="true" data-tab="experience">
-        Experience
-      </button>
-      <button class="tab-button" role="tab" aria-selected="false" data-tab="projects">
-        Projects
-      </button>
-    </div>
-
-    <!-- Experience tab -->
-    <section id="tab-experience" data-tab-content="experience">
-      <Timeline />
-    </section>
-
-    <!-- Projects tab -->
-    <section id="tab-projects" data-tab-content="projects" class="hidden">
-      <div class="flex flex-col gap-4">
-        {
-          projects.map((project) => (
-            <div class="card-hover rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-              <div class="mb-2">
-                <h3 class="text-sm font-medium text-[var(--color-text)]">{project.name}</h3>
-              </div>
-              <p class="mb-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
-                {project.description}
-              </p>
-              <div class="flex gap-4">
-                {project.url && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    class="text-sm text-[var(--color-accent)] hover:underline"
-                  >
-                    Website &rarr;
-                  </a>
-                )}
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    class="text-sm text-[var(--color-accent)] hover:underline"
-                  >
-                    GitHub &rarr;
-                  </a>
-                )}
-              </div>
-            </div>
-          ))
-        }
+          <p>
+            Teaching is a big part of that, too. I love the moment when something
+            clicks for someone and they can do something they couldn’t before. I
+            want to help people develop the understanding and judgment to find
+            their own way through hard problems. That includes having good reasons
+            to disagree with me.
+          </p>
+        </section>
+        <section>
+          <h3>Building</h3>
+          <p>
+            I tend to get absorbed in the things I build. I want to pick apart the
+            problem, live in the data, and learn from the people who know the
+            business. That understanding shapes everything from how I represent a
+            problem in a model to what I decide is worth building.
+          </p>
+          <p>
+            I usually start with a question: what will someone do differently if
+            this works? The answer helps me work backward to what the system needs
+            to do and how we should measure it. Making that connection can be
+            surprisingly hard. But when the measure stays close to the decision,
+            improving the system is more likely to improve something people care
+            about.
+          </p>
+        </section>
       </div>
     </section>
   </div>
+</SiteLayout>
 
-  <script>
-    document.addEventListener("astro:page-load", () => {
-      document.querySelectorAll("[data-tab]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const tab = (btn as HTMLElement).dataset.tab!;
-
-          document.querySelectorAll("[data-tab]").forEach((b) => {
-            b.setAttribute("aria-selected", b === btn ? "true" : "false");
-          });
-
-          document.querySelectorAll("[data-tab-content]").forEach((section) => {
-            const el = section as HTMLElement;
-            el.classList.toggle("hidden", el.dataset.tabContent !== tab);
-          });
-        });
-      });
-    });
-  </script>
-</PageLayout>
+<style>
+  /* The card switches to one column when the page is narrow. */
+  .about {
+    container: about / inline-size;
+    padding: 0 var(--g);
+  }
+  /* beside the header's card, the profile card's top lines up with it, and the cards grow no wider than 1216px */
+  @media (min-width: 1024px) {
+    .about {
+      margin-top: -14px;
+      padding-left: var(--g-left);
+      max-width: calc(var(--g-left) + 1216px + var(--g));
+    }
+  }
+  /*
+   * The introduction is a second card under the profile, the same width: two parts side by side, split
+   * by a hairline, each under a small label. The profile above already lists every role, so the parts
+   * say what the list can't: what Ryan has led, and what he builds.
+   */
+  .bio {
+    margin-top: 20px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+  }
+  .parts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .parts section {
+    padding: 30px 40px 34px;
+  }
+  .parts section:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+  .parts section:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+  .parts h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .parts p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 25px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .parts p + p {
+    margin-top: 1em;
+  }
+  @container about (max-width: 760px) {
+    .bio {
+      margin-top: 14px;
+    }
+    .parts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .parts section {
+      padding: 22px 20px 24px;
+    }
+    .parts section:nth-child(odd) {
+      border-right: 0;
+    }
+    .parts section + section {
+      border-top: 1px solid var(--line);
+    }
+    .parts p {
+      font-size: 14.5px;
+      line-height: 24px;
+    }
+  }
+</style>

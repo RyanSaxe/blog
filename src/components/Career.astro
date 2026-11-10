@@ -1,0 +1,569 @@
+---
+/*
+ * The About page's profile card: the portrait, the selected role, and a ledger of every role, newest
+ * first, with its organization, years and a bar on a shared time scale. On a laptop the role and the
+ * ledger sit beside the portrait; on a tablet the ledger runs the card's full width below them; on a
+ * phone everything stacks, the role above the ledger. The rows are tabs: resting the pointer on one,
+ * clicking or focusing it shows its role, and a soft highlight glides to it. Except on a phone, every
+ * role's text sits in the same grid cell, so the card never changes height; on a phone the text fits
+ * the selected role, and the page scrolls by the difference so the tapped row stays under the finger.
+ */
+import { timeline } from "@/data/timeline";
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function toYear(date: string) {
+  const [month, year] = date.split(" ");
+  const m = MONTHS.indexOf(month);
+  if (m < 0 || !year) throw new Error(`Timeline date "${date}" is not "Mon YYYY"`);
+  return Number(year) + m / 12;
+}
+
+const today = new Date();
+const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+const now = today.getFullYear() + (today.getMonth() + (today.getDate() - 1) / daysInMonth) / 12;
+
+const roles = timeline.map((entry, i) => ({
+  ...entry,
+  i,
+  start: toYear(entry.startDate),
+  end: entry.endDate ? toYear(entry.endDate) : now,
+}));
+type Role = (typeof roles)[number];
+
+const first = Math.floor(Math.min(...roles.map((r) => r.start)));
+const span = now - first;
+const pct = (year: number) => `${(((year - first) / span) * 100).toFixed(3)}%`;
+const place = (r: Role) => `--l: ${pct(r.start)}; --w: ${(((r.end - r.start) / span) * 100).toFixed(3)}%`;
+
+const newest = [...roles].sort((a, b) => b.start - a.start || b.end - a.end);
+// Left and right walk the roles in date order; up and down walk the rows.
+const order = [...newest].reverse().map((r) => r.i);
+const current = roles.find((r) => !r.endDate) ?? newest[0];
+const januaries = Array.from({ length: Math.floor(now) - first + 1 }, (_, k) => first + k);
+
+const year = (date: string) => date.split(" ")[1];
+const years = (r: Role) => `${year(r.startDate)} – ${r.endDate ? year(r.endDate) : "Present"}`;
+const dates = (r: Role) => `${r.startDate} – ${r.endDate ?? "Present"}`;
+function linkLabel(url: string) {
+  if (url.includes("patents.google.com")) return `Patent ${url.split("/").filter(Boolean).at(-1)}`;
+  if (url.includes("arxiv.org")) return "Paper on arXiv";
+  return new URL(url).hostname.replace(/^www\./, "");
+}
+---
+
+<section class="profile" aria-labelledby="career-h" data-career data-order={order.join(",")}>
+  <h2 id="career-h" class="vh">Career</h2>
+  <figure class="pf">
+    <img src="/images/about/ryan-saxe-720.webp" width="720" height="900" alt="Portrait of Ryan Saxe" decoding="sync" fetchpriority="high" />
+  </figure>
+  <div class="side">
+    <div class="detail">
+      {
+        roles.map((r) => (
+          <div class:list={["pane", { on: r.i === current.i }]} role="tabpanel" id={`role-${r.i}`} aria-labelledby={`tab-${r.i}`} data-i={r.i}>
+            <h3 class="title">{r.title}</h3>
+            <p class="meta">
+              <span class="where">{r.organization}</span>
+              <span class="sep" aria-hidden="true">·</span>
+              <span class="when">{dates(r)}</span>
+            </p>
+            {r.description && (
+              <p class="desc">
+                {r.description}
+                {r.link && (
+                  <a class="ext" href={r.link} target="_blank" rel="noopener">
+                    {linkLabel(r.link)}
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                      <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                    </svg>
+                  </a>
+                )}
+              </p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="chart">
+      <div class="grid" aria-hidden="true">{januaries.map((y) => <i style={`--l: ${pct(y)}`} />)}</div>
+      <div class="field" role="tablist" aria-label="Roles, newest first" aria-orientation="vertical">
+        <span class="hl" aria-hidden="true" style={`--k: ${newest.indexOf(current)}`}></span>
+        {
+          newest.map((r, k) => (
+            <button
+              type="button"
+              role="tab"
+              class="row"
+              id={`tab-${r.i}`}
+              aria-controls={`role-${r.i}`}
+              aria-selected={r.i === current.i ? "true" : "false"}
+              tabindex={r.i === current.i ? 0 : -1}
+              data-i={r.i}
+            >
+              <span class:list={["org", { rep: newest[k - 1]?.organization === r.organization }]} aria-hidden="true">
+                {r.organization}
+              </span>
+              <span class="yrs" aria-hidden="true">{years(r)}</span>
+              <span class="track" aria-hidden="true">
+                <span class="bar" style={place(r)} />
+              </span>
+              <span class="vh">
+                {r.title}, {r.organization}, {dates(r)}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+      <div class="axis" aria-hidden="true">
+        {januaries.map((y) => <span class:list={["yr", { odd: y % 2 === 1 }]} style={`--l: ${pct(y)}`}>{y}</span>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { onPage } from "@/scripts/page";
+
+  onPage((signal) => {
+    const root = document.querySelector<HTMLElement>("[data-career]");
+    if (!root) return;
+    const chart = root.querySelector<HTMLElement>(".chart")!;
+    const hl = root.querySelector<HTMLElement>(".hl")!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panes = [...root.querySelectorAll<HTMLElement>(".pane")];
+    const order = root.dataset.order!.split(",").map(Number);
+    const tabOf = (i: number) => tabs.find((t) => Number(t.dataset.i) === i);
+
+    const select = (i: number) => {
+      const tab = tabOf(i)!;
+      const before = tab.getBoundingClientRect().top;
+      tabs.forEach((t, k) => {
+        const on = t === tab;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) hl.style.setProperty("--k", String(k));
+      });
+      for (const p of panes) p.classList.toggle("on", Number(p.dataset.i) === i);
+      const moved = tab.getBoundingClientRect().top - before;
+      if (moved) scrollBy({ top: moved, behavior: "instant" });
+    };
+
+    const keyTarget = (i: number, key: string) => {
+      const at = order.indexOf(i);
+      const row = tabs.findIndex((t) => Number(t.dataset.i) === i);
+      if (key === "ArrowRight") return tabOf(order[at + 1]);
+      if (key === "ArrowLeft") return tabOf(order[at - 1]);
+      if (key === "ArrowDown") return tabs[row + 1];
+      if (key === "ArrowUp") return tabs[row - 1];
+      if (key === "Home") return tabs[0];
+      if (key === "End") return tabs.at(-1);
+    };
+
+    // A row selects once the pointer rests on it, so a pointer crossing rows on its way elsewhere
+    // changes nothing, and the selection stays when the pointer leaves.
+    const REST = 100;
+    let resting = 0;
+    for (const t of tabs) {
+      const i = Number(t.dataset.i);
+      t.addEventListener("pointerenter", (e) => {
+        clearTimeout(resting);
+        if (e.pointerType === "mouse") resting = setTimeout(() => select(i), REST);
+      });
+      t.addEventListener("pointerleave", () => clearTimeout(resting));
+      t.addEventListener("click", () => select(i));
+      t.addEventListener("focus", () => select(i));
+      t.addEventListener("keydown", (e) => {
+        const next = keyTarget(i, e.key);
+        if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
+        e.preventDefault();
+        next?.focus();
+      });
+    }
+
+    // A click or tap focuses the row so the arrow keys work next, but the focus ring shows only once a key is pressed.
+    chart.addEventListener("pointerdown", () => (chart.dataset.input = "pointer"));
+    document.addEventListener("keydown", () => (chart.dataset.input = "keys"), { capture: true, signal });
+  });
+</script>
+
+<style>
+  .profile {
+    --seg: color-mix(in srgb, var(--ink) 12%, var(--card));
+    --glide: 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    display: grid;
+    grid-template-columns: 352px minmax(0, 1fr);
+    min-height: 384px;
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+  }
+  /* Unselected bars need a little more ink on the dark card to stay visible. */
+  :global([data-theme="dark"]) .profile {
+    --seg: color-mix(in srgb, var(--ink) 17%, var(--card));
+  }
+  /* The card is as tall as its longest role needs; the portrait fills that height. */
+  .pf {
+    position: relative;
+    margin: 8px 0 8px 8px;
+  }
+  .pf img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: 10px;
+    background: var(--plate);
+  }
+
+  /* The selected role reads first; the ledger that picks it sits on the card's bottom edge. */
+  .side {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 30px 28px 18px 40px;
+  }
+  .detail {
+    display: grid;
+  }
+  /* The old role and the new one crossfade in place. */
+  .pane {
+    grid-area: 1 / 1;
+    align-content: start;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.24s ease,
+      visibility 0s linear 0.24s;
+  }
+  .pane.on {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.24s ease;
+  }
+  .title {
+    margin: 0;
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: 600;
+    letter-spacing: -0.017em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .meta {
+    margin: 3px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--muted);
+  }
+  .meta .where {
+    color: var(--ink-2);
+  }
+  .meta .sep {
+    margin: 0 6px;
+    color: var(--faint);
+  }
+  .meta .when {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .desc {
+    margin: 12px 0 0;
+    max-width: 600px;
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .ext {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 6px;
+    font-size: 13.5px;
+    line-height: 23px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: top;
+  }
+  .ext:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ext svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* ---- The ledger ---- */
+  .chart {
+    --rh: 30px;
+    --c1: 168px;
+    --c2: 116px;
+    --cg: 16px;
+    --bars: calc(var(--c1) + var(--c2) + 2 * var(--cg));
+    position: relative;
+  }
+  .grid {
+    position: absolute;
+    top: 0;
+    bottom: 4px;
+    left: var(--bars);
+    right: 0;
+    pointer-events: none;
+  }
+  .grid i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--l);
+    width: 1px;
+    background: var(--line);
+  }
+  .field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .hl {
+    position: absolute;
+    top: 0;
+    left: -12px;
+    right: -12px;
+    height: var(--rh);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--ink) 5%, transparent);
+    transform: translateY(calc(var(--k, 0) * var(--rh)));
+    transition: transform var(--glide);
+  }
+  /* Each row reaches 12px past the text on both sides, as the highlight does, so a focus ring outlines the same box. */
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--c1) var(--c2) minmax(0, 1fr);
+    column-gap: var(--cg);
+    align-items: center;
+    width: calc(100% + 24px);
+    height: var(--rh);
+    margin: 0 -12px;
+    padding: 0 12px;
+    font-size: 13.5px;
+    line-height: 18px;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .row:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 0;
+    border-radius: 8px;
+  }
+  .chart[data-input="pointer"] .row:focus-visible {
+    outline: none;
+  }
+  .org {
+    overflow: hidden;
+    color: var(--ink-2);
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: color 0.2s var(--ease);
+  }
+  /* A name repeated from the row above is fainter, so the rows read as groups by organization. */
+  .org.rep {
+    color: var(--faint);
+  }
+  .yrs {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transition: color 0.2s var(--ease);
+  }
+  .track {
+    position: relative;
+    height: 6px;
+  }
+  .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--l);
+    width: var(--w);
+    min-width: 4px;
+    border-radius: 99px;
+    background: var(--seg);
+    transition: background-color 0.2s var(--ease);
+  }
+  .row[aria-selected="true"] .org {
+    color: var(--ink);
+  }
+  .row[aria-selected="true"] .yrs {
+    color: var(--ink-2);
+  }
+  .row[aria-selected="true"] .bar {
+    background: var(--ink);
+  }
+  .axis {
+    position: relative;
+    height: 20px;
+    margin: 4px 0 0 var(--bars);
+  }
+  .yr {
+    position: absolute;
+    left: var(--l);
+    top: 4px;
+    padding-left: 5px;
+    font-size: 11px;
+    line-height: 14px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .yr.odd {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl,
+    .pane {
+      transition: none;
+    }
+  }
+
+  /* ---- Tablet: the portrait beside the role, and the ledger across the card's full width below ---- */
+  @container about (max-width: 999px) {
+    .profile {
+      grid-template-columns: 208px minmax(0, 1fr);
+      grid-template-areas: "pf detail" "chart chart";
+      min-height: 0;
+    }
+    .side {
+      display: contents;
+    }
+    .pf {
+      grid-area: pf;
+      min-height: 232px;
+      margin: 8px 0 0 8px;
+    }
+    .detail {
+      grid-area: detail;
+      padding: 28px 32px 24px;
+    }
+    .chart {
+      grid-area: chart;
+      margin: 8px 28px 0;
+      padding: 18px 0 14px;
+    }
+    /* A hairline across the whole card sets the ledger apart from the portrait and role above it. */
+    .chart::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -28px;
+      right: -28px;
+      height: 1px;
+      background: var(--line);
+    }
+    .grid {
+      top: 18px;
+      bottom: 18px;
+    }
+  }
+
+  /* ---- Phone: the portrait, then the role, then the ledger that picks it ---- */
+  @container about (max-width: 639px) {
+    .profile {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "pf" "detail" "chart";
+    }
+    .pf {
+      aspect-ratio: 4 / 3;
+      min-height: 0;
+      max-height: 360px;
+      margin: 8px 8px 0;
+    }
+    .pf img {
+      object-position: 50% 26%;
+    }
+    .detail {
+      padding: 18px 16px;
+    }
+    .pane:not(.on) {
+      display: none;
+    }
+    @starting-style {
+      .pane.on {
+        opacity: 0;
+      }
+    }
+    .title {
+      font-size: 15.5px;
+      line-height: 22px;
+      letter-spacing: -0.012em;
+    }
+    .meta {
+      margin-top: 2px;
+      font-size: 13px;
+    }
+    .desc {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .ext {
+      line-height: 22px;
+    }
+    /* Too narrow for year lines: each bar sits on a faint track that runs from the first year to today. */
+    .chart {
+      --rh: 40px;
+      --cg: 10px;
+      margin: 0 16px;
+      padding: 4px 0 6px;
+    }
+    .chart::before {
+      left: -16px;
+      right: -16px;
+    }
+    /* The bars get 64px on a phone and grow on anything wider. The highlight lines up with the portrait. */
+    .hl {
+      left: -8px;
+      right: -8px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr) 96px max(64px, 100% - 348px);
+      width: calc(100% + 16px);
+      margin: 0 -8px;
+      padding: 0 8px;
+      font-size: 13px;
+    }
+    .grid,
+    .axis {
+      display: none;
+    }
+    .track {
+      border-radius: 99px;
+      background: color-mix(in srgb, var(--ink) 5%, var(--card));
+    }
+    /* The selected row's track stays visible on its highlight. */
+    .row[aria-selected="true"] .track {
+      background: color-mix(in srgb, var(--ink) 11%, var(--card));
+    }
+  }
+
+  /* The narrowest phones: smaller type and columns, so every name fits from 360px wide. */
+  @container about (max-width: 340px) {
+    .chart {
+      --cg: 8px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr) 88px 52px;
+      font-size: 12px;
+    }
+  }
+</style>

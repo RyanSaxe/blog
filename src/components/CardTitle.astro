@@ -1,0 +1,27 @@
+---
+import type { CardItem } from "@/data/cards";
+
+interface Props {
+  item: CardItem;
+}
+const { item } = Astro.props;
+---
+
+{
+  item.logo === "pair" ? (
+    <picture class="wordmark">
+      <source data-dark media="(prefers-color-scheme: dark)" srcset="/images/site/pair-logo-dark.svg" />
+      <img src="/images/site/pair-logo.svg" alt={item.title} width="32" height="24" />
+    </picture>
+  ) : item.logo === "byor" ? (
+    <>
+      <picture class="mark">
+        <source data-dark media="(prefers-color-scheme: dark)" srcset="/images/site/byor-mark-dark.png" />
+        <img src="/images/site/byor-mark.png" alt="" width="39" height="20" />
+      </picture>
+      <span class="tt">{item.title}</span>
+    </>
+  ) : (
+    <span class="tt">{item.title}</span>
+  )
+}
