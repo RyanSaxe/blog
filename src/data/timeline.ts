@@ -12,7 +12,7 @@ export const timeline: TimelineEntry[] = [
     title: "Global Director, Data & Analytics",
     organization: "AB InBev",
     description:
-      "Chief Data Scientist for Global Analytics, responsible for the science and engineering behind its products, from marketing and pricing models to demand forecasting.",
+      "Chief Data Scientist for Global Analytics, responsible for the science and engineering behind everything from forecasting to agentic dev tools.",
     startDate: "Nov 2024",
   },
   {
