@@ -60,12 +60,16 @@ export const timeline: TimelineEntry[] = [
   {
     title: "Master of Science in Computer Science",
     organization: "New York University",
+    description:
+      "Wrote a thesis on classifying the quality of movement from motion capture, which Courant chose for publication.",
     startDate: "Sep 2017",
     endDate: "Dec 2018",
   },
   {
     title: "Bachelor of Arts in Mathematics & Computer Science",
     organization: "New York University",
+    description:
+      "Alongside it, built a classifier for fashion products at StyleSage and analyzed fMRI data for a poster on brain entropy.",
     startDate: "Sep 2013",
     endDate: "May 2017",
   },
