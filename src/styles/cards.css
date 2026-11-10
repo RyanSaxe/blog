@@ -484,7 +484,6 @@
 .p-txt {
   padding: 10px 30px 12px 0;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
 }
 /* The scrolling column runs from the panel's top edge to its bottom edge, so text scrolls cleanly under
    both, and the last links keep their space below them at the end. */
