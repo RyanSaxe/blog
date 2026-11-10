@@ -5,13 +5,13 @@ export const WRITING = {
   subtitle: "Essays, articles and podcasts",
 };
 
-// TODO(ryan): rewrite the sidebar's opening line and the paragraph it opens into by hand.
 /** The opening line, under your name in the header on every page. */
-export const TAGLINE = "I’m obsessed with how people work with AI, and I build things to find out.";
+export const TAGLINE =
+  "I'm obsessed about understanding the inner machinations of AI and ML systems. I build systems to further my intuitions of how they work, and I write about what I learn along the way.";
 
 /** The short paragraph the opening line opens into when a visitor clicks it. */
 export const TAGLINE_MORE =
-  "My day job is machine learning that has to work at scale and still make sense to the people who rely on it. The rest of my time goes to whatever I’m obsessed with. Lately that’s AI agents: how people work with them, and how they work with each other. For much longer it’s been Magic: The Gathering, which is how I ended up with over 400 articles, a drafting bot that reached Mythic, and a format of my own.";
+  "I love picking apart AI and machine learning systems to understand how they work. This site collects my projects, writing, and whatever else I get a little too interested in.";
 
 export const SOCIAL = [
   { label: "GitHub", href: "https://github.com/RyanSaxe" },
