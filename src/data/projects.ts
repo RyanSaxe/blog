@@ -192,6 +192,46 @@ export const projects: CardItem[] = [
     ],
   },
   {
+    id: "dotfiles",
+    title: "dotfiles",
+    sentence:
+      "My Mac and Linux setup in one Nix flake, from macOS’s settings to the editor.",
+    year: "2023–2026",
+    fact: "Every app themed from one file",
+    gallery: [
+      {
+        name: "dotfiles-screen",
+        alt: "The Mac’s screen: sketchybar across the top, and Rex below it with a Python file and a note open side by side in Neovim",
+        caption: "The whole screen",
+      },
+      {
+        name: "dotfiles-go",
+        alt: "ws’s Go popup over Rex, listing repositories by their latest git activity beside the selected one’s files and commits",
+        caption: "Going to a project",
+      },
+      {
+        name: "dotfiles-reviews",
+        alt: "ws’s Reviews popup, listing the pull requests and issues that need me beside a review comment",
+        caption: "Pull requests that need me",
+      },
+      {
+        name: "dotfiles-tasks",
+        alt: "ws’s Tasks popup, listing open tasks from my notes by due date beside the note they’re in",
+        caption: "Tasks from my notes",
+      },
+    ],
+    paras: [
+      "It includes ws, a Go program that opens each project as a terminal session with a coding agent in it, and one theme file that colors every app in light and dark.",
+      "Each computer lists its roles, such as a screen, personal or work, and each module applies only to the roles it names. The coding agents’ instructions live here too, and one command installs them for Claude Code and Codex.",
+    ],
+    facts: [
+      ["Years", "2023 to 2026"],
+      ["Computers", "A Mac and a Linux server"],
+      ["Stack", "Nix, nix-darwin and Home Manager"],
+    ],
+    actions: [{ label: "Code on GitHub", href: GH + "dotfiles" }],
+  },
+  {
     id: "cubecobra",
     title: "CubeCobra ML system",
     sentence:
