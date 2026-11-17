@@ -1,9 +1,11 @@
 ---
 /*
  * An essay: title block, the rendered markdown in a reading column, and links to the
- * neighbouring essays. Text, figures and code share the column.
+ * neighbouring essays. Text, figures and code share the column, and a figure opens larger
+ * when clicked (FigureZoom).
  */
 import SiteLayout from "./SiteLayout.astro";
+import FigureZoom from "@/components/FigureZoom.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import "katex/dist/katex.min.css";
 import "@fontsource/jetbrains-mono/400.css";
@@ -114,6 +116,7 @@ const neighbours = [
       </nav>
     )}
   </article>
+  <FigureZoom />
 </SiteLayout>
 
 <script>
