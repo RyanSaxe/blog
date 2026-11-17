@@ -32,6 +32,8 @@ categories: ["topic"]
 Your content here...
 ```
 
+Add `draft: true` to the frontmatter while you write. `npm run build` leaves a draft off the published site: it gets no page, it isn't in the RSS feed or the sitemap, other posts' Previous and Next links skip it, and any Writing card that links to it is hidden. `npm run dev` shows drafts like any other post, so you can preview one.
+
 ### Notebook post
 
 1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `#hide`, `#hide_input` or `#hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
@@ -40,6 +42,10 @@ Your content here...
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
 
 Draw figures for a white page: dark text on a white or transparent background. The dark theme inverts them and keeps their hues. A figure drawn on black goes in `DRAWN_ON_BLACK` in `plugins/rehype-essay-figures.mjs`, so the light theme inverts it instead.
+
+### Writing card
+
+A post shows in the Writing section only after you add its card to `src/data/writing.ts`. Copy the `linear-nn` entry, and point its action at `/blog/<slug>/`, where `<slug>` is the post's file name without `.md`. The card's images go in `public/images/site/`, named as `Pic` in `src/data/cards.ts` describes.
 
 ## Updating Site Content
 

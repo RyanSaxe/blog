@@ -2,8 +2,10 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Rail from "@/components/Rail.astro";
 import { projects } from "@/data/projects";
-import { writing } from "@/data/writing";
+import { getPublishedWriting } from "@/data/published";
 import { TAGLINE, WRITING } from "@/data/site";
+
+const writing = await getPublishedWriting();
 ---
 
 <SiteLayout title="Ryan Saxe" description={TAGLINE}>

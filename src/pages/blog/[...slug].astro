@@ -1,13 +1,14 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
+import { getPublishedPosts, postHref } from "@/data/published";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog")).sort(
+  const posts = (await getPublishedPosts()).sort(
     (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
   );
   const link = (post?: (typeof posts)[number]) =>
-    post && { title: post.data.title, description: post.data.description, href: `/blog/${post.id}/` };
+    post && { title: post.data.title, description: post.data.description, href: postHref(post) };
   return posts.map((post, i) => ({
     params: { slug: post.id },
     props: { post, prev: link(posts[i - 1]), next: link(posts[i + 1]) },
