@@ -35,12 +35,12 @@ def load_citations(notebook_dir: str) -> dict:
 
 def generate_frontmatter(meta: dict) -> str:
     cats = ", ".join(f'"{c}"' for c in meta["categories"])
+    hero = f'heroImage: "{meta["heroImage"]}"\n' if "heroImage" in meta else ""
     return f"""---
 title: "{meta["title"]}"
 description: "{meta["description"]}"
 date: {meta["date"]}
-heroImage: "{meta["heroImage"]}"
-categories: [{cats}]
+{hero}categories: [{cats}]
 ---"""
 
 
