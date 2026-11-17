@@ -6,6 +6,8 @@ Built with [Astro](https://astro.build), deployed to GitHub Pages.
 
 ## Local Development
 
+The site needs Node. The notebooks, the Python checks and the notebook build also need [uv](https://docs.astral.sh/uv/).
+
 ```bash
 npm install
 npm run dev
@@ -32,6 +34,8 @@ prek install
 - rumdl lints Markdown (`.rumdl.toml`).
 - nbstripout removes notebook outputs.
 
+prek installs these tools in its own environments, so they aren't on your PATH. Run one check with `prek run HOOK --files FILE`. When rumdl offers to fix something, `uvx rumdl fmt FILE` applies the fix.
+
 The notebook build formats each post it generates, so generated posts pass the same checks.
 
 ## Adding a New Post
@@ -51,19 +55,17 @@ categories: ["topic"]
 Your content here...
 ```
 
-The page's title comes from `title`, so start sections at `##`. Give every image alt text that describes it.
+`title`, `description` and `date` are required. The page's title comes from `title`, so start sections at `##`. Give every image alt text that describes it.
 
 Add `draft: true` to the frontmatter while you write. `npm run build` leaves a draft off the published site: it gets no page, it isn't in the RSS feed or the sitemap, other posts' Previous and Next links skip it, and any Writing card that links to it is hidden. `npm run dev` shows drafts like any other post, so you can preview one.
 
 ### Notebook post
 
-1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `# hide`, `# hide_input` or `# hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
-   - Start sections at `##`, and give every image alt text, as in a Markdown post.
-   - Seed random numbers in the first cell, as both notebooks do, so every run draws the same plots.
+1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories`, and optionally a `heroImage` to show when the post is shared. Copy these files from `notebooks/linear-nn/`, along with `blog.mplstyle`, the plot style its first cell loads. Start a cell with `# hide`, `# hide_input` or `# hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
+   - Start sections at `##`, and give every image you link in a Markdown cell alt text, as in a Markdown post. A plot that a cell draws has no alt text, since nbconvert writes it without any.
+   - Seed random numbers in the first cell, as both notebooks do, so a rerun on the same machine draws the same plots. Another platform, such as CI's Linux, can still draw slightly different ones.
    - Take PyTorch from the CPU index, as `notebooks/linear-nn/pyproject.toml` does, so CI doesn't download CUDA.
-2. Run `npm run build:notebooks` to see it locally, or push to `main` — CI will execute the notebook, generate the markdown, and commit the output
-
-CI uses per-notebook hashing to only re-run notebooks whose source files changed.
+2. Run `npm run build:notebooks` to see it locally. It runs only the notebooks whose sources changed since their last run. Commit the post, plots and `.notebook-cache/` hash it writes along with the notebook. If you push only the notebook, CI runs it on `main` and commits them.
 
 Draw figures for a white page: dark text on a white or transparent background. The dark theme inverts them and keeps their hues. A figure drawn on black goes in `DRAWN_ON_BLACK` in `plugins/rehype-essay-figures.mjs`, so the light theme inverts it instead.
 
