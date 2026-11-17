@@ -110,6 +110,9 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
         --output "$OUTPUT_DIR/$slug.md" \
         --slug "$slug" \
         --notebook-dir "$nb_dir"
+    # The post is committed, so it meets the same checks as the rest. rumdl
+    # fences the output nbconvert indents and makes `#` sections `##`.
+    (cd "$REPO_ROOT" && uvx rumdl@0.3.4 fmt "$OUTPUT_DIR/$slug.md" && npx oxfmt "$OUTPUT_DIR/$slug.md")
 
     # 6. Save hash
     echo "$current_hash" > "$CACHE_DIR/$slug.hash"

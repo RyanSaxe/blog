@@ -1,0 +1,12 @@
+[global]
+# Posts use HTML for citations, footnote links and figures.
+disable = ["MD033"]
+
+# Prose stays one line per paragraph. ruff keeps Python code to 80 columns,
+# and a cell's printed output keeps the lines it printed, so only headings are
+# held to 80.
+[MD013]
+paragraphs = false
+blockquotes = false
+math-blocks = false
+code-blocks = false

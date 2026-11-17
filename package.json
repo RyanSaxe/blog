@@ -19,7 +19,13 @@
     "remark-math": "^6.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.2.2",
-    "tailwindcss": "^4.2.2"
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3"
   }
 }

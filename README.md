@@ -15,6 +15,25 @@ Blog posts from notebooks are generated in CI and committed to the repo, so they
 
 Links within the site swap pages in place through Astro's client router, so a script in a page or component runs once, not on every page. Start page scripts with `onPage` from `src/scripts/page.ts`, which runs them again after each swap and removes their listeners when the page leaves.
 
+## Checks
+
+[prek](https://prek.j178.dev) runs the checks in `.pre-commit-config.yaml` before each commit, and CI runs the same checks on every pull request. Install prek, then install its hook once per clone:
+
+```bash
+prek install
+```
+
+`prek run --all-files` runs every check on demand:
+
+- oxfmt formats code, styles, Markdown, JSON, YAML and TOML (`.oxfmtrc.json`).
+- oxlint lints JavaScript, TypeScript and Astro (`.oxlintrc.json`), and `astro check` type-checks them.
+- ruff formats and lints Python, notebooks included, at 80 columns (`ruff.toml`).
+- ty type-checks each notebook against its own environment, and each script in `scripts/` against the dependencies it declares inline.
+- rumdl lints Markdown (`.rumdl.toml`).
+- nbstripout removes notebook outputs.
+
+The notebook build formats each post it generates, so generated posts pass the same checks.
+
 ## Adding a New Post
 
 ### Markdown post
@@ -36,7 +55,7 @@ Add `draft: true` to the frontmatter while you write. `npm run build` leaves a d
 
 ### Notebook post
 
-1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `#hide`, `#hide_input` or `#hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
+1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `# hide`, `# hide_input` or `# hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
 2. Run `npm run build:notebooks` to see it locally, or push to `main` — CI will execute the notebook, generate the markdown, and commit the output
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.
@@ -60,8 +79,4 @@ Images for cards live in `public/images/site/`.
 
 ## Notebook Reproducibility
 
-Notebooks are stored without outputs (via nbstripout). CI executes them fresh, guaranteeing reproducibility. To set up nbstripout locally:
-
-```bash
-uvx nbstripout --install --attributes .gitattributes
-```
+Notebooks are stored without outputs: the nbstripout check removes them before each commit. CI executes them fresh.

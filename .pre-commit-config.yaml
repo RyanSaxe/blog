@@ -1,0 +1,64 @@
+# prek runs these before each commit, and CI runs `prek run --all-files`.
+# Formatters fix files rather than only reporting them.
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        # CI's checkout stages nothing, so check every file it is given.
+        args: [--enforce-all]
+
+  # Notebooks are committed without outputs; CI runs them to draw the plots.
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.9.1
+    hooks:
+      - id: nbstripout
+        args: [--extra-keys, metadata.varInspector]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.5
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      # Type-checks each notebook against its own environment, so it runs
+      # only for the notebooks a commit touches.
+      - id: ty
+        name: ty
+        entry: scripts/check-types.sh
+        language: system
+        files: ^(notebooks/[^/]+/(notebook\.ipynb|pyproject\.toml|uv\.lock)|scripts/.*\.py)$
+
+      # oxfmt also fails on a JSON, YAML or TOML file it can't parse.
+      - id: oxfmt
+        name: oxfmt
+        entry: npx oxfmt --no-error-on-unmatched-pattern
+        language: system
+        files: \.(astro|[cm]?[jt]s|css|json|ya?ml|toml|md)$
+
+      - id: oxlint
+        name: oxlint
+        entry: npx oxlint --deny-warnings
+        language: system
+        files: \.(astro|[cm]?[jt]s)$
+
+      - id: astro-check
+        name: astro check
+        entry: npx astro check
+        language: system
+        files: \.(astro|[cm]?[jt]s)$|^tsconfig\.json$|^src/content/
+        pass_filenames: false
+
+  # After oxfmt, so it lints formatted Markdown.
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: v0.3.4
+    hooks:
+      - id: rumdl

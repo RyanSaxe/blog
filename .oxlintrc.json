@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "rules": {
+    // Helpers sit beside the code that uses them, and an inline script's
+    // helpers have no outer scope to move to that isn't global.
+    "unicorn/consistent-function-scoping": "off",
+    // Its fix mutates each object in place, which costs clarity for no
+    // measurable gain on lists this short.
+    "oxc/no-map-spread": "off"
+  }
+}
