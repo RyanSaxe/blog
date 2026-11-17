@@ -8,7 +8,6 @@
 import json
 import sys
 
-
 # The formatter writes `#hide` as `# hide`, so both spellings hide a cell.
 HIDE_TAGS = {
     "hide": "remove_cell",

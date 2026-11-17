@@ -58,7 +58,10 @@ def extract_footnotes_from_fndetail(text: str) -> dict[int, str]:
 
 
 def convert_citations(text: str, citations: dict) -> tuple[str, list[str]]:
-    """Replace {% cite KEY %} with inline author-year link and collect used keys in order."""
+    """Replace each {% cite KEY %} with an inline author-year link.
+
+    Returns the text and the cited keys, in order of first use.
+    """
     seen: list[str] = []
 
     def replacer(m):
@@ -68,7 +71,10 @@ def convert_citations(text: str, citations: dict) -> tuple[str, list[str]]:
             seen.append(key)
         short = citations[key]["short"]
         if is_first:
-            return f'<cite id="cite-{key}"><a href="#ref-{key}">({short})</a></cite>'
+            return (
+                f'<cite id="cite-{key}">'
+                f'<a href="#ref-{key}">({short})</a></cite>'
+            )
         return f'<cite><a href="#ref-{key}">({short})</a></cite>'
 
     text = re.sub(r"\{%\s*cite\s+(\w+)\s*%\}", replacer, text)
@@ -131,7 +137,8 @@ def clean_html(text: str, slug: str) -> str:
     if slug == "transparent-nn":
         text = re.sub(
             r"<li style.*?</li>",
-            "\n> **Prerequisite**: This post builds on [From Linear Models to Neural Networks](/blog/linear-nn/).\n",
+            "\n> **Prerequisite**: This post builds on "
+            "[From Linear Models to Neural Networks](/blog/linear-nn/).\n",
             text,
             flags=re.DOTALL,
         )
@@ -146,7 +153,7 @@ def clean_html(text: str, slug: str) -> str:
 
 
 def remove_cell0_metadata(text: str) -> str:
-    """Remove the fastpages metadata from the first cell (title, description, list items)."""
+    """Remove the first cell's fastpages title, description and list items."""
     lines = text.split("\n")
     cleaned = []
     in_header = True
@@ -215,9 +222,13 @@ def postprocess(
         ref_lines = ["", "", "---", "", "## References", ""]
         for i, key in enumerate(used_citations, 1):
             if key in citations:
-                back = f' <a href="#cite-{key}" aria-label="Back to reference">↩</a>'
+                back = (
+                    f' <a href="#cite-{key}" '
+                    'aria-label="Back to reference">↩</a>'
+                )
                 ref_lines.append(
-                    f'{i}. <span id="ref-{key}">{citations[key]["full"]}{back}</span>'
+                    f'{i}. <span id="ref-{key}">'
+                    f"{citations[key]['full']}{back}</span>"
                 )
         ref_section = "\n".join(ref_lines)
 
