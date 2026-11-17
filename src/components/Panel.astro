@@ -202,9 +202,7 @@ import "@/styles/cards.css";
     if (S) finish(true);
     const card = from.classList.contains("card") ? from : null;
     const phone = narrow.matches;
-    const head = phone ? 56 : 64;
-    const cr0 = rect(from);
-    if (cr0.y < head + 8) window.scrollBy(0, cr0.y - head - 8);
+    // the page stays where it is: a card partly above the window opens from where it is
     const rail = card && railOf(card);
     if (rail) rail.reveal(rail.cards.indexOf(card!));
 
