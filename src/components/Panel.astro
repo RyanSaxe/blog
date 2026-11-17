@@ -1,10 +1,10 @@
 ---
 /*
  * The dialog every card opens, plus the carousel behavior. SiteLayout includes it once on every page,
- * since every page's header has the opening line. On a laptop the card's image grows into a centered panel; on a phone, a tablet
- * held upright or a phone on its side it grows into a full-screen sheet. The opening line's round button grows the same way into a
- * smaller panel, or a sheet as tall as its text. All use one critically damped spring and reverse
- * exactly on close.
+ * since every page's header has the opening line. A card's picture lifts out of the card and grows into the panel's picture,
+ * and the whole panel opens out around it at the same scale: a centered panel on a laptop, and a full-screen sheet on a phone,
+ * a tablet held upright or a phone on its side. The opening line's round button grows the same way into a smaller panel, or a
+ * sheet as tall as its text. Nothing fades in. All use one critically damped spring and reverse exactly on close.
  */
 import "@/styles/cards.css";
 ---
@@ -49,7 +49,7 @@ import "@/styles/cards.css";
       if (Math.abs(this.x - this.target) < this.eps && Math.abs(this.v) < this.eps * 20) { this.x = this.target; this.v = 0; this.done = true; }
     }
   }
-  const OMEGA = 21; // settles in about 350 ms with no overshoot
+  const OMEGA = 13; // settles in about 550 ms with no overshoot
   type Job = (now: number) => boolean;
   const jobs = new Set<Job>(); let rafId = 0;
   const run = (fn: Job) => { jobs.add(fn); if (!rafId) rafId = requestAnimationFrame(tick); };
@@ -181,12 +181,10 @@ import "@/styles/cards.css";
   const railOf = (card: HTMLElement) => rails.find((r) => r.cards.includes(card));
 
   /* ---------- the panel ---------- */
-  type Part = { ce: HTMLElement; pe: HTMLElement; k: number; C: DOMRect | R; L: R };
   type R = { x: number; y: number; w: number; h: number };
   const rect = (el: Element): R => { const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; };
   const snapR = (r: R): R => { const x = Math.round(r.x), y = Math.round(r.y); return { x, y, w: Math.round(r.x + r.w) - x, h: Math.round(r.y + r.h) - y }; };
   const lerpRect = (a: R, b: R, t: number): R => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), w: lerp(a.w, b.w, t), h: lerp(a.h, b.h, t) });
-  const fs = (el: Element) => parseFloat(getComputedStyle(el).fontSize);
 
   let S: any = null;
   // An open panel has its own history entry, so Back closes it instead of leaving the page.
@@ -224,17 +222,11 @@ import "@/styles/cards.css";
     content.style.height = "auto";
     content.style.position = "relative";
     content.style.transform = "none";
+    content.style.transformOrigin = "0 0";
     const ptxt = $(".p-txt", content);
     // on a laptop only the text column scrolls, so the image never moves
     if (!phone) ptxt.classList.add("scrolls");
 
-    const pairs = (phone && card ? [[".t", ".p-t"], [".s", ".p-s"], [".m .y", ".p-m .y"], [".m .f", ".p-m .f"]] : []).map(([a, b]) => {
-      const ce = $(a, card!), pe = $(b, content);
-      const k = fs(ce) / fs(pe);
-      // the same measure in proportion to the type size, so every line breaks in the same place
-      if (a === ".s") pe.style.width = rect(ce).w / k + "px";
-      return { ce, pe, k };
-    });
     if (!phone) {
       P.h = Math.min(content.offsetHeight, H - 64);
       P.y = Math.round((H - P.h) / 2);
@@ -249,28 +241,19 @@ import "@/styles/cards.css";
     frame.style.height = P.h + "px";
     frame.style.transform = `translate(${P.x}px, ${P.y}px)`;
 
-    const cover = card && $(".cover", card), pimg = card && $(".p-img", content);
-    let ghost: HTMLElement | null = null;
-    if (card && !phone) {
-      // a copy of the card's text rides under the growing image and fades, so no text crosses the image
-      ghost = $(".txt", card).cloneNode(true) as HTMLElement;
-      ghost.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));
-      ghost.setAttribute("aria-hidden", "true");
-      content.appendChild(ghost);
-      placeGhost(ghost, card);
-    }
+    const cover = card && $(".cover", card);
     S = {
-      from, trigger, card, phone, P, pimg, gi: 0, ghost,
-      rest: phone && card ? $$(".rest", content) : [...$$(".rest", content), ptxt],
-      close: $(".p-close", content), bar: $(".p-bar", content), gal: phone ? $(".gal", content) : null, layers: [null, ...$$(".p-img .layer", content)],
-      parts: pairs.map((p) => ({ ...p, C: rect(p.ce), L: rect(p.pe) })) as Part[],
-      C: rect(from), Ci: cover && rect(cover), M: card && rect($(".p-media", content)), TL: phone || !card ? null : rect(ptxt).x,
-      r0: card ? 16 : rect(from).h / 2, rP: phone ? 16 : 20, riC: cover && px(getComputedStyle(cover).borderTopLeftRadius), riP: 10,
-      sp: new Spring(0, OMEGA, 4e-4), sd: new Spring(0, 26, 0.2), fn: null as Job | null, travel: null as number | null, closing: false,
+      from, trigger, card, phone, P, pimg: card && $(".p-img", content), gi: 0,
+      // the card's picture leaves an empty spot on the card until it returns; the round button goes entirely
+      lifted: card ? $("picture", cover!) : from,
+      close: $(".p-close", content), gal: phone ? $(".gal", content) : null, layers: [null, ...$$(".p-img .layer", content)],
+      C: rect(from), Ci: cover && rect(cover), M: card && rect($(".p-media", content)),
+      r0: card ? px(getComputedStyle(cover!).borderTopLeftRadius) : rect(from).h / 2, rP: phone ? 16 : 20,
+      sp: new Spring(0, OMEGA, 4e-4), sd: new Spring(0, 26, 0.2), fn: null as Job | null, closing: false,
     };
     if (card) wirePanel();
     $(".p-close", content).addEventListener("click", closePanel);
-    from.style.visibility = "hidden";
+    S.lifted.style.visibility = "hidden";
     trigger.setAttribute("aria-expanded", "true");
     for (const el of inertTargets()) el.inert = true;
     render();
@@ -280,11 +263,6 @@ import "@/styles/cards.css";
     S.close.focus({ preventScroll: true });
     history.pushState({ panel: true }, "");
     pushed = true;
-  }
-
-  function placeGhost(ghost: HTMLElement, card: HTMLElement) {
-    const g = rect($(".txt", card)), c0 = rect(content);
-    Object.assign(ghost.style, { position: "absolute", left: g.x - c0.x + "px", top: g.y - c0.y + "px", width: g.w + "px", height: g.h + "px", zIndex: "4", pointerEvents: "none", margin: "0" });
   }
 
   function wirePanel() {
@@ -325,55 +303,39 @@ import "@/styles/cards.css";
     }, { passive: true });
   }
 
-  function travel() {
-    if (!S.parts.length) return 0;
-    if (S.travel == null) S.travel = Math.max(...S.parts.map((q: Part) => Math.hypot(q.C.x - q.L.x, q.C.y - q.L.y)));
-    return S.travel;
-  }
   function render() {
-    const { P, parts, phone } = S;
+    const { P, phone, card } = S;
     const p = S.sp.x, d = S.sd.x;
     const T = { x: P.x, y: P.y + d, w: P.w, h: P.h };
-    const F = snapR(lerpRect(S.C, T, p));
+    // the panel's visible box grows from the card's picture, or from the round button
+    const F = snapR(lerpRect(card ? S.Ci : S.C, T, p));
     frame.style.transform = `translate(${F.x}px, ${F.y}px)`;
     frame.style.width = F.w + "px";
     frame.style.height = F.h + "px";
     const r = lerp(S.r0, S.rP, p), rb = phone ? lerp(S.r0, 0, p) : r;
     frame.style.borderRadius = `${r}px ${r}px ${rb}px ${rb}px`;
+    // a picture has no edge line, so a card's panel draws one only as it grows
+    const edge = card ? 0 : 1;
     frame.style.boxShadow = phone
-      ? `0 0 0 1px ${isDark() ? `rgba(255,255,255,${0.075 * (1 - p)})` : `rgba(0,0,0,${0.065 * (1 - p)})`}`
+      ? `0 0 0 1px ${isDark() ? `rgba(255,255,255,${0.075 * edge * (1 - p)})` : `rgba(0,0,0,${0.065 * edge * (1 - p)})`}`
       : isDark()
-        ? `0 0 0 1px rgba(255,255,255,${lerp(0.075, 0.09, p)}), 0 30px 80px -24px rgba(0,0,0,${0.7 * p})`
-        : `0 0 0 1px rgba(0,0,0,${lerp(0.065, 0.08, p)}), 0 2px 4px rgba(0,0,0,${0.04 * p}), 0 30px 80px -24px rgba(0,0,0,${0.3 * p})`;
-    // the content stays put on screen while the frame grows around it
-    content.style.transform = `translate(${T.x - F.x}px, ${T.y - F.y}px)`;
-    for (const q of parts) {
-      const x = lerp(q.C.x, q.L.x, p), y = lerp(q.C.y, q.L.y + d, p), k = lerp(q.k, 1, p);
-      q.pe.style.transform = `translate(${x - q.L.x}px, ${Math.round(y) - q.L.y - d}px) scale(${k})`;
-    }
-    let clear = 1;
-    if (S.card) {
-      const M = { x: S.M.x, y: S.M.y + d, w: S.M.w, h: S.M.h };
-      const I = lerpRect(S.Ci, M, p);
-      const st = S.pimg.style;
-      st.left = I.x - M.x + "px"; st.top = I.y - M.y + "px"; st.width = I.w + "px"; st.height = I.h + "px";
-      st.borderRadius = lerp(S.riC, S.riP, p) + "px";
+        ? `0 0 0 1px rgba(255,255,255,${lerp(0.075 * edge, 0.09, p)}), 0 30px 80px -24px rgba(0,0,0,${0.7 * p})`
+        : `0 0 0 1px rgba(0,0,0,${lerp(0.065 * edge, 0.08, p)}), 0 2px 4px rgba(0,0,0,${0.04 * p}), 0 30px 80px -24px rgba(0,0,0,${0.3 * p})`;
+    // The whole panel is drawn at one scale that grows to full size, so its text zooms in with it. A card's
+    // panel starts at the scale where its picture is exactly the card's and sits where that picture is; the
+    // opening line's panel starts at the round button's width and grows from its top-left corner.
+    const k0 = card ? S.Ci.w / S.M.w : S.C.w / P.w, k = lerp(k0, 1, p);
+    let ox = F.x, oy = F.y;
+    if (card) {
+      ox = lerp(S.Ci.x, S.M.x, p) - k * (S.M.x - P.x);
+      oy = lerp(S.Ci.y, S.M.y + d, p) - k * (S.M.y - P.y);
+      // the card's picture is 3:2 and the panel's box for it can be taller, so the box grows from one to the other
+      S.pimg.style.height = lerp(S.Ci.h / k0, S.M.h, p) + "px";
       if (S.closing && S.gi > 0) S.layers[S.gi].style.opacity = String(smooth(0.3, 0.85, p));
-      if (S.ghost) {
-        S.ghost.style.transform = `translate(${I.x - S.Ci.x}px, ${I.y + I.h - S.Ci.y - S.Ci.h}px)`;
-        S.ghost.style.opacity = String(1 - smooth(0, 0.3, p));
-      }
-      // on a laptop the text column waits until the moving image has cleared it
-      if (S.TL != null) clear = clamp(1 - (I.x + I.w - S.TL + 12) / 48);
     }
-    // the details appear only once the moving text is within a few pixels of home;
-    // a panel of text alone shows it only once the panel has nearly reached its size, so no line is cut off
-    const fade = parts.length ? clamp(Math.min(1 - ((1 - p) * travel()) / 36, (p - 0.3) / 0.4))
-      : S.card ? Math.min(smooth(0.4, 0.92, p), clear) : smooth(0.82, 1, p);
-    const o = fade * fade * (3 - 2 * fade);
-    for (const el of S.rest) { el.style.opacity = String(o); el.style.transform = `translateY(${(1 - o) * 6}px)`; }
-    S.close.style.opacity = String(smooth(0.82, 1, p));
-    if (S.bar) S.bar.style.opacity = String(o);
+    content.style.transform = `translate(${ox - F.x}px, ${oy - F.y}px) scale(${k})`;
+    // a phone's sheet has its close button on the picture, so it shows only as the sheet arrives
+    if (phone) S.close.style.opacity = String(smooth(0.82, 1, p));
     dim.style.opacity = String(p * (1 - Math.min(1, d / (P.h * 0.85))));
   }
   function loop() {
@@ -390,9 +352,8 @@ import "@/styles/cards.css";
     if (!S) return;
     if (S.sp.target === 1) {
       if (S.sd.x !== 0) return;
-      for (const q of S.parts) q.pe.style.transform = "";
       content.style.transform = "";
-      for (const el of S.rest) el.style.transform = "";
+      if (S.card) S.pimg.style.height = "";
       if (S.phone) content.style.overflowY = "auto";
       if (S.gal) {
         // the gallery takes over from the image only once its own copy is decoded; shown before that, it paints blank for a moment
@@ -421,17 +382,14 @@ import "@/styles/cards.css";
     S.pimg?.classList.remove("covered");
     S.pimg?.classList.add("noanim");
     S.closing = true;
-    if (S.sp.done && S.sp.x === 1) {
-      const d = S.sd.x;
-      for (const q of S.parts) { q.pe.style.transform = ""; q.L = rect(q.pe); q.L.y -= d; }
-      if (S.card) { const m = rect($(".p-media", content)); m.y -= d; S.M = m; }
+    if (S.sp.done && S.sp.x === 1 && S.card) {
+      const m = rect($(".p-media", content));
+      m.y -= S.sd.x;
+      S.M = m;
     }
     // the row may have moved while the panel was open, so the panel returns to where the card is now
     S.C = rect(S.from);
     if (S.card) S.Ci = rect($(".cover", S.card));
-    for (const q of S.parts) q.C = rect(q.ce);
-    S.travel = null;
-    if (S.ghost) placeGhost(S.ghost, S.card);
     if (reduced.matches) { finish(false); return; }
     S.sp.to(0, performance.now());
     loop();
@@ -439,8 +397,8 @@ import "@/styles/cards.css";
   function finish(instant: boolean) {
     if (!S) return;
     if (S.fn) stop(S.fn);
-    const { from, trigger } = S as { from: HTMLElement; trigger: HTMLElement };
-    from.style.visibility = "";
+    const { lifted, trigger } = S as { lifted: HTMLElement; trigger: HTMLElement };
+    lifted.style.visibility = "";
     trigger.setAttribute("aria-expanded", "false");
     for (const el of inertTargets()) el.inert = false;
     overlay.hidden = true;
