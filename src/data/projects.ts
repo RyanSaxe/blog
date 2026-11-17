@@ -4,6 +4,50 @@ const GH = "https://github.com/RyanSaxe/";
 
 export const projects: CardItem[] = [
   {
+    id: "cubecobra",
+    title: "CubeCobra ML system",
+    sentence:
+      "The machine learning system behind CubeCobra’s draft bots and card recommendations.",
+    year: "2020–2026",
+    fact: "100k monthly users",
+    gallery: [
+      {
+        name: "cc-model",
+        dark: true,
+        alt: "Diagram: a set of cards goes into one shared encoder, which narrows from 512 to 256 to 128 numbers; four heads read those numbers for recommendations, draft picks, deck building and card correlations",
+        caption: "The model",
+      },
+      {
+        name: "cc-search",
+        dark: true,
+        alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube",
+        caption: "Smart Search",
+      },
+      {
+        name: "cc-home",
+        dark: true,
+        alt: "The CubeCobra home page",
+        caption: "CubeCobra",
+      },
+    ],
+    paras: [
+      "One shared encoder maps a set of cards into a 128-dimensional space, and four heads read it: cube recommendations, draft picks, deck building and card correlations.",
+      "The model runs as its own service, apart from the main site, and each feature asks it for one head. Smart Search filters the catalog by your query and has the cube head rank what’s left by fit, and the draft bots call the draft and deck heads for every pick and every deck.",
+    ],
+    facts: [
+      ["Years", "2020 to 2026"],
+      ["Players", "Over 100k"],
+      ["Model", "One shared encoder and four heads"],
+    ],
+    actions: [
+      { label: "Open cubecobra.com", href: "https://cubecobra.com/" },
+      {
+        label: "Model on GitHub",
+        href: "https://github.com/dekkerglen/CubeCobraML",
+      },
+    ],
+  },
+  {
     id: "pair",
     title: "pair",
     logo: "pair",
@@ -54,7 +98,39 @@ export const projects: CardItem[] = [
       },
     ],
   },
-
+  {
+    id: "mtg",
+    title: "MTG drafting AI",
+    sentence:
+      "A transformer that drafts and builds decks in Magic: The Gathering.",
+    year: "2021–2022",
+    fact: "Peaked at #27 in Mythic",
+    gallery: [
+      {
+        name: "mtg-rank",
+        dark: true,
+        alt: "Magic Arena profile of RyanSaxe AI: January 2022 season, Mythic limited rank #106",
+        caption: "The account’s January 2022 season rank",
+      },
+      {
+        name: "mtg-arch",
+        dark: true,
+        alt: "The README’s diagram of the model: a pack encoder and a pick decoder",
+        caption:
+          "The model: an encoder reads the pack, a decoder reads the picks so far",
+      },
+    ],
+    paras: [
+      "A transformer that drafts and builds decks in Magic: The Gathering, trained on public 17lands draft and game data. An encoder reads the cards in the current pack, a decoder reads the picks made so far, and the output is the next pick.",
+      "It reached Mythic on Magic Arena in 23 drafts with a 66% win rate. Its highest rank within Mythic was #27.",
+    ],
+    facts: [
+      ["Years", "2021 to 2022"],
+      ["Record", "Mythic in 23 drafts, 66% win rate"],
+      ["Highest rank", "#27 within Mythic"],
+    ],
+    actions: [{ label: "Code on GitHub", href: GH + "mtg" }],
+  },
   {
     id: "gaia",
     title: "Gaia",
@@ -230,83 +306,6 @@ export const projects: CardItem[] = [
       ["Stack", "Nix, nix-darwin and Home Manager"],
     ],
     actions: [{ label: "Code on GitHub", href: GH + "dotfiles" }],
-  },
-  {
-    id: "cubecobra",
-    title: "CubeCobra ML system",
-    sentence:
-      "The machine learning system behind CubeCobra’s draft bots and card recommendations.",
-    year: "2020–2026",
-    fact: "100k monthly users",
-    gallery: [
-      {
-        name: "cc-model",
-        dark: true,
-        alt: "Diagram: a set of cards goes into one shared encoder, which narrows from 512 to 256 to 128 numbers; four heads read those numbers for recommendations, draft picks, deck building and card correlations",
-        caption: "The model",
-      },
-      {
-        name: "cc-search",
-        dark: true,
-        alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube",
-        caption: "Smart Search",
-      },
-      {
-        name: "cc-home",
-        dark: true,
-        alt: "The CubeCobra home page",
-        caption: "CubeCobra",
-      },
-    ],
-    paras: [
-      "One shared encoder maps a set of cards into a 128-dimensional space, and four heads read it: cube recommendations, draft picks, deck building and card correlations.",
-      "The model runs as its own service, apart from the main site, and each feature asks it for one head. Smart Search filters the catalog by your query and has the cube head rank what’s left by fit, and the draft bots call the draft and deck heads for every pick and every deck.",
-    ],
-    facts: [
-      ["Years", "2020 to 2026"],
-      ["Players", "Over 100k"],
-      ["Model", "One shared encoder and four heads"],
-    ],
-    actions: [
-      { label: "Open cubecobra.com", href: "https://cubecobra.com/" },
-      {
-        label: "Model on GitHub",
-        href: "https://github.com/dekkerglen/CubeCobraML",
-      },
-    ],
-  },
-  {
-    id: "mtg",
-    title: "MTG drafting AI",
-    sentence:
-      "A transformer that drafts and builds decks in Magic: The Gathering.",
-    year: "2021–2022",
-    fact: "Peaked at #27 in Mythic",
-    gallery: [
-      {
-        name: "mtg-rank",
-        dark: true,
-        alt: "Magic Arena profile of RyanSaxe AI: January 2022 season, Mythic limited rank #106",
-        caption: "The account’s January 2022 season rank",
-      },
-      {
-        name: "mtg-arch",
-        dark: true,
-        alt: "The README’s diagram of the model: a pack encoder and a pick decoder",
-        caption:
-          "The model: an encoder reads the pack, a decoder reads the picks so far",
-      },
-    ],
-    paras: [
-      "A transformer that drafts and builds decks in Magic: The Gathering, trained on public 17lands draft and game data. An encoder reads the cards in the current pack, a decoder reads the picks made so far, and the output is the next pick.",
-      "It reached Mythic on Magic Arena in 23 drafts with a 66% win rate. Its highest rank within Mythic was #27.",
-    ],
-    facts: [
-      ["Years", "2021 to 2022"],
-      ["Record", "Mythic in 23 drafts, 66% win rate"],
-      ["Highest rank", "#27 within Mythic"],
-    ],
-    actions: [{ label: "Code on GitHub", href: GH + "mtg" }],
   },
   {
     id: "crucible",
