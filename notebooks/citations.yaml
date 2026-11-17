@@ -20,7 +20,7 @@ backfitting_two:
 
 bspline:
   short: "Prautzsch et al., 2002"
-  full: 'Prautzsch, Boehm & Paluszny, Bézier and B-Spline Techniques, 2002.'
+  full: "Prautzsch, Boehm & Paluszny, Bézier and B-Spline Techniques, 2002."
 
 pinkus_1999:
   short: "Pinkus, 1999"
@@ -36,7 +36,7 @@ nam_2020:
 
 GANN:
   short: "Potts, 1999"
-  full: "Potts, \"Generalized Additive Neural Networks\", KDD '99, 1999."
+  full: 'Potts, "Generalized Additive Neural Networks", KDD ''99, 1999.'
 
 conditional_nn:
   short: "Bengio et al., 2013"

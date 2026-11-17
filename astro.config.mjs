@@ -22,12 +22,20 @@ export default defineConfig({
     build: {
       // Inter's three weights are inlined into the stylesheet, so a page always paints in Inter. Loaded as
       // files, a font could arrive just after a new page's first frame, and the text re-wrapped when it did.
-      assetsInlineLimit: (file) => (/inter-latin-\d00-normal\.woff2$/.test(file) ? true : undefined),
+      assetsInlineLimit: (file) =>
+        /inter-latin-\d00-normal\.woff2$/.test(file) ? true : undefined,
     },
   },
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeDisplayMath, rehypeKatex, rehypeMathNowrap, rehypeSplitFootnotes, rehypeEssayFigures, rehypeEssayHeadings],
+    rehypePlugins: [
+      rehypeDisplayMath,
+      rehypeKatex,
+      rehypeMathNowrap,
+      rehypeSplitFootnotes,
+      rehypeEssayFigures,
+      rehypeEssayHeadings,
+    ],
     shikiConfig: {
       // Both themes are emitted as CSS variables; PostLayout picks one per color scheme.
       themes: { light: "github-light", dark: "github-dark" },

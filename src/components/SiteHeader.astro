@@ -33,20 +33,40 @@ const { section, article = false } = Astro.props;
     <Intro aboutLink={section !== "about"} />
   </div>
   <nav aria-label="Main">
-    {
-      NAV.map((item) => (
-        <a href={item.href} aria-current={item.section === section ? "page" : undefined}>
-          {item.label}
-        </a>
-      ))
-    }
+    {NAV.map((item) => (
+      <a
+        href={item.href}
+        aria-current={item.section === section ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
   </nav>
   <div class="foot">
-    <div class="icons"><SocialLinks /></div>
-    <button class="theme" type="button" aria-label="Dark theme" aria-pressed="false" data-theme-toggle>
+    <div class="icons">
+      <SocialLinks />
+    </div>
+    <button
+      class="theme"
+      type="button"
+      aria-label="Dark theme"
+      aria-pressed="false"
+      data-theme-toggle
+    >
       <svg viewBox="0 0 16 16" aria-hidden="true">
-        <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
-        <path class="half" d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"></path>
+        <circle
+          cx="8"
+          cy="8"
+          r="6.25"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        ></circle>
+        <path
+          class="half"
+          d="M8 1.75a6.25 6.25 0 0 1 0 12.5z"
+          fill="currentColor"
+        ></path>
       </svg>
     </button>
   </div>
@@ -56,19 +76,32 @@ const { section, article = false } = Astro.props;
   import { onPage } from "@/scripts/page";
 
   onPage((signal) => {
-    const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
+    const toggle = document.querySelector<HTMLButtonElement>(
+      "[data-theme-toggle]",
+    )!;
     const root = document.documentElement;
-    const show = () => toggle.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
+    const show = () =>
+      toggle.setAttribute(
+        "aria-pressed",
+        String(root.dataset.theme === "dark"),
+      );
     show();
     const observer = new MutationObserver(show);
-    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     signal.addEventListener("abort", () => observer.disconnect());
     toggle.addEventListener(
       "click",
       () => {
         const next = root.dataset.theme === "dark" ? "light" : "dark";
         const set = () => (window as any).setTheme(next);
-        if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(set);
+        if (
+          document.startViewTransition &&
+          !matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+          document.startViewTransition(set);
         else set();
       },
       { signal },

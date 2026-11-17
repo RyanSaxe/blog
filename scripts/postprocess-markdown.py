@@ -36,10 +36,10 @@ def load_citations(notebook_dir: str) -> dict:
 def generate_frontmatter(meta: dict) -> str:
     cats = ", ".join(f'"{c}"' for c in meta["categories"])
     return f"""---
-title: "{meta['title']}"
-description: "{meta['description']}"
-date: {meta['date']}
-heroImage: "{meta['heroImage']}"
+title: "{meta["title"]}"
+description: "{meta["description"]}"
+date: {meta["date"]}
+heroImage: "{meta["heroImage"]}"
 categories: [{cats}]
 ---"""
 
@@ -47,7 +47,9 @@ categories: [{cats}]
 def extract_footnotes_from_fndetail(text: str) -> dict[int, str]:
     """Extract footnote definitions from fndetail Liquid syntax."""
     footnotes = {}
-    pattern = r"""\{\{\s*(?P<q>['\"])(.+?)(?P=q)\s*\|\s*fndetail:\s*(\d+)\s*\}\}"""
+    pattern = (
+        r"""\{\{\s*(?P<q>['\"])(.+?)(?P=q)\s*\|\s*fndetail:\s*(\d+)\s*\}\}"""
+    )
     for match in re.finditer(pattern, text, re.DOTALL):
         content = match.group(2).strip()
         num = int(match.group(3))
@@ -80,16 +82,12 @@ def convert_fn_refs(text: str) -> str:
 
 def fix_image_paths(text: str, slug: str) -> str:
     """Fix image paths to work with the Astro public/ directory."""
-    text = re.sub(
-        r"https?://ryansaxe\.com/images/", "/images/", text
-    )
+    text = re.sub(r"https?://ryansaxe\.com/images/", "/images/", text)
     text = re.sub(r"!\[([^\]]*)\]\(images/", r"![\1](/images/", text)
     text = re.sub(r'src="images/', 'src="/images/', text)
     text = re.sub(r'src="/images/', 'src="/images/', text)
     for dirname in ["output_files", "executed_files", "notebook_files"]:
-        text = text.replace(
-            f"{dirname}/", f"/images/generated/{slug}/"
-        )
+        text = text.replace(f"{dirname}/", f"/images/generated/{slug}/")
     text = re.sub(
         r"!\[([^\]]*)\]\(/tmp/([^)]+)\)",
         rf"![\1](/images/generated/{slug}/\2)",
@@ -133,7 +131,7 @@ def clean_html(text: str, slug: str) -> str:
     if slug == "transparent-nn":
         text = re.sub(
             r"<li style.*?</li>",
-            '\n> **Prerequisite**: This post builds on [From Linear Models to Neural Networks](/blog/linear-nn/).\n',
+            "\n> **Prerequisite**: This post builds on [From Linear Models to Neural Networks](/blog/linear-nn/).\n",
             text,
             flags=re.DOTALL,
         )
@@ -168,7 +166,9 @@ def remove_cell0_metadata(text: str) -> str:
     return "\n".join(cleaned)
 
 
-def postprocess(input_path: str, output_path: str, slug: str, notebook_dir: str) -> None:
+def postprocess(
+    input_path: str, output_path: str, slug: str, notebook_dir: str
+) -> None:
     text = Path(input_path).read_text()
 
     meta = load_meta(notebook_dir)
@@ -216,7 +216,9 @@ def postprocess(input_path: str, output_path: str, slug: str, notebook_dir: str)
         for i, key in enumerate(used_citations, 1):
             if key in citations:
                 back = f' <a href="#cite-{key}" aria-label="Back to reference">↩</a>'
-                ref_lines.append(f'{i}. <span id="ref-{key}">{citations[key]["full"]}{back}</span>')
+                ref_lines.append(
+                    f'{i}. <span id="ref-{key}">{citations[key]["full"]}{back}</span>'
+                )
         ref_section = "\n".join(ref_lines)
 
     # Clean up excessive blank lines

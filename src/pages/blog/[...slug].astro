@@ -8,7 +8,11 @@ export async function getStaticPaths() {
     (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
   );
   const link = (post?: (typeof posts)[number]) =>
-    post && { title: post.data.title, description: post.data.description, href: postHref(post) };
+    post && {
+      title: post.data.title,
+      description: post.data.description,
+      href: postHref(post),
+    };
   return posts.map((post, i) => ({
     params: { slug: post.id },
     props: { post, prev: link(posts[i - 1]), next: link(posts[i + 1]) },

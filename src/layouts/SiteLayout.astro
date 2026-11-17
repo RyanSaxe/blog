@@ -40,7 +40,9 @@ const { title, description, image, section, article } = Astro.props;
     <slot name="head" />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
     <SiteHeader section={section} article={article} />
     <main id="main" tabindex="-1">
       <slot />
@@ -65,16 +67,24 @@ const { title, description, image, section, article } = Astro.props;
         const root = document.documentElement;
         // 100svh ignores the iPhone toolbar collapsing, so scrolling never resizes the rows
         const probe = document.createElement("div");
-        probe.style.cssText = "position:absolute;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
+        probe.style.cssText =
+          "position:absolute;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
 
         const fit = () => {
           const shelves = [...document.querySelectorAll("[data-fit] .shelf")];
           const target = document.querySelector("#writing .card");
           if (!shelves.length || !target) return;
           if (!probe.isConnected) document.body.append(probe);
-          const over = () => target.getBoundingClientRect().top + scrollY + PEEK - probe.offsetHeight;
+          const over = () =>
+            target.getBoundingClientRect().top +
+            scrollY +
+            PEEK -
+            probe.offsetHeight;
           // 0 keeps the designed spacing, 1 is the tightest; every spacing it changes is linear in it
-          const tighten = (t) => (t ? root.style.setProperty("--fit-t", t) : root.style.removeProperty("--fit-t"));
+          const tighten = (t) =>
+            t
+              ? root.style.setProperty("--fit-t", t)
+              : root.style.removeProperty("--fit-t");
           const set = (cw, coverH, compact = false) => {
             for (const s of shelves) {
               s.classList.toggle("compact", compact);
@@ -111,7 +121,11 @@ const { title, description, image, section, article } = Astro.props;
           shrink(false, phone ? 240 : 260);
           if (over() <= 0) return;
           const card = shelves[0].querySelector(".card");
-          set(card.offsetWidth, card.querySelector(".cover").offsetHeight, true);
+          set(
+            card.offsetWidth,
+            card.querySelector(".cover").offsetHeight,
+            true,
+          );
           shrink(true, phone ? 200 : 220);
           // shrinking only costs quality when the row still ends up far out of view
           if (over() > 60) {

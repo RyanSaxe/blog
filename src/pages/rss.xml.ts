@@ -8,7 +8,8 @@ import { SKIP, visit } from "unist-util-visit";
 import { getPublishedPosts, postHref } from "@/data/published";
 
 const isKatexHtml = (node: Element) =>
-  Array.isArray(node.properties.className) && node.properties.className.includes("katex-html");
+  Array.isArray(node.properties.className) &&
+  node.properties.className.includes("katex-html");
 
 const isRootRelative = (url: unknown): url is string =>
   typeof url === "string" && url.startsWith("/") && !url.startsWith("//");
@@ -34,7 +35,9 @@ function rehypeFeedReader(origin: string) {
 }
 
 export async function GET(context: APIContext) {
-  const posts = (await getPublishedPosts()).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = (await getPublishedPosts()).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
 
   const toFeedHtml = unified()
     .use(rehypeParse, { fragment: true })

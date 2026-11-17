@@ -25,7 +25,16 @@ interface Props {
   next?: Neighbour;
 }
 
-const { title, description, date, heroImage, headings = [], readingTime, prev, next } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  heroImage,
+  headings = [],
+  readingTime,
+  prev,
+  next,
+} = Astro.props;
 
 const formattedDate = date.toLocaleDateString("en-US", {
   year: "numeric",
@@ -39,7 +48,13 @@ const neighbours = [
 ].filter((n) => !!n);
 ---
 
-<SiteLayout title={`${title} · Ryan Saxe`} description={description} image={heroImage} section="writing" article>
+<SiteLayout
+  title={`${title} · Ryan Saxe`}
+  description={description}
+  image={heroImage}
+  section="writing"
+  article
+>
   <article class="essay">
     <header class="essay-head">
       <h1>{title}</h1>
@@ -58,31 +73,46 @@ const neighbours = [
       </div>
     </div>
 
-    {
-      neighbours.length > 0 && (
-        <nav class:list={["pager", { single: neighbours.length === 1 }]} aria-label="More essays">
-          {neighbours.map((n) => (
-            <a class:list={["pg", n.dir]} href={n.href}>
-              <span class="pg-k">
-                {n.dir === "prev" && (
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
-                    <path d="M10 6H2.5M5.5 3l-3 3 3 3" />
-                  </svg>
-                )}
-                {n.label}
-                {n.dir === "next" && (
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
-                    <path d="M2 6h7.5M6.5 3l3 3-3 3" />
-                  </svg>
-                )}
-              </span>
-              <span class="pg-t">{n.title}</span>
-              <span class="pg-d">{n.description}</span>
-            </a>
-          ))}
-        </nav>
-      )
-    }
+    {neighbours.length > 0 && (
+      <nav
+        class:list={["pager", { single: neighbours.length === 1 }]}
+        aria-label="More essays"
+      >
+        {neighbours.map((n) => (
+          <a class:list={["pg", n.dir]} href={n.href}>
+            <span class="pg-k">
+              {n.dir === "prev" && (
+                <svg
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M10 6H2.5M5.5 3l-3 3 3 3" />
+                </svg>
+              )}
+              {n.label}
+              {n.dir === "next" && (
+                <svg
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+                </svg>
+              )}
+            </span>
+            <span class="pg-t">{n.title}</span>
+            <span class="pg-d">{n.description}</span>
+          </a>
+        ))}
+      </nav>
+    )}
   </article>
 </SiteLayout>
 
@@ -121,35 +151,54 @@ const neighbours = [
     frame = requestAnimationFrame(step);
   }
   const stop = () => cancelAnimationFrame(frame);
-  for (const type of ["wheel", "touchstart", "keydown"]) addEventListener(type, stop, { passive: true });
+  for (const type of ["wheel", "touchstart", "keydown"])
+    addEventListener(type, stop, { passive: true });
   // a page swap leaves no glide running on the next page
   document.addEventListener("astro:before-swap", stop);
 
   function landing(el: HTMLElement) {
     // a reference is a span inside its list item; light the whole item
-    return el.matches("span[id^='ref-']") ? (el.closest("li") ?? el) : el.matches("a") ? (el.closest("sup") ?? el) : el;
+    return el.matches("span[id^='ref-']")
+      ? (el.closest("li") ?? el)
+      : el.matches("a")
+        ? (el.closest("sup") ?? el)
+        : el;
   }
 
   onPage((signal) => {
-    document.querySelector(".essay")?.addEventListener("click", (event) => {
-      const e = event as MouseEvent;
-      const link = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
-      if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      const id = decodeURIComponent(link.hash.slice(1));
-      const el = document.getElementById(id);
-      if (!el) return;
-      e.preventDefault();
-      glideTo(el.getBoundingClientRect().top + scrollY - 28);
-      history.pushState(null, "", `#${id}`);
-      if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
-      el.focus({ preventScroll: true });
-      if (!el.matches("h1, h2, h3")) {
-        const mark = landing(el);
-        mark.classList.remove("landed");
-        void mark.offsetWidth;
-        mark.classList.add("landed");
-      }
-    }, { signal });
+    document.querySelector(".essay")?.addEventListener(
+      "click",
+      (event) => {
+        const e = event as MouseEvent;
+        const link = (e.target as Element).closest<HTMLAnchorElement>(
+          'a[href^="#"]',
+        );
+        if (
+          !link ||
+          e.button !== 0 ||
+          e.metaKey ||
+          e.ctrlKey ||
+          e.shiftKey ||
+          e.altKey
+        )
+          return;
+        const id = decodeURIComponent(link.hash.slice(1));
+        const el = document.getElementById(id);
+        if (!el) return;
+        e.preventDefault();
+        glideTo(el.getBoundingClientRect().top + scrollY - 28);
+        history.pushState(null, "", `#${id}`);
+        if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+        el.focus({ preventScroll: true });
+        if (!el.matches("h1, h2, h3")) {
+          const mark = landing(el);
+          mark.classList.remove("landed");
+          void mark.offsetWidth;
+          mark.classList.add("landed");
+        }
+      },
+      { signal },
+    );
   });
 </script>
 

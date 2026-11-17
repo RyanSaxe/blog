@@ -5,9 +5,14 @@ import { getPublishedWriting } from "@/data/published";
 import { WRITING } from "@/data/site";
 
 const writing = await getPublishedWriting();
-const description = "Essays, articles and podcast episodes, with links to read or listen.";
+const description =
+  "Essays, articles and podcast episodes, with links to read or listen.";
 ---
 
-<SiteLayout title={`${WRITING.name} · Ryan Saxe`} description={description} section="writing">
+<SiteLayout
+  title={`${WRITING.name} · Ryan Saxe`}
+  description={description}
+  section="writing"
+>
   <CardGrid items={writing} label={WRITING.name} />
 </SiteLayout>

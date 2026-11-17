@@ -29,28 +29,58 @@ export default function rehypeSplitFootnotes() {
       const sections = [];
 
       if (fnItems.length > 0) {
-        sections.push({ type: "element", tagName: "hr", properties: {}, children: [] });
+        sections.push({
+          type: "element",
+          tagName: "hr",
+          properties: {},
+          children: [],
+        });
         sections.push({
           type: "element",
           tagName: "section",
           properties: { className: ["footnotes"] },
           children: [
             // GFM's footnote references are described by this heading
-            { type: "element", tagName: "h2", properties: { id: "footnote-label" }, children: [{ type: "text", value: "Footnotes" }] },
-            { type: "element", tagName: "ol", properties: {}, children: fnItems },
+            {
+              type: "element",
+              tagName: "h2",
+              properties: { id: "footnote-label" },
+              children: [{ type: "text", value: "Footnotes" }],
+            },
+            {
+              type: "element",
+              tagName: "ol",
+              properties: {},
+              children: fnItems,
+            },
           ],
         });
       }
 
       if (refItems.length > 0) {
-        sections.push({ type: "element", tagName: "hr", properties: {}, children: [] });
+        sections.push({
+          type: "element",
+          tagName: "hr",
+          properties: {},
+          children: [],
+        });
         sections.push({
           type: "element",
           tagName: "section",
           properties: { className: ["references"] },
           children: [
-            { type: "element", tagName: "h2", properties: {}, children: [{ type: "text", value: "References" }] },
-            { type: "element", tagName: "ol", properties: {}, children: refItems },
+            {
+              type: "element",
+              tagName: "h2",
+              properties: {},
+              children: [{ type: "text", value: "References" }],
+            },
+            {
+              type: "element",
+              tagName: "ol",
+              properties: {},
+              children: refItems,
+            },
           ],
         });
       }

@@ -10,17 +10,37 @@
  */
 import { timeline } from "@/data/timeline";
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 function toYear(date: string) {
   const [month, year] = date.split(" ");
   const m = MONTHS.indexOf(month);
-  if (m < 0 || !year) throw new Error(`Timeline date "${date}" is not "Mon YYYY"`);
+  if (m < 0 || !year)
+    throw new Error(`Timeline date "${date}" is not "Mon YYYY"`);
   return Number(year) + m / 12;
 }
 
 const today = new Date();
-const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-const now = today.getFullYear() + (today.getMonth() + (today.getDate() - 1) / daysInMonth) / 12;
+const daysInMonth = new Date(
+  today.getFullYear(),
+  today.getMonth() + 1,
+  0,
+).getDate();
+const now =
+  today.getFullYear() +
+  (today.getMonth() + (today.getDate() - 1) / daysInMonth) / 12;
 
 const roles = timeline.map((entry, i) => ({
   ...entry,
@@ -33,90 +53,148 @@ type Role = (typeof roles)[number];
 const first = Math.floor(Math.min(...roles.map((r) => r.start)));
 const span = now - first;
 const pct = (year: number) => `${(((year - first) / span) * 100).toFixed(3)}%`;
-const place = (r: Role) => `--l: ${pct(r.start)}; --w: ${(((r.end - r.start) / span) * 100).toFixed(3)}%`;
+const place = (r: Role) =>
+  `--l: ${pct(r.start)}; --w: ${(((r.end - r.start) / span) * 100).toFixed(3)}%`;
 
 const newest = [...roles].sort((a, b) => b.start - a.start || b.end - a.end);
 // Left and right walk the roles in date order; up and down walk the rows.
 const order = [...newest].reverse().map((r) => r.i);
 const current = roles.find((r) => !r.endDate) ?? newest[0];
-const januaries = Array.from({ length: Math.floor(now) - first + 1 }, (_, k) => first + k);
+const januaries = Array.from(
+  { length: Math.floor(now) - first + 1 },
+  (_, k) => first + k,
+);
 
 const year = (date: string) => date.split(" ")[1];
-const years = (r: Role) => `${year(r.startDate)} – ${r.endDate ? year(r.endDate) : "Present"}`;
+const years = (r: Role) =>
+  `${year(r.startDate)} – ${r.endDate ? year(r.endDate) : "Present"}`;
 const dates = (r: Role) => `${r.startDate} – ${r.endDate ?? "Present"}`;
 function linkLabel(url: string) {
-  if (url.includes("patents.google.com")) return `Patent ${url.split("/").filter(Boolean).at(-1)}`;
+  if (url.includes("patents.google.com"))
+    return `Patent ${url.split("/").filter(Boolean).at(-1)}`;
   if (url.includes("arxiv.org")) return "Paper on arXiv";
   return new URL(url).hostname.replace(/^www\./, "");
 }
 ---
 
-<section class="profile" aria-labelledby="career-h" data-career data-order={order.join(",")}>
-  <h2 id="career-h" class="vh">Career</h2>
+<section
+  class="profile"
+  aria-labelledby="career-h"
+  data-career
+  data-order={order.join(",")}
+>
+  <h2 id="career-h" class="vh">
+    Career
+  </h2>
   <figure class="pf">
-    <img src="/images/about/ryan-saxe-720.webp" width="720" height="900" alt="Portrait of Ryan Saxe" decoding="sync" fetchpriority="high" />
+    <img
+      src="/images/about/ryan-saxe-720.webp"
+      width="720"
+      height="900"
+      alt="Portrait of Ryan Saxe"
+      decoding="sync"
+      fetchpriority="high"
+    />
   </figure>
   <div class="side">
     <div class="detail">
-      {
-        roles.map((r) => (
-          <div class:list={["pane", { on: r.i === current.i }]} role="tabpanel" id={`role-${r.i}`} aria-labelledby={`tab-${r.i}`} data-i={r.i}>
-            <h3 class="title">{r.title}</h3>
-            <p class="meta">
-              <span class="where">{r.organization}</span>
-              <span class="sep" aria-hidden="true">·</span>
-              <span class="when">{dates(r)}</span>
+      {roles.map((r) => (
+        <div
+          class:list={["pane", { on: r.i === current.i }]}
+          role="tabpanel"
+          id={`role-${r.i}`}
+          aria-labelledby={`tab-${r.i}`}
+          data-i={r.i}
+        >
+          <h3 class="title">{r.title}</h3>
+          <p class="meta">
+            <span class="where">{r.organization}</span>
+            <span class="sep" aria-hidden="true">
+              ·
+            </span>
+            <span class="when">{dates(r)}</span>
+          </p>
+          {r.description && (
+            <p class="desc">
+              {r.description}
+              {r.link && (
+                <a class="ext" href={r.link} target="_blank" rel="noopener">
+                  {linkLabel(r.link)}
+                  <svg
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    aria-hidden="true"
+                  >
+                    <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
+                  </svg>
+                </a>
+              )}
             </p>
-            {r.description && (
-              <p class="desc">
-                {r.description}
-                {r.link && (
-                  <a class="ext" href={r.link} target="_blank" rel="noopener">
-                    {linkLabel(r.link)}
-                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-                      <path d="M3.5 8.5l5-5M4.5 3.5h4v4" />
-                    </svg>
-                  </a>
-                )}
-              </p>
-            )}
-          </div>
-        ))
-      }
+          )}
+        </div>
+      ))}
     </div>
 
     <div class="chart">
-      <div class="grid" aria-hidden="true">{januaries.map((y) => <i style={`--l: ${pct(y)}`} />)}</div>
-      <div class="field" role="tablist" aria-label="Roles, newest first" aria-orientation="vertical">
-        <span class="hl" aria-hidden="true" style={`--k: ${newest.indexOf(current)}`}></span>
-        {
-          newest.map((r, k) => (
-            <button
-              type="button"
-              role="tab"
-              class="row"
-              id={`tab-${r.i}`}
-              aria-controls={`role-${r.i}`}
-              aria-selected={r.i === current.i ? "true" : "false"}
-              tabindex={r.i === current.i ? 0 : -1}
-              data-i={r.i}
+      <div class="grid" aria-hidden="true">
+        {januaries.map((y) => (
+          <i style={`--l: ${pct(y)}`} />
+        ))}
+      </div>
+      <div
+        class="field"
+        role="tablist"
+        aria-label="Roles, newest first"
+        aria-orientation="vertical"
+      >
+        <span
+          class="hl"
+          aria-hidden="true"
+          style={`--k: ${newest.indexOf(current)}`}
+        ></span>
+        {newest.map((r, k) => (
+          <button
+            type="button"
+            role="tab"
+            class="row"
+            id={`tab-${r.i}`}
+            aria-controls={`role-${r.i}`}
+            aria-selected={r.i === current.i ? "true" : "false"}
+            tabindex={r.i === current.i ? 0 : -1}
+            data-i={r.i}
+          >
+            <span
+              class:list={[
+                "org",
+                { rep: newest[k - 1]?.organization === r.organization },
+              ]}
+              aria-hidden="true"
             >
-              <span class:list={["org", { rep: newest[k - 1]?.organization === r.organization }]} aria-hidden="true">
-                {r.organization}
-              </span>
-              <span class="yrs" aria-hidden="true">{years(r)}</span>
-              <span class="track" aria-hidden="true">
-                <span class="bar" style={place(r)} />
-              </span>
-              <span class="vh">
-                {r.title}, {r.organization}, {dates(r)}
-              </span>
-            </button>
-          ))
-        }
+              {r.organization}
+            </span>
+            <span class="yrs" aria-hidden="true">
+              {years(r)}
+            </span>
+            <span class="track" aria-hidden="true">
+              <span class="bar" style={place(r)} />
+            </span>
+            <span class="vh">
+              {r.title}, {r.organization}, {dates(r)}
+            </span>
+          </button>
+        ))}
       </div>
       <div class="axis" aria-hidden="true">
-        {januaries.map((y) => <span class:list={["yr", { odd: y % 2 === 1 }]} style={`--l: ${pct(y)}`}>{y}</span>)}
+        {januaries.map((y) => (
+          <span
+            class:list={["yr", { odd: y % 2 === 1 }]}
+            style={`--l: ${pct(y)}`}
+          >
+            {y}
+          </span>
+        ))}
       </div>
     </div>
   </div>
@@ -144,7 +222,8 @@ function linkLabel(url: string) {
         t.tabIndex = on ? 0 : -1;
         if (on) hl.style.setProperty("--k", String(k));
       });
-      for (const p of panes) p.classList.toggle("on", Number(p.dataset.i) === i);
+      for (const p of panes)
+        p.classList.toggle("on", Number(p.dataset.i) === i);
       const moved = tab.getBoundingClientRect().top - before;
       if (moved) scrollBy({ top: moved, behavior: "instant" });
     };
@@ -168,22 +247,39 @@ function linkLabel(url: string) {
       const i = Number(t.dataset.i);
       t.addEventListener("pointerenter", (e) => {
         clearTimeout(resting);
-        if (e.pointerType === "mouse") resting = setTimeout(() => select(i), REST);
+        if (e.pointerType === "mouse")
+          resting = setTimeout(() => select(i), REST);
       });
       t.addEventListener("pointerleave", () => clearTimeout(resting));
       t.addEventListener("click", () => select(i));
       t.addEventListener("focus", () => select(i));
       t.addEventListener("keydown", (e) => {
         const next = keyTarget(i, e.key);
-        if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
+        if (
+          ![
+            "ArrowRight",
+            "ArrowLeft",
+            "ArrowUp",
+            "ArrowDown",
+            "Home",
+            "End",
+          ].includes(e.key)
+        )
+          return;
         e.preventDefault();
         next?.focus();
       });
     }
 
     // A click or tap focuses the row so the arrow keys work next, but the focus ring shows only once a key is pressed.
-    chart.addEventListener("pointerdown", () => (chart.dataset.input = "pointer"));
-    document.addEventListener("keydown", () => (chart.dataset.input = "keys"), { capture: true, signal });
+    chart.addEventListener(
+      "pointerdown",
+      () => (chart.dataset.input = "pointer"),
+    );
+    document.addEventListener("keydown", () => (chart.dataset.input = "keys"), {
+      capture: true,
+      signal,
+    });
   });
 </script>
 
