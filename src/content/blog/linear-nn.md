@@ -93,7 +93,7 @@ Furthermore, this means that a neural network with zero hidden layers and a line
 
 ```python
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 class LinearRegression(nn.Module):

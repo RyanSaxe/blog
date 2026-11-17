@@ -51,11 +51,16 @@ categories: ["topic"]
 Your content here...
 ```
 
+The page's title comes from `title`, so start sections at `##`. Give every image alt text that describes it.
+
 Add `draft: true` to the frontmatter while you write. `npm run build` leaves a draft off the published site: it gets no page, it isn't in the RSS feed or the sitemap, other posts' Previous and Next links skip it, and any Writing card that links to it is hidden. `npm run dev` shows drafts like any other post, so you can preview one.
 
 ### Notebook post
 
 1. Create a directory in `notebooks/` with a `notebook.ipynb`, a `pyproject.toml` that lists its dependencies plus `jupyter`, `nbconvert` and `ipykernel`, and a `meta.yaml` with the post's `title`, `description`, `date` and `categories` (copy them from `notebooks/linear-nn/`). Start a cell with `# hide`, `# hide_input` or `# hide_output` to leave it, its input or its output out of the post. Citations go in `notebooks/citations.yaml`.
+   - Start sections at `##`, and give every image alt text, as in a Markdown post.
+   - Seed random numbers in the first cell, as both notebooks do, so every run draws the same plots.
+   - Take PyTorch from the CPU index, as `notebooks/linear-nn/pyproject.toml` does, so CI doesn't download CUDA.
 2. Run `npm run build:notebooks` to see it locally, or push to `main` — CI will execute the notebook, generate the markdown, and commit the output
 
 CI uses per-notebook hashing to only re-run notebooks whose source files changed.

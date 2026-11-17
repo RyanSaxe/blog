@@ -11,3 +11,13 @@ dependencies = [
   "nbconvert>=7.0",
   "ipykernel>=6.0",
 ]
+
+# The CPU build of PyTorch: the notebook needs no GPU, and the default Linux
+# build downloads CUDA libraries in CI.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

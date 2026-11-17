@@ -84,7 +84,7 @@ Below is code for creating a GANN using [PyTorch](https://pytorch.org). As you c
 
 ```python
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 # define a simple multi-layer perceptron
