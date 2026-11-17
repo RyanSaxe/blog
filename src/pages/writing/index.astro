@@ -1,9 +1,10 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import CardGrid from "@/components/CardGrid.astro";
-import { writing } from "@/data/writing";
+import { getPublishedWriting } from "@/data/published";
 import { WRITING } from "@/data/site";
 
+const writing = await getPublishedWriting();
 const description = "Essays, articles and podcast episodes, with links to read or listen.";
 ---
 
