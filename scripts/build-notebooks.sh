@@ -9,23 +9,33 @@ CACHE_DIR="$REPO_ROOT/.notebook-cache"
 
 mkdir -p "$OUTPUT_DIR" "$IMAGES_DIR" "$CACHE_DIR"
 
+# Hashes a notebook's sources and the scripts that build it by content and by
+# path from the repository root, so every clone and CI compute the same hash.
 compute_hash() {
-    local dir="$1"
-    find "$dir" \
-        "$REPO_ROOT/scripts/tag-cells.py" \
-        "$REPO_ROOT/scripts/postprocess-markdown.py" \
-        "$REPO_ROOT/notebooks/citations.yaml" \
-        -type f \
-        ! -path '*/.venv/*' \
-        ! -path '*/__pycache__/*' \
-        ! -name 'tagged.ipynb' \
-        ! -name 'executed.ipynb' \
-        ! -name 'output.md' \
-        -print0 \
-        | sort -z \
-        | xargs -0 shasum -a 256 \
-        | shasum -a 256 \
-        | cut -d' ' -f1
+    local dir="${1%/}"
+    (
+        cd "$REPO_ROOT"
+        find "${dir#"$REPO_ROOT"/}" \
+            scripts/tag-cells.py \
+            scripts/postprocess-markdown.py \
+            notebooks/citations.yaml \
+            -type f \
+            ! -path '*/.venv/*' \
+            ! -path '*/__pycache__/*' \
+            ! -path '*/.ipynb_checkpoints/*' \
+            ! -path '*/output_files/*' \
+            ! -path '*/executed_files/*' \
+            ! -path '*/notebook_files/*' \
+            ! -name '.DS_Store' \
+            ! -name 'tagged.ipynb' \
+            ! -name 'executed.ipynb' \
+            ! -name 'output.md' \
+            -print0 \
+            | LC_ALL=C sort -z \
+            | xargs -0 shasum -a 256 \
+            | shasum -a 256 \
+            | cut -d' ' -f1
+    )
 }
 
 # Clean up outputs for notebooks that no longer exist
