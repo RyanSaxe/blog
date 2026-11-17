@@ -6,7 +6,6 @@ import rehypeKatex from "rehype-katex";
 import rehypeSplitFootnotes from "./plugins/rehype-split-footnotes.mjs";
 import rehypeEssayFigures from "./plugins/rehype-essay-figures.mjs";
 import rehypeDisplayMath from "./plugins/rehype-display-math.mjs";
-import rehypeEssayHeadings from "./plugins/rehype-essay-headings.mjs";
 import rehypeMathNowrap from "./plugins/rehype-math-nowrap.mjs";
 
 export default defineConfig({
@@ -34,7 +33,6 @@ export default defineConfig({
       rehypeMathNowrap,
       rehypeSplitFootnotes,
       rehypeEssayFigures,
-      rehypeEssayHeadings,
     ],
     shikiConfig: {
       // Both themes are emitted as CSS variables; PostLayout picks one per color scheme.

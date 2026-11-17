@@ -10,7 +10,7 @@ Most systems we interact with are part of some pipeline that integrates Machine 
 
 Neural networks (NNs) are a popular class of machine learning algorithms, which are notorious for being difficult to interpret. They are often referred to as "black boxes" or "opaque". Linear Models, Generalized Linear Models (GLMs), and Generalized Additive Models (GAMs) are examples of popular machine learning algorithms that are not "opaque", but instead "transparent". This transparency often leads linear and additive models to be favorable choices over classic neural networks even though the functions neural networks can learn are a superset of the functions these other models can learn. The goal of this blog post is to demonstrate that, with a particular asterisk over the architecture of neural networks, they can be just as transparent.
 
-![](/images/transparent_summary.png)
+![Nested circles: linear models inside GLMs, inside GAMs, inside neural networks. An arrow leads from the dark, opaque NN circle to a transparent NN* circle](/images/transparent_summary.png)
 
 Prior to jumping into such a neural architecture, it's important to understand the fundamental transparent algorithms. The following section will provide a quick background on the math and fundamentals for Generalized Additive Models, which is what will inspire our neural architecture design. GAMs are a special kind of GLM, and if you are not familiar with GLMs and how they are connected to Neural Networks, I would recommend reading the blog post below before reading this one:
 
@@ -42,7 +42,7 @@ As you can see, a linear combination of many cubic b-splines was sufficient to f
 
 There is so much more to learn about GAMs, such as how these splines are learned, methods of interpreting them, and important regularization penalties to ensure higher degrees of smoothness. There are even some newer methods of fitting GAMs using decision trees instead of splines. If you would like a more extensive review on GAMs, please refer to [this wonderful mini-website-textbook](https://m-clark.github.io/generalized-additive-models/preface.html), however that's out of the scope of this blog post.
 
-# Transparent Neural Networks
+## Transparent Neural Networks
 
 <cite id="cite-univ_approx_orig"><a href="#ref-univ_approx_orig">(Hornik et al., 1989)</a></cite> is the original paper suggesting NNs are a type of universal approximator. The theory of this contribution was explored in multi-layer perceptrons in <cite id="cite-pinkus_1999"><a href="#ref-pinkus_1999">(Pinkus, 1999)</a></cite> and generally formalized by <cite id="cite-univ_approx_thm"><a href="#ref-univ_approx_thm">(Csáji, 2001)</a></cite>. The theorem can be summarized by:
 
@@ -76,7 +76,7 @@ Luckily, because these functions are continuous, we can use a neural network to 
 
 The trick is to use a different neural network for each individual feature, and add them together just like how GAMs work! By replacing the non-linear, non-parametric, functions in GAMs by neural networks, we get Generalized Additive Neural Networks (GANNs), introduced in <cite id="cite-GANN"><a href="#ref-GANN">(Potts, 1999)</a></cite>. Unfortunately, this contribution did not take off because we didn't have the technical capacity to train large networks as we do today. Luckily, now it is quite easy to fit such a model.
 
-![](/images/nam.png)
+![A separate neural network for each input feature, x1 to xN, with their outputs summed into ŷ](/images/nam.png)
 
 GANNs are simply a linear combination of neural networks, where each network only observes a single input feature[^fn-3]. Because each of these networks take a single input feature, and provide a single output feature, it becomes possible to plot a two-dimensional graph where the x-axis is the input feature and the y-axis is the output feature for each network. This graph is hence a fully transparent function describing how the neural network learned to transform the input feature as it contributes, additively, to the prediction. Hence this type of neural architecture is sufficient for creating a model as transparent as classic linear and additive models described in this blog post so far.
 
@@ -190,7 +190,7 @@ Real world data doesn't look like beautifully continuous functions. It's often m
 
 Let $w$ and $b$ be the respective weight and bias parameters on a node with activation function $f$. Then, when the node is passed input $x$ it computes: $f(e^w * (x - b))$. Recall that the normal computation on these nodes is simply applying the activation function to a linear computation: $f(w * x + b)$. The reason exponentiation of the weights accomplishes the goal of learning "jumpy" functions is that small changes in the input can have drastic changes on the output, enabling small weights to still represent a function with a steep slope. The excerpt below is taken directly from <cite><a href="#ref-nam_2020">(Agarwal et al., 2020)</a></cite> and demonstrates the difference between a non-regularized neural network's ability to overfit to data when using normal node computation (a) versus ExU unit computation (b).
 
-![](/images/nam_exerpt.png)
+![Figure 2 of the paper: on the same toy data, a ReLU network learns a fairly smooth function and an ExU network a very jumpy one](/images/nam_exerpt.png)
 
 While this clearly demonstrates ExU's ability to overfit to jumpy functions, this isn't ideal. Overfitting isn't a good thing. Hence, the rest of this paper demonstrates ExU can be regularized to learn functions that are relatively smooth, yet "jumpy" at very specific junctions. This is more reminiscent of real-world solutions, and the paper shows that this can outperform current state-of-the-art GAMs while maintaining feature transparency. Their regularization strategies are:
 
