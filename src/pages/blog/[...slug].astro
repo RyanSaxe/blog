@@ -4,7 +4,7 @@ import PostLayout from "@/layouts/PostLayout.astro";
 import { getPublishedPosts, postHref } from "@/data/published";
 
 export async function getStaticPaths() {
-  const posts = (await getPublishedPosts()).sort(
+  const posts = (await getPublishedPosts()).toSorted(
     (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
   );
   const link = (post?: (typeof posts)[number]) =>

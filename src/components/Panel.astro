@@ -107,6 +107,8 @@ import "@/styles/cards.css";
     jobs.delete(fn);
   };
   function tick(now: number) {
+    // The copy holds a job added during this frame for the next one.
+    // oxlint-disable-next-line unicorn/no-useless-spread
     for (const fn of [...jobs]) if (fn(now)) jobs.delete(fn);
     rafId = jobs.size ? requestAnimationFrame(tick) : 0;
   }
@@ -797,13 +799,16 @@ import "@/styles/cards.css";
     frame.addEventListener("dragstart", (e) => e.preventDefault());
     // iOS resizes the window by a toolbar's height when the toolbar collapses during a scroll; only a
     // larger change, such as a rotation or a resized window, closes the panel, since it no longer fits.
-    let last = { w: innerWidth, h: innerHeight };
+    let lastSize = { w: innerWidth, h: innerHeight };
     addEventListener(
       "resize",
       () => {
-        if (innerWidth === last.w && Math.abs(innerHeight - last.h) < 120)
+        if (
+          innerWidth === lastSize.w &&
+          Math.abs(innerHeight - lastSize.h) < 120
+        )
           return;
-        last = { w: innerWidth, h: innerHeight };
+        lastSize = { w: innerWidth, h: innerHeight };
         if (S) finish(true);
       },
       { signal },

@@ -56,9 +56,9 @@ const pct = (year: number) => `${(((year - first) / span) * 100).toFixed(3)}%`;
 const place = (r: Role) =>
   `--l: ${pct(r.start)}; --w: ${(((r.end - r.start) / span) * 100).toFixed(3)}%`;
 
-const newest = [...roles].sort((a, b) => b.start - a.start || b.end - a.end);
+const newest = roles.toSorted((a, b) => b.start - a.start || b.end - a.end);
 // Left and right walk the roles in date order; up and down walk the rows.
-const order = [...newest].reverse().map((r) => r.i);
+const order = newest.toReversed().map((r) => r.i);
 const current = roles.find((r) => !r.endDate) ?? newest[0];
 const januaries = Array.from(
   { length: Math.floor(now) - first + 1 },
@@ -71,7 +71,7 @@ const years = (r: Role) =>
 const dates = (r: Role) => `${r.startDate} – ${r.endDate ?? "Present"}`;
 function linkLabel(url: string) {
   if (url.includes("patents.google.com"))
-    return `Patent ${url.split("/").filter(Boolean).at(-1)}`;
+    return `Patent ${url.split("/").findLast(Boolean)}`;
   if (url.includes("arxiv.org")) return "Paper on arXiv";
   return new URL(url).hostname.replace(/^www\./, "");
 }
@@ -248,7 +248,7 @@ function linkLabel(url: string) {
       t.addEventListener("pointerenter", (e) => {
         clearTimeout(resting);
         if (e.pointerType === "mouse")
-          resting = setTimeout(() => select(i), REST);
+          resting = window.setTimeout(() => select(i), REST);
       });
       t.addEventListener("pointerleave", () => clearTimeout(resting));
       t.addEventListener("click", () => select(i));

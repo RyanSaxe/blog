@@ -35,7 +35,7 @@ function rehypeFeedReader(origin: string) {
 }
 
 export async function GET(context: APIContext) {
-  const posts = (await getPublishedPosts()).sort(
+  const posts = (await getPublishedPosts()).toSorted(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
 
