@@ -63,7 +63,7 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     # 1. Tag cells (#hide -> nbconvert tags)
     echo "  Tagging cells..."
-    python3 "$REPO_ROOT/scripts/tag-cells.py" \
+    "$REPO_ROOT/scripts/tag-cells.py" \
         "$nb_file" \
         "$nb_dir/tagged.ipynb"
 
@@ -105,7 +105,7 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     # 5. Post-process markdown
     echo "  Post-processing..."
-    uvx --with pyyaml -- python3 "$REPO_ROOT/scripts/postprocess-markdown.py" \
+    "$REPO_ROOT/scripts/postprocess-markdown.py" \
         --input "$nb_dir/output.md" \
         --output "$OUTPUT_DIR/$slug.md" \
         --slug "$slug" \
