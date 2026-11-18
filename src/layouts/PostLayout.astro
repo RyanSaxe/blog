@@ -1,9 +1,11 @@
 ---
 /*
  * An essay: title block, the rendered markdown in a reading column, and links to the
- * neighbouring essays. Figures and code run wider than the text on large screens.
+ * neighbouring essays. Text, figures and code share the column, and a figure opens larger
+ * when clicked (FigureZoom).
  */
 import SiteLayout from "./SiteLayout.astro";
+import FigureZoom from "@/components/FigureZoom.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import "katex/dist/katex.min.css";
 import "@fontsource/jetbrains-mono/400.css";
@@ -114,6 +116,7 @@ const neighbours = [
       </nav>
     )}
   </article>
+  <FigureZoom />
 </SiteLayout>
 
 <script>
@@ -204,8 +207,8 @@ const neighbours = [
 
 <style>
   .essay {
-    --measure: 620px;
-    --wide: 920px;
+    /* Fits 80 characters of 13px code, and about 78 of the 18px text. */
+    --measure: 660px;
   }
   /*
    * Beside the header's card the essay stops widening once its contents list reaches its full 240px, so on
@@ -367,10 +370,8 @@ const neighbours = [
     display: grid;
     grid-template-columns:
       [full-start] minmax(var(--g), 1fr)
-      [wide-start] minmax(0, calc((var(--wide) - var(--measure)) / 2))
       [text-start] min(var(--measure), 100% - 2 * var(--g))
-      [text-end] minmax(0, calc((var(--wide) - var(--measure)) / 2))
-      [wide-end] minmax(var(--g), 1fr)
+      [text-end] minmax(var(--g), 1fr)
       [full-end];
     font-size: 18px;
     line-height: 30px;
@@ -384,17 +385,6 @@ const neighbours = [
   }
   .essay-body > * + * {
     margin-top: 22px;
-  }
-  .essay-body > .fig,
-  .essay-body > pre {
-    grid-column: wide;
-  }
-  /* With the contents rail in the left margin, figures and code reach into the right margin only. */
-  @media (min-width: 1240px) {
-    .essay-wrap:has(.toc) .essay-body > .fig,
-    .essay-wrap:has(.toc) .essay-body > pre {
-      grid-column: text-start / wide-end;
-    }
   }
 
   .essay-body h2,
@@ -527,12 +517,12 @@ const neighbours = [
   }
   .essay-body > pre {
     margin-top: 28px;
-    padding: 18px 22px;
+    padding: 18px 16px;
     border-radius: 12px;
     background: var(--card) !important;
     box-shadow: var(--card-shadow);
-    font-size: 14px;
-    line-height: 23px;
+    font-size: 13px;
+    line-height: 21px;
     tab-size: 4;
   }
   .essay-body > pre + * {
@@ -678,8 +668,6 @@ const neighbours = [
     }
     .essay-body > pre {
       padding: 14px var(--g);
-      font-size: 13px;
-      line-height: 21px;
     }
     .essay-body .katex-display > .katex {
       font-size: 1em;

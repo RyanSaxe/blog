@@ -1,0 +1,281 @@
+---
+/*
+ * Opens an essay's figure larger. Clicking a figure lifts it out of the reading column and grows it to fill the
+ * window, on the spring the card panels use, and a click anywhere, Escape or scrolling returns it. A figure opens only
+ * where the window can show it clearly larger, so on a phone, where figures already span the screen, it stays.
+ */
+---
+
+<script>
+  import { onPage } from "@/scripts/page";
+  import { OMEGA, Spring } from "@/scripts/spring";
+
+  type Rect = { x: number; y: number; w: number; h: number };
+  type Zoom = {
+    fig: HTMLElement;
+    button: HTMLButtonElement;
+    overlay: HTMLElement;
+    dim: HTMLElement;
+    frame: HTMLElement;
+    from: Rect;
+    to: Rect;
+    spring: Spring;
+    animating: boolean;
+  };
+
+  const MARGIN = 40; // the window's edge around an open figure
+  const ROOM = 1.25; // a figure opens only when it would grow at least this much
+  const SCROLL_KEYS = new Set([
+    " ",
+    "PageDown",
+    "PageUp",
+    "ArrowDown",
+    "ArrowUp",
+    "Home",
+    "End",
+  ]);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => document.documentElement.dataset.theme === "dark";
+
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const rectOf = (el: Element): Rect => {
+    const r = el.getBoundingClientRect();
+    return { x: r.left, y: r.top, w: r.width, h: r.height };
+  };
+  const pictureOf = (fig: HTMLElement) =>
+    fig.querySelector<HTMLImageElement>("img");
+
+  // The open figure: its picture as large as the window allows, up to the picture's own size, in the
+  // figure's padding. The rehype plugin gives every picture its width and height, so this works before it loads.
+  function openRect(fig: HTMLElement, img: HTMLImageElement): Rect {
+    const pad = parseFloat(getComputedStyle(fig).paddingLeft) || 0;
+    const width = Number(img.getAttribute("width"));
+    const aspect = width / Number(img.getAttribute("height"));
+    const w = Math.min(
+      width,
+      innerWidth - 2 * (MARGIN + pad),
+      (innerHeight - 2 * (MARGIN + pad)) * aspect,
+    );
+    const W = w + 2 * pad;
+    const H = w / aspect + 2 * pad;
+    return { x: (innerWidth - W) / 2, y: (innerHeight - H) / 2, w: W, h: H };
+  }
+
+  let zoom: Zoom | null = null;
+
+  function render() {
+    if (!zoom) return;
+    const p = zoom.spring.x;
+    const { from, to, frame, dim } = zoom;
+    const x = Math.round(lerp(from.x, to.x, p));
+    const y = Math.round(lerp(from.y, to.y, p));
+    frame.style.transform = `translate(${x}px, ${y}px)`;
+    frame.style.width =
+      Math.round(lerp(from.x + from.w, to.x + to.w, p)) - x + "px";
+    frame.style.height =
+      Math.round(lerp(from.y + from.h, to.y + to.h, p)) - y + "px";
+    frame.style.boxShadow = `var(--card-shadow), 0 30px 80px -24px rgba(0, 0, 0, ${(isDark() ? 0.7 : 0.3) * p})`;
+    dim.style.opacity = String(p);
+  }
+
+  function animate() {
+    if (!zoom || zoom.animating) return;
+    zoom.animating = true;
+    const step = (now: number) => {
+      if (!zoom) return;
+      zoom.spring.sample(now);
+      render();
+      if (!zoom.spring.done) return void requestAnimationFrame(step);
+      zoom.animating = false;
+      if (zoom.spring.target === 0) finish();
+    };
+    requestAnimationFrame(step);
+  }
+
+  // Everything but the open figure stays still and out of reach until it closes.
+  const pageLayers = (overlay: HTMLElement) =>
+    [...document.body.children].filter(
+      (el): el is HTMLElement =>
+        el !== overlay && el instanceof HTMLElement && el.tagName !== "SCRIPT",
+    );
+
+  function open(fig: HTMLElement, button: HTMLButtonElement) {
+    const img = pictureOf(fig);
+    if (!img || (zoom && zoom.spring.target === 1)) return;
+    // a figure still on its way back lands at once, so another can open
+    finish();
+    const overlay = document.createElement("div");
+    overlay.className = "zoom";
+    const dim = document.createElement("div");
+    dim.className = "zoom-dim";
+    const frame = document.createElement("div");
+    frame.className = "zoom-frame";
+    frame.classList.toggle("fig-dark", fig.classList.contains("fig-dark"));
+    frame.style.padding = getComputedStyle(fig).paddingLeft;
+    frame.setAttribute("role", "dialog");
+    frame.setAttribute("aria-modal", "true");
+    frame.setAttribute("aria-label", img.alt || "Figure");
+    frame.tabIndex = -1;
+    const copy = img.cloneNode() as HTMLImageElement;
+    copy.loading = "eager";
+    frame.append(copy);
+    overlay.append(dim, frame);
+    // the second click of a double-click would close what the first opened
+    overlay.addEventListener("click", (e) => e.detail < 2 && close());
+    // scrolling means reading on, so the figure goes back to its place
+    overlay.addEventListener("wheel", close, { passive: true });
+
+    document.documentElement.style.overflow = "hidden";
+    zoom = {
+      fig,
+      button,
+      overlay,
+      dim,
+      frame,
+      from: rectOf(fig),
+      to: openRect(fig, img),
+      spring: new Spring(0, OMEGA, 4e-4),
+      animating: false,
+    };
+    render();
+    document.body.append(overlay);
+    fig.style.visibility = "hidden";
+    for (const el of pageLayers(overlay)) el.inert = true;
+    frame.focus({ preventScroll: true });
+    if (reduced.matches) {
+      zoom.spring.jump(1);
+      render();
+    } else {
+      zoom.spring.to(1, performance.now());
+      animate();
+    }
+  }
+
+  function close() {
+    if (!zoom || zoom.spring.target === 0) return;
+    for (const el of pageLayers(zoom.overlay)) el.inert = false;
+    zoom.overlay.style.pointerEvents = "none";
+    document.documentElement.style.overflow = "";
+    // the figure returns to wherever its place on the page is now
+    zoom.from = rectOf(zoom.fig);
+    if (reduced.matches) return finish();
+    zoom.spring.to(0, performance.now());
+    animate();
+  }
+
+  function finish() {
+    if (!zoom) return;
+    const { fig, button, overlay } = zoom;
+    zoom = null;
+    for (const el of pageLayers(overlay)) el.inert = false;
+    overlay.remove();
+    fig.style.visibility = "";
+    document.documentElement.style.overflow = "";
+    button.focus({ preventScroll: true });
+  }
+
+  onPage((signal) => {
+    finish();
+    const figures = [
+      ...document.querySelectorAll<HTMLElement>(".essay-body > .fig"),
+    ].filter((fig) => pictureOf(fig));
+    if (!figures.length) return;
+
+    for (const fig of figures) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "fig-open";
+      button.setAttribute("aria-label", "Enlarge figure");
+      button.addEventListener("click", () => open(fig, button), { signal });
+      fig.append(button);
+    }
+    const markRoom = () => {
+      for (const fig of figures) {
+        const room = openRect(fig, pictureOf(fig)!).w / fig.offsetWidth;
+        fig.classList.toggle("zoomable", room >= ROOM);
+      }
+    };
+    markRoom();
+    addEventListener(
+      "resize",
+      () => {
+        finish();
+        markRoom();
+      },
+      { signal },
+    );
+    addEventListener(
+      "keydown",
+      (e) => {
+        if (!zoom || zoom.spring.target === 0) return;
+        // the open figure holds focus, and a key that would scroll closes it
+        if (e.key === "Tab") e.preventDefault();
+        if (e.key === "Escape" || SCROLL_KEYS.has(e.key)) {
+          e.preventDefault();
+          close();
+        }
+      },
+      { signal },
+    );
+    signal.addEventListener("abort", finish);
+  });
+</script>
+
+<style is:global>
+  .essay-body > .fig.zoomable {
+    position: relative;
+  }
+  .fig-open {
+    display: none;
+  }
+  .fig.zoomable .fig-open {
+    display: block;
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .zoom {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    cursor: zoom-out;
+  }
+  .zoom-dim {
+    position: absolute;
+    inset: 0;
+    background: var(--dim);
+    opacity: 0;
+  }
+  /* The same plate as the figure in the column: white for a light picture, the card's grey in the dark theme. */
+  .zoom-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 14px;
+    background: #fff;
+  }
+  /* The frame holds focus only so Escape and Tab stay with it; it shows no ring. */
+  .zoom-frame:focus-visible {
+    outline: none;
+    border-radius: 14px;
+  }
+  [data-theme="dark"] .zoom-frame {
+    background: var(--card);
+  }
+  .zoom-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  [data-theme="dark"] .zoom-frame:not(.fig-dark) img,
+  [data-theme="light"] .zoom-frame.fig-dark img {
+    filter: invert(0.9) hue-rotate(180deg);
+  }
+</style>
