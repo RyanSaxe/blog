@@ -41,5 +41,7 @@ export interface CardItem {
   actions: Action[];
 }
 
-export const imgSrc = (name: string, w: 800 | 1200) => `/images/site/${name}-${w}.webp`;
-export const imgSet = (name: string) => `${imgSrc(name, 800)} 800w, ${imgSrc(name, 1200)} 1200w`;
+export const imgSrc = (name: string, w: 800 | 1200) =>
+  `/images/site/${name}-${w}.webp`;
+export const imgSet = (name: string) =>
+  `${imgSrc(name, 800)} 800w, ${imgSrc(name, 1200)} 1200w`;

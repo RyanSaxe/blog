@@ -1,8 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = []
+# ///
 """Convert fastpages #hide comments to nbconvert cell tags."""
 
 import json
 import sys
+
+# The formatter writes `#hide` as `# hide`, so both spellings hide a cell.
+HIDE_TAGS = {
+    "hide": "remove_cell",
+    "hide_input": "remove_input",
+    "hide_output": "remove_output",
+}
+
+
+def comment_text(line: str) -> str:
+    line = line.strip()
+    return line.removeprefix("#").strip() if line.startswith("#") else ""
 
 
 def tag_cells(input_path: str, output_path: str) -> None:
@@ -17,16 +33,8 @@ def tag_cells(input_path: str, output_path: str) -> None:
         if not source:
             continue
 
-        first_line = source[0].strip()
         tags = cell.get("metadata", {}).get("tags", [])
-
-        tag = None
-        if first_line == "#hide":
-            tag = "remove_cell"
-        elif first_line == "#hide_input":
-            tag = "remove_input"
-        elif first_line == "#hide_output":
-            tag = "remove_output"
+        tag = HIDE_TAGS.get(comment_text(source[0]))
 
         if tag:
             tags.append(tag)

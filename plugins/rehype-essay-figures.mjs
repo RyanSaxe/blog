@@ -17,7 +17,8 @@ export default function rehypeEssayFigures() {
   const sizes = new Map();
 
   function sizeOf(src) {
-    if (!sizes.has(src)) sizes.set(src, readPngSize(join(publicDir, decodeURI(src))));
+    if (!sizes.has(src))
+      sizes.set(src, readPngSize(join(publicDir, decodeURI(src))));
     return sizes.get(src);
   }
 
@@ -40,13 +41,19 @@ export default function rehypeEssayFigures() {
       }
 
       if (node.tagName !== "p" || !parent || index == null) return;
-      const children = node.children.filter((c) => !(c.type === "text" && !c.value.trim()));
+      const children = node.children.filter(
+        (c) => !(c.type === "text" && !c.value.trim()),
+      );
       if (children.length !== 1 || children[0].tagName !== "img") return;
       // Very wide figures (a row of three plots) pan sideways on a phone instead of shrinking.
       const src = String(children[0].properties.src ?? "");
       const size = sizeOf(src);
       const wide = size && size.width / size.height > 2.4;
-      const className = ["fig", wide && "fig-pan", DRAWN_ON_BLACK.has(src) && "fig-dark"].filter(Boolean);
+      const className = [
+        "fig",
+        wide && "fig-pan",
+        DRAWN_ON_BLACK.has(src) && "fig-dark",
+      ].filter(Boolean);
       parent.children[index] = {
         type: "element",
         tagName: "figure",
@@ -61,7 +68,8 @@ export default function rehypeEssayFigures() {
 function readPngSize(path) {
   try {
     const buf = readFileSync(path);
-    if (buf.length < 24 || buf.toString("ascii", 1, 4) !== "PNG") return undefined;
+    if (buf.length < 24 || buf.toString("ascii", 1, 4) !== "PNG")
+      return undefined;
     return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
   } catch {
     return undefined;

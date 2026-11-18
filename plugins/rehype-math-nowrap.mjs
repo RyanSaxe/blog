@@ -11,8 +11,10 @@ export default function rehypeMathNowrap() {
       if (!parent || index == null || !isInlineMath(node)) return;
       const prev = parent.children[index - 1];
       const next = parent.children[index + 1];
-      const before = prev?.type === "text" ? prev.value.match(/\S+$/)?.[0] : undefined;
-      const after = next?.type === "text" ? next.value.match(/^\S+/)?.[0] : undefined;
+      const before =
+        prev?.type === "text" ? prev.value.match(/\S+$/)?.[0] : undefined;
+      const after =
+        next?.type === "text" ? next.value.match(/^\S+/)?.[0] : undefined;
       if (!before && !after) return;
       const kept = [node];
       if (before) {
@@ -23,7 +25,12 @@ export default function rehypeMathNowrap() {
         next.value = next.value.slice(after.length);
         kept.push({ type: "text", value: after });
       }
-      parent.children[index] = { type: "element", tagName: "span", properties: { className: ["math-nowrap"] }, children: kept };
+      parent.children[index] = {
+        type: "element",
+        tagName: "span",
+        properties: { className: ["math-nowrap"] },
+        children: kept,
+      };
       return index + 1;
     });
   };

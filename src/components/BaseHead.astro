@@ -73,7 +73,9 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     };
     const apply = (theme) => {
       root.dataset.theme = theme;
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", theme === "dark" ? "#121214" : "#fafafa");
       sync(document);
     };
     const current = () => stored() ?? (device.matches ? "dark" : "light");
@@ -81,15 +83,18 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     document.addEventListener("astro:after-swap", () => apply(current()));
     const scrollbars = () => {
       const probe = document.createElement("div");
-      probe.style.cssText = "position:absolute;top:-200px;width:100px;height:100px;overflow:scroll;visibility:hidden";
+      probe.style.cssText =
+        "position:absolute;top:-200px;width:100px;height:100px;overflow:scroll;visibility:hidden";
       root.append(probe);
-      if (probe.offsetWidth > probe.clientWidth) root.dataset.scrollbars = "classic";
+      if (probe.offsetWidth > probe.clientWidth)
+        root.dataset.scrollbars = "classic";
       probe.remove();
     };
     scrollbars();
     document.addEventListener("astro:after-swap", scrollbars);
     new MutationObserver((records) => {
-      for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
+      for (const r of records)
+        for (const n of r.addedNodes) if (n.nodeType === 1) sync(n);
     }).observe(root, { childList: true, subtree: true });
     // a template's content is parsed outside the document, so the observer cannot see it
     document.addEventListener("DOMContentLoaded", () => sync(document));
@@ -117,17 +122,27 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
       fade = e.viewTransition;
       fade.finished.finally(() => (fade = null));
     });
-    addEventListener("pointerdown", () => {
-      if (!fade) return;
-      pressed = true;
-      fade.skipTransition();
-    }, true);
-    addEventListener("click", (e) => {
-      if (!pressed) return;
-      pressed = false;
-      if (e.target !== document.documentElement) return;
-      const target = document.elementFromPoint(e.clientX, e.clientY)?.closest("a[href], button, [role=tab]");
-      if (target) target.click();
-    }, true);
+    addEventListener(
+      "pointerdown",
+      () => {
+        if (!fade) return;
+        pressed = true;
+        fade.skipTransition();
+      },
+      true,
+    );
+    addEventListener(
+      "click",
+      (e) => {
+        if (!pressed) return;
+        pressed = false;
+        if (e.target !== document.documentElement) return;
+        const target = document
+          .elementFromPoint(e.clientX, e.clientY)
+          ?.closest("a[href], button, [role=tab]");
+        if (target) target.click();
+      },
+      true,
+    );
   })();
 </script>

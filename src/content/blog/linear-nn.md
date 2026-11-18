@@ -19,9 +19,9 @@ y &= X^T\beta + \epsilon \\
 \end{aligned}
 $$
 
-Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $T$ is the [transpose operation](https://en.wikipedia.org/wiki/Transpose), which in this case is basically identical to computing the [dot product](https://en.wikipedia.org/wiki/Dot_product) of two n-dimensional vectors. 
+Where $\beta_i$ represents learned coefficients with respect to $X_i$, and $T$ is the [transpose operation](https://en.wikipedia.org/wiki/Transpose), which in this case is basically identical to computing the [dot product](https://en.wikipedia.org/wiki/Dot_product) of two n-dimensional vectors.
 
-# Linear Regression
+## Linear Regression
 
 Linear regression is arguably the simplest linear model, and comes with four assumptions:
 
@@ -41,11 +41,11 @@ $$
 
 Unfortunately, these assumptions are quite rigid for the real world. Many datasets do not conform to these restrictions. So why do we still use linear regression when we have algorithms that can perform the regression task without such rigid assumptions? The common answers to this question are:
 
-1. **Occam's Razor**: Don't add complexity without necessity.    
+1. **Occam's Razor**: Don't add complexity without necessity.
 2. **Little Data**: Ordinary Least Squares (OLS) is a closed form solution to linear regression[^fn-2], hence there are no issues with convergence and a solution can always be computed regardless of the amount of data.
 3. **Interpretability**: $y$ can be explained with respect to how $X$ interacts with the $\beta$ coefficients.
 
-# Generalized Linear Models
+## Generalized Linear Models
 
 Generalized Linear Models (GLMs), introduced in <cite id="cite-GLM"><a href="#ref-GLM">(Nelder & Wedderburn, 1972)</a></cite>, loosen the constraints of normality, linearity, and homoscedasticity described in the previous section. Furthermore, GLMs break down the problem into three different components:
 
@@ -65,7 +65,7 @@ $$g(\mu) = log(\frac{\mu}{1 - \mu})$$
 
 Now, we can fit a simple linear model to $g(y) = X^T\beta + \epsilon$. Unfortunately, introducing a non-linear transformation to this equation means that Ordinary Least Squares is no longer a reasonable estimation method. Hence, learning $\beta$ requires a different estimation method. Maximum Likelihood Estimation (MLE) estimates the parameters of a probability distribution by maximizing the likelihood that a sample of observed data belongs to that probability distribution. In fact, under the assumptions of simple linear regression, MLE is equivalent to Ordinary Least Squares as demonstrated on page 2 of [these CMU lecture notes](https://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/06/lecture-06.pdf). The specifics of MLE are not necessary for the rest of this blog post, however if you would like to learn more about it, please refer to [these Stanford lecture notes](http://web.stanford.edu/class/archive/cs/cs109/cs109.1202/lectureNotes/LN21_parameters_mle.pdf).
 
-# The Building Blocks of Neural Networks
+## The Building Blocks of Neural Networks
 
 How are neural networks (NNs) connected to linear models? Aren't they incredibly non-linear and opaque, unlike GLMs? Sort of. On the macro-level, NNs and GLMs look very different, but the micro-level tells a different story. Let's zoom into the inner workings of neural networks and see how they relate to GLMs!
 
@@ -73,11 +73,11 @@ Neural networks are built of components called layers. Layers are built of compo
 
 The first layer of a neural network is called the input layer, because each node passes an input feature to all nodes in the next layer. The last layer of a neural network is called the output layer, and it should represent the output you are trying to predict (this layer has one node in the classic regression case). Lastly, any layers between the input and output layers are called hidden layers.
 
-![](/images/nnonelayer.png)
+![A fully connected network: inputs x1 to xN, one hidden layer of five nodes, and one output ŷ](/images/nnonelayer.png)
 
 In the classic fully-connected feed-forward neural network, this structure of layers is ordered and connected such that every node $n_j$ in layer $L_i$ receives the output of every node in the preceding layer $L_{i-1}$, does some computation with those outputs, and passes the corresponding output to each node in the succeeding layer $L_{i + 1}$. The image above displays a neural network with $N$ input features, a single hidden layer, and a single output prediction $\hat{y}$.
 
-Each node in layer $L_i$ contains some set of weights ($w$) and a bias ($b$), where the dimension of the weight vector is equal to the number of nodes in layer $L_{i - 1}$. When the node receives the output of all the nodes in the preceding layer, it performs the following computation: $L_{i - 1}^Tw + b$. 
+Each node in layer $L_i$ contains some set of weights ($w$) and a bias ($b$), where the dimension of the weight vector is equal to the number of nodes in layer $L_{i - 1}$. When the node receives the output of all the nodes in the preceding layer, it performs the following computation: $L_{i - 1}^Tw + b$.
 
 This should look familiar! It is quite literally $X^T\beta$: the classic computation from linear models on the outputs of the preceding layer!
 
@@ -85,16 +85,16 @@ However, before this node passes $X^T\beta$ to the next layer in the network, it
 
 The image below isolates a single neuron from the image above, taking input from the previous layer, and making a prediction by transforming the output of the neuron with an activation function $\hat{y} = f(X^T\beta)$.
 
-![](/images/nnflow.png) 
+![The same network with one hidden node highlighted: it sums the inputs x1 to xN, applies the activation f, and outputs ŷ](/images/nnflow.png)
 
 In fact, observe that if the activation function is invertible, this computation is equivalent to $f^{-1}(\hat{y}) = X^T\beta$, which is exactly a GLM with link function $f^{-1}$. This demonstrates that the computation of a single node in a neural network is, conceptually, a GLM on the output of the previous layer!
 
 Furthermore, this means that a neural network with zero hidden layers and a linear activation function on the output layer is exactly equivalent to linear regression, as the lack of hidden layers maintains independence. And, if we change the activation function to the inverse of the logit function (this is the sigmoid activation function), this neural network becomes exactly equivalent to logistic regression! The code below is a simple prototype of building linear and logistic regression with [PyTorch](https://docs.pytorch.org/docs/stable/index.html), and tests it on a simulated dataset.
 
-
 ```python
 import torch
-import torch.nn as nn
+from torch import nn
+
 
 class LinearRegression(nn.Module):
     def __init__(self, n_features):
@@ -105,6 +105,7 @@ class LinearRegression(nn.Module):
     def forward(self, x):
         return self.output_layer(x)
 
+
 class LogisticRegression(nn.Module):
     def __init__(self, n_features):
         super().__init__()
@@ -113,26 +114,21 @@ class LogisticRegression(nn.Module):
 
     def forward(self, x):
         return torch.sigmoid(self.output_layer(x))
-
 ```
 
-
-    
 ![png](/images/generated/linear-nn/output_5_0.png)
-    
-
 
 Hopefully if the math wasn't convincing enough, these plots convince you that our neural network with a single input layer, zero hidden layers, and a single output node with a linear/sigmoid activation function is mathematically equivalent to linear/logistic regression.
 
 Now that you have an understanding of all the components of neural networks with respect to linear models, the last piece to understand is the hidden layers.
 
-# Understanding Hidden Layers
+## Understanding Hidden Layers
 
 As described in the previous section, hidden layers are the layers between the input and the output layer. They often have an activation function, which introduces non-linearity to the function we fit. Furthermore, introducing hidden layers are what is responsible for the opacity of neural networks. It's why they are referred to as "black boxes", meaning they are difficult to interpret.
 
 This opacity doesn't actually come from the non-linearity, but rather feature interactions. Because the nodes in a neural network compute the sum of the output of the nodes in the previous layer, once a single hidden layer is introduced, every node after the first hidden layer is computing a function that is dependent on every single input feature. This makes it difficult to see the individual contribution of a single input feature on the output of the network. The image below isolates the computation of a single node in a hidden layer between other hidden layers.
 
-![](/images/hiddenlayers.png)
+![Three layers, L(i-1), L(i) and L(i+1), with one node of L(i) highlighted: it takes every node of L(i-1) as input and feeds every node of L(i+1)](/images/hiddenlayers.png)
 
 Let's look at the math for regression using a neural network with $k$ hidden layers, where $w_{i,j}$ and $b_{i,j}$ are the weights and bias of the j<sup>th</sup> node in layer $L_i$ with activation function $f_i$. As additional context, with the notation below, $f_i(L_{i - 1}^Tw_{i,3} + b_{i,3})$ corresponds to the computation of the highlighted node in the image above: the third node in the i<sup>th</sup> layer.
 
@@ -146,15 +142,15 @@ L_k & = \big [\hspace{0.5em}f_k(L_{k - 1}^Tw_{k,1} + b_{k,1}), \hspace{0.5em}f_k
 \end{aligned}
 $$
 
-When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$, the outputs of the nodes in the preceding layer. However, the analogy to GLMs is not perfect for a few reasons. First, The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And second, activation function $f_k$ isn't always invertible (e.g. [ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks))). The point I am trying to make is that the math is familiar, as it's intimately related to that of GLMs.
+When you think of a hidden layer, think of it as a collection of models. Hidden layer $L_k$ in the math above is kind of like a list of Generalized Linear Models. The first element in $L_k$ is $f_k(L_{k - 1}^Tw_{k,1} + b_{k,1})$, which is basically like a GLM with link function $f_k^{-1}$ where the input features are the vector $L_{k - 1}$, the outputs of the nodes in the preceding layer. However, the analogy to GLMs is not perfect for a few reasons. First, The elements in $L_{k - 1}$ are not independent because they all are linear combinations of the input features. And second, activation function $f_k$ isn't always invertible (e.g. [ReLU](<https://en.wikipedia.org/wiki/Rectifier_(neural_networks)>)). The point I am trying to make is that the math is familiar, as it's intimately related to that of GLMs.
 
 So why does this work so well? What is the intuition behind it?
 
-Look at the last line in the equation above. The output prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. The purpose of hidden layers is basically automated feature engineering. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target. 
+Look at the last line in the equation above. The output prediction: $\hat{y} = L_k^T \beta$. If we think of $L_k$ as a collection of non-linear models dependent on every input feature as I described above, then we can also think of the output of each model in $L_k$ as an engineered feature. The purpose of hidden layers is basically automated feature engineering. The last hidden layer contains a bunch of engineered features that come from adding up a bunch of linear combinations of the input features and applying non-linear activation functions. These engineered features are then thrown into a linear model to predict the target.
 
 So, neural networks really aren't that different from linear models. They're just instructions for learning the best features one can engineer from the input features, and predicting a linear combination of the engineered features!
 
-# Further Reading
+## Further Reading
 
 Hopefully this blog post helped you understand how neural networks work! However, there is quite a lot that I didn't cover. Below is a list of introductory resources on concepts related to neural networks that I didn't cover:
 

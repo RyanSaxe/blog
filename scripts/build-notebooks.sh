@@ -9,23 +9,33 @@ CACHE_DIR="$REPO_ROOT/.notebook-cache"
 
 mkdir -p "$OUTPUT_DIR" "$IMAGES_DIR" "$CACHE_DIR"
 
+# Hashes a notebook's sources and the scripts that build it by content and by
+# path from the repository root, so every clone and CI compute the same hash.
 compute_hash() {
-    local dir="$1"
-    find "$dir" \
-        "$REPO_ROOT/scripts/tag-cells.py" \
-        "$REPO_ROOT/scripts/postprocess-markdown.py" \
-        "$REPO_ROOT/notebooks/citations.yaml" \
-        -type f \
-        ! -path '*/.venv/*' \
-        ! -path '*/__pycache__/*' \
-        ! -name 'tagged.ipynb' \
-        ! -name 'executed.ipynb' \
-        ! -name 'output.md' \
-        -print0 \
-        | sort -z \
-        | xargs -0 shasum -a 256 \
-        | shasum -a 256 \
-        | cut -d' ' -f1
+    local dir="${1%/}"
+    (
+        cd "$REPO_ROOT"
+        find "${dir#"$REPO_ROOT"/}" \
+            scripts/tag-cells.py \
+            scripts/postprocess-markdown.py \
+            notebooks/citations.yaml \
+            -type f \
+            ! -path '*/.venv/*' \
+            ! -path '*/__pycache__/*' \
+            ! -path '*/.ipynb_checkpoints/*' \
+            ! -path '*/output_files/*' \
+            ! -path '*/executed_files/*' \
+            ! -path '*/notebook_files/*' \
+            ! -name '.DS_Store' \
+            ! -name 'tagged.ipynb' \
+            ! -name 'executed.ipynb' \
+            ! -name 'output.md' \
+            -print0 \
+            | LC_ALL=C sort -z \
+            | xargs -0 shasum -a 256 \
+            | shasum -a 256 \
+            | cut -d' ' -f1
+    )
 }
 
 # Clean up outputs for notebooks that no longer exist
@@ -63,7 +73,7 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     # 1. Tag cells (#hide -> nbconvert tags)
     echo "  Tagging cells..."
-    python3 "$REPO_ROOT/scripts/tag-cells.py" \
+    "$REPO_ROOT/scripts/tag-cells.py" \
         "$nb_file" \
         "$nb_dir/tagged.ipynb"
 
@@ -105,11 +115,14 @@ for nb_dir in "$NOTEBOOKS_DIR"/*/; do
 
     # 5. Post-process markdown
     echo "  Post-processing..."
-    uvx --with pyyaml -- python3 "$REPO_ROOT/scripts/postprocess-markdown.py" \
+    "$REPO_ROOT/scripts/postprocess-markdown.py" \
         --input "$nb_dir/output.md" \
         --output "$OUTPUT_DIR/$slug.md" \
         --slug "$slug" \
         --notebook-dir "$nb_dir"
+    # The post is committed, so it meets the same checks as the rest. rumdl
+    # fences the output nbconvert indents and makes `#` sections `##`.
+    (cd "$REPO_ROOT" && uvx rumdl@0.3.4 fmt "$OUTPUT_DIR/$slug.md" && npx oxfmt "$OUTPUT_DIR/$slug.md")
 
     # 6. Save hash
     echo "$current_hash" > "$CACHE_DIR/$slug.hash"

@@ -3,32 +3,46 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import { WRITING } from "@/data/site";
 
 const destinations = [
-  { label: "Home", href: "/", note: "Projects, writing and a short introduction" },
+  {
+    label: "Home",
+    href: "/",
+    note: "Projects, writing and a short introduction",
+  },
   { label: "Projects", href: "/projects/", note: "Software I have built" },
   { label: WRITING.name, href: WRITING.path, note: WRITING.subtitle },
   { label: "About", href: "/about/", note: "My career and an introduction" },
 ];
 ---
 
-<SiteLayout title="Page not found · Ryan Saxe" description="This page does not exist.">
+<SiteLayout
+  title="Page not found · Ryan Saxe"
+  description="This page does not exist."
+>
   <section class="nf" aria-labelledby="nf-title">
     <p class="code">404</p>
     <h1 id="nf-title">This page does not exist.</h1>
-    <p class="lede">The link may be old, or the address may have a typo. These pages do exist:</p>
+    <p class="lede">
+      The link may be old, or the address may have a typo. These pages do exist:
+    </p>
     <ul class="dest">
-      {
-        destinations.map((d) => (
-          <li>
-            <a href={d.href}>
-              <span class="label">{d.label}</span>
-              <span class="note">{d.note}</span>
-              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
-                <path d="M2 6h7.5M6.5 3l3 3-3 3" />
-              </svg>
-            </a>
-          </li>
-        ))
-      }
+      {destinations.map((d) => (
+        <li>
+          <a href={d.href}>
+            <span class="label">{d.label}</span>
+            <span class="note">{d.note}</span>
+            <svg
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M2 6h7.5M6.5 3l3 3-3 3" />
+            </svg>
+          </a>
+        </li>
+      ))}
     </ul>
   </section>
 </SiteLayout>

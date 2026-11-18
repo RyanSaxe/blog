@@ -13,6 +13,10 @@ export const getPublishedPosts = () => getCollection("blog", isPublished);
 
 /** The Writing cards, less any card whose action links to an unpublished post. */
 export async function getPublishedWriting(): Promise<CardItem[]> {
-  const unpublished = new Set((await getCollection("blog", (post) => !isPublished(post))).map(postHref));
-  return writing.filter((card) => !card.actions.some((action) => unpublished.has(action.href)));
+  const unpublished = new Set(
+    (await getCollection("blog", (post) => !isPublished(post))).map(postHref),
+  );
+  return writing.filter(
+    (card) => !card.actions.some((action) => unpublished.has(action.href)),
+  );
 }
