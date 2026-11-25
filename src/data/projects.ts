@@ -20,7 +20,7 @@ export const projects: CardItem[] = [
       {
         name: "cc-search",
         dark: true,
-        alt: "CubeCobra’s Smart Search on the Crucible cube, ranking creature cards by how well each fits the cube",
+        alt: "CubeCobra’s Smart Search on the Pitfight cube, ranking creature cards by how well each fits the cube",
         caption: "Smart Search",
       },
       {
@@ -308,44 +308,44 @@ export const projects: CardItem[] = [
     actions: [{ label: "Code on GitHub", href: GH + "dotfiles" }],
   },
   {
-    id: "crucible",
-    title: "Crucible",
+    id: "pitfight",
+    title: "Pitfight",
     sentence:
       "A Magic: The Gathering format inspired by roguelikes and autobattlers.",
     year: "2026",
     fact: "Play online or in paper",
     gallery: [
       {
-        name: "cr-battle",
+        name: "pf-fight",
         dark: true,
-        alt: "A battle in Goldfish mode: each player has two creatures, three lands, a Treasure and a poison counter on a green table",
-        caption: "A battle",
+        alt: "A fight in Goldfish mode: each player has two creatures, three lands, a Treasure and a poison counter on a green table",
+        caption: "A fight",
       },
       {
-        name: "cr-build",
+        name: "pf-build",
         dark: true,
         alt: "The build phase: a hand of three cards above three basic lands, a Treasure and a poison counter",
         caption: "Building a hand",
       },
       {
-        name: "cr-home",
+        name: "pf-home",
         dark: true,
-        alt: "The cruciblemtg.com home page: a starting hand of three cards and three lands on a green table",
+        alt: "The pitfightmtg.com home page: a starting hand of three cards and three lands on a green table",
         caption: "The site",
       },
     ],
     paras: [
-      "Crucible is a Magic: The Gathering format inspired by roguelikes and autobattlers. Players alternate between drafting cards and short battles, the loser of each battle takes poison counters, and the game ends when one player is left.",
+      "Pitfight is a Magic: The Gathering format inspired by roguelikes and autobattlers. Players alternate between drafting cards and short fights, the loser of each fight takes poison counters, and the game ends when one player is left.",
       "A game works for any even number of players, best with 2 or 4, and takes about 1.5 hours in paper or 45 minutes online.",
     ],
     facts: [
       ["Year", "2026"],
       ["Game length", "About 45 minutes online"],
-      ["Releases", "27, from January to May 2026"],
+      ["Releases", "29, from January to November 2026 (v1.0.0)"],
     ],
     actions: [
-      { label: "Open cruciblemtg.com", href: "https://www.cruciblemtg.com/" },
-      { label: "Code on GitHub", href: GH + "magic-the-battling" },
+      { label: "Open pitfightmtg.com", href: "https://pitfightmtg.com/" },
+      { label: "Code on GitHub", href: GH + "pitfight" },
     ],
   },
 ];
